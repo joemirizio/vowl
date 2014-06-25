@@ -31,9 +31,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="50dp"
-        vowl:baseColor="@color/blueLight"
+        vowl:baseColor="@color/redLight"
+        vowl:shadowColor="@color/redDark"
         vowl:height="100"
-        vowl:shadowColor="@color/blueDark"
         vowl:width="100"
         vowl:x="0"
         vowl:y="0" />
