@@ -4,6 +4,7 @@ import java.util.Locale;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.ColorFilter;
 import android.graphics.Paint;
@@ -20,6 +21,7 @@ import android.text.SpannableString;
 import android.view.LayoutInflater;
 import android.view.SurfaceView;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
@@ -119,23 +121,21 @@ public class MainFragment extends Fragment {
 			return fragment;
 		}
 	
-		public PlaceholderFragment() {
-		}
-	
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container,
 				Bundle savedInstanceState) {
 			View rootView = inflater.inflate(R.layout.fragment_main_navitem, container,
 					false);
-			/*TextView textView = (TextView) rootView
-					.findViewById(R.id.navText);
-	        Typeface font = Typeface.createFromAsset(this.getActivity().getAssets(), "fonts/FredokaOne-Regular.ttf");
-	        Spannable buttonText = new SpannableString(Integer.toString(getArguments().getInt(
-					ARG_SECTION_NUMBER)));   
-	        buttonText.setSpan(font, 0, buttonText.length(), 0);
-	        
-			//Button b = (Button) rootView.findViewById(R.id.menuItem);
-			textView.setText(buttonText);*/
+			
+			// Start level select when nav button is clicked
+			View button = (View) rootView.findViewById(R.id.nav_button);
+			button.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					Intent intent = new Intent(v.getContext(), LevelSelectActivity.class);
+					startActivity(intent);
+				}
+			});
 	
 			return rootView;
 		}
