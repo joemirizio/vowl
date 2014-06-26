@@ -5,10 +5,8 @@
     </declare-styleable>
     
     <declare-styleable name="FlatButton">
-        <attr name="x" format="integer" />
-        <attr name="y" format="integer" />
-        <attr name="width" format="integer" />
-        <attr name="height" format="integer" />
+        <attr name="shadowOffset" format="integer" />
+        <attr name="cornerRadius" format="integer" />
         <attr name="baseColor" format="color" />
         <attr name="shadowColor" format="color" />
     </declare-styleable>
