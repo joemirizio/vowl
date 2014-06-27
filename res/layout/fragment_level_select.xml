@@ -1,6 +1,7 @@
 <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:vowl="http://schemas.android.com/apk/res/edu.cmu.rwsefe.vowl"
+    android:id="@+id/levelTable"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingBottom="@dimen/activity_vertical_margin"
@@ -20,11 +21,7 @@
 	        android:layout_height="100dp"
 	        android:layout_margin="3dp"
 	        vowl:baseColor="@color/blueLight"
-	        vowl:height="100"
-	        vowl:shadowColor="@color/blueDark"
-	        vowl:width="100"
-	        vowl:x="0"
-	        vowl:y="0" />
+	        vowl:shadowColor="@color/blueDark"/>
 	
 	    <edu.cmu.rwsefe.vowl.FlatButton
 	        android:id="@+id/navButton2"
@@ -32,11 +29,7 @@
 	        android:layout_height="match_parent"
 	        android:layout_margin="3dp"
 	        vowl:baseColor="@color/blueLight"
-	        vowl:height="100"
-	        vowl:shadowColor="@color/blueDark"
-	        vowl:width="100"
-	        vowl:x="0"
-	        vowl:y="0" />
+	        vowl:shadowColor="@color/blueDark"/>
 	    
 	   <edu.cmu.rwsefe.vowl.FlatButton
 	       android:id="@+id/navButton3"
@@ -44,11 +37,7 @@
 	       android:layout_height="match_parent"
 	       android:layout_margin="3dp"
 	       vowl:baseColor="@color/blueLight"
-	       vowl:height="100"
-	       vowl:shadowColor="@color/blueDark"
-	       vowl:width="100"
-	       vowl:x="0"
-	       vowl:y="0" />
+	       vowl:shadowColor="@color/blueDark"/>
 	    
 	</TableRow>
 
@@ -63,11 +52,7 @@
 	        android:layout_height="100dp"
 	        android:layout_margin="3dp"
 	        vowl:baseColor="@color/blueLight"
-	        vowl:height="100"
-	        vowl:shadowColor="@color/blueDark"
-	        vowl:width="100"
-	        vowl:x="0"
-	        vowl:y="0" />
+	        vowl:shadowColor="@color/blueDark"/>
 	
 	    <edu.cmu.rwsefe.vowl.FlatButton
 	        android:id="@+id/navButton5"
@@ -75,11 +60,7 @@
 	        android:layout_height="match_parent"
 	        android:layout_margin="3dp"
 	        vowl:baseColor="@color/blueLight"
-	        vowl:height="100"
-	        vowl:shadowColor="@color/blueDark"
-	        vowl:width="100"
-	        vowl:x="0"
-	        vowl:y="0" />
+	        vowl:shadowColor="@color/blueDark"/>
 	    
 	    <edu.cmu.rwsefe.vowl.FlatButton
 	        android:id="@+id/navButton6"
@@ -87,11 +68,7 @@
 	        android:layout_height="match_parent"
 	        android:layout_margin="3dp"
 	        vowl:baseColor="@color/blueLight"
-	        vowl:height="100"
-	        vowl:shadowColor="@color/blueDark"
-	        vowl:width="100"
-	        vowl:x="0"
-	        vowl:y="0" />
+	        vowl:shadowColor="@color/blueDark"/>
 
 	</TableRow>
 	
@@ -106,11 +83,7 @@
 	        android:layout_height="100dp"
 	        android:layout_margin="3dp"
 	        vowl:baseColor="@color/blueLight"
-	        vowl:height="100"
-	        vowl:shadowColor="@color/blueDark"
-	        vowl:width="100"
-	        vowl:x="0"
-	        vowl:y="0" />
+	        vowl:shadowColor="@color/blueDark"/>
 	
 	    <edu.cmu.rwsefe.vowl.FlatButton
 	        android:id="@+id/navButton8"
@@ -118,11 +91,7 @@
 	        android:layout_height="match_parent"
 	        android:layout_margin="3dp"
 	        vowl:baseColor="@color/blueLight"
-	        vowl:height="100"
-	        vowl:shadowColor="@color/blueDark"
-	        vowl:width="100"
-	        vowl:x="0"
-	        vowl:y="0" />
+	        vowl:shadowColor="@color/blueDark"/>
 	    
 	    <edu.cmu.rwsefe.vowl.FlatButton
 	        android:id="@+id/navButton9"
@@ -130,11 +99,7 @@
 	        android:layout_height="match_parent"
 	        android:layout_margin="3dp"
 	        vowl:baseColor="@color/blueLight"
-	        vowl:height="100"
-	        vowl:shadowColor="@color/blueDark"
-	        vowl:width="100"
-	        vowl:x="0"
-	        vowl:y="0" />
+	        vowl:shadowColor="@color/blueDark"/>
 
 	</TableRow>
 </TableLayout>

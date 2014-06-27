@@ -84,20 +84,6 @@ public class MainFragment extends Fragment {
 			// Show 3 total pages.
 			return 3;
 		}
-	
-		@Override
-		public CharSequence getPageTitle(int position) {
-			Locale l = Locale.getDefault();
-			switch (position) {
-			case 0:
-				return getString(R.string.title_section1).toUpperCase(l);
-			case 1:
-				return getString(R.string.title_section2).toUpperCase(l);
-			case 2:
-				return getString(R.string.title_section3).toUpperCase(l);
-			}
-			return null;
-		}
 	}
 
 	/**
@@ -128,7 +114,8 @@ public class MainFragment extends Fragment {
 					false);
 			
 			// Start level select when nav button is clicked
-			View button = (View) rootView.findViewById(R.id.nav_button);
+			Button button = (Button) rootView.findViewById(R.id.nav_button);
+			button.setText(R.string.menu_choice1);
 			button.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
