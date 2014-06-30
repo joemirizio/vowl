@@ -37,7 +37,7 @@ public class FlatButton extends Button {
 		this.init(context, attributes);
 	}
 
-	private void init(Context context, AttributeSet attributes) {
+	protected void init(Context context, AttributeSet attributes) {
 	    TypedArray attrs = context.obtainStyledAttributes(attributes, R.styleable.FlatButton);
 	    
 	    mShadowOffset = attrs.getInteger(R.styleable.FlatButton_shadowOffset, 30);
@@ -54,6 +54,9 @@ public class FlatButton extends Button {
 	    }
 	    this.applyCustomFont();
 		
+	    // Override default button look
+	    this.setBackgroundColor(getResources().getColor(android.R.color.transparent));
+	    
 		// Recycle TypedArray
 		attrs.recycle();
 	}
