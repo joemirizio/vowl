@@ -1,9 +1,11 @@
 package edu.cmu.rwsefe.vowl;
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TableLayout;
@@ -16,6 +18,11 @@ public class LevelSelectFragment extends Fragment {
 	public static final String LATIN_LOWER_ALPHABET = LATIN_UPPER_ALPHABET.toLowerCase();
 	public static final String LATIN_NUMBERS = "0123456789";
 	
+	
+	
+	
+	
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 	    Bundle savedInstanceState) {
@@ -25,8 +32,22 @@ public class LevelSelectFragment extends Fragment {
 	    String labels = LATIN_LOWER_ALPHABET;
 	    generateLevelButtons(view, labels);
 	    
+	    
+		View button = (View) view.findViewById(R.id.navButton);
+		button.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent();
+				intent.setClassName("com.canvas", "com.canvas.Canvas1");  //calling Canvas activity here
+				startActivity(intent);
+			}	
+			
+		});
+	    
 	    return view;
 	}
+	
+
 	
 	protected void generateLevelButtons(View view, String labels) {
 		String[] characters = labels.split("");

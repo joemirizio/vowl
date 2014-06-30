@@ -26,6 +26,8 @@
             android:name="edu.cmu.rwsefe.vowl.LevelSelectActivity"
             android:label="@string/title_activity_level_select" >
         </activity>
+        <activity android:name="com.lipitk.canvas.vowl.Canvas1" >
+        </activity>
     </application>
 
 </manifest>
