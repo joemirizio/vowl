@@ -1,4 +1,4 @@
-package edu.cmu.rwsefe.vowl;
+package edu.cmu.rwsefe.vowl.ui;
 
 import java.util.Arrays;
 
@@ -16,7 +16,10 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
-import edu.cmu.rwsefe.vowl.CustomTextView;
+import edu.cmu.rwsefe.vowl.R;
+import edu.cmu.rwsefe.vowl.R.color;
+import edu.cmu.rwsefe.vowl.R.styleable;
+import edu.cmu.rwsefe.vowl.ui.CustomTextView;
 
 public class FlatButton extends Button {
 	protected ShapeDrawable mBase;

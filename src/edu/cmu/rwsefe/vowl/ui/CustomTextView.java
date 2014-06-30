@@ -1,5 +1,7 @@
-package edu.cmu.rwsefe.vowl;
+package edu.cmu.rwsefe.vowl.ui;
 
+import edu.cmu.rwsefe.vowl.R;
+import edu.cmu.rwsefe.vowl.R.styleable;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Paint;

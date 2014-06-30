@@ -26,7 +26,7 @@
         android:fontFamily="FredokaOne-Regular.ttf"
    	/>-->
 
-    <edu.cmu.rwsefe.vowl.FlatButton
+    <edu.cmu.rwsefe.vowl.ui.FlatButton
         android:id="@+id/nav_button"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
