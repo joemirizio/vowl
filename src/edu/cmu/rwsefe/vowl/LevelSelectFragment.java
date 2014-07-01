@@ -38,7 +38,7 @@ public class LevelSelectFragment extends Fragment {
 			@Override
 			public void onClick(View v) {
 				Intent intent = new Intent();
-				intent.setClassName("com.canvas", "com.canvas.Canvas1");  //calling Canvas activity here
+				intent.setClassName("com.canvas", "com.canvas.Canvas1");  //calling Canvas activity
 				startActivity(intent);
 			}	
 			
