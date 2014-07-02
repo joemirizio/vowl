@@ -52,7 +52,6 @@ public class FlatButton extends Button {
 	    } else {
 	    	mTextStyle = new StyleSpan(Typeface.NORMAL);
 	    }
-	    this.applyCustomFont();
 		
 	    // Override default button look
 	    this.setBackgroundColor(getResources().getColor(android.R.color.transparent));
