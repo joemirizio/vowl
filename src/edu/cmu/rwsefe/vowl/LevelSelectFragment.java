@@ -1,9 +1,11 @@
 package edu.cmu.rwsefe.vowl;
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TableLayout;
@@ -24,6 +26,20 @@ public class LevelSelectFragment extends Fragment {
 	    
 	    String labels = LATIN_LOWER_ALPHABET;
 	    generateLevelButtons(view, labels);
+	    
+	    final Button button = (Button) view.findViewById(R.id.navButton);
+		button.setOnClickListener(new OnClickListener() {
+			
+		    String buttonText = (String) button.getText();
+
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(v.getContext(), CanvasActivity.class);
+				intent.putExtra("letter", buttonText);
+				startActivity(intent);
+			}	
+
+		});
 	    
 	    return view;
 	}
