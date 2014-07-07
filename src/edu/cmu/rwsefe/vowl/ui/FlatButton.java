@@ -105,6 +105,14 @@ public class FlatButton extends Button {
 		
 		super.onDraw(canvas);
 	}
+	
+	public void setBaseColor(int color) {
+		mBaseColor = color;
+	}
+	
+	public void setShadowColor(int color) {
+		mShadowColor = color;
+	}
 
 	@Override
 	protected void onLayout(boolean changed, int l, int t, int r, int b) {

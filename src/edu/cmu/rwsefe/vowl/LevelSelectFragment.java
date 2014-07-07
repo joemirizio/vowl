@@ -5,9 +5,10 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
+import edu.cmu.rwsefe.vowl.ui.FlatButtonRating;
 
 
 public class LevelSelectFragment extends Fragment {
@@ -29,29 +30,37 @@ public class LevelSelectFragment extends Fragment {
 	}
 	
 	protected void generateLevelButtons(View view, String labels) {
-		String[] characters = labels.split("");
-		int characterCount = characters.length;
-		int characterIndex = 1;
-		int colorWhite = this.getResources().getColor(R.color.white);
+		final char[] characters = labels.toCharArray();
+		final int colorWhite = this.getResources().getColor(R.color.white);
+		final int colorBlueLight = this.getResources().getColor(R.color.blueLight);
+		final int colorBlueDark = this.getResources().getColor(R.color.blueDark);
+
+		final int buttonsPerRow = 3;
+		final int padding = 10;
+		
 		TableLayout layout = (TableLayout) view.findViewById(R.id.levelTable);
-		
-		// TODO: Make level button builder dynamic
-		for (int rowIndex = 0; rowIndex < layout.getChildCount(); rowIndex++) {
-			TableRow row = (TableRow) layout.getChildAt(rowIndex);
-			for (int buttonIndex = 0; buttonIndex < row.getChildCount(); buttonIndex++) {
-				Button button = (Button) row.getChildAt(buttonIndex);
-				button.setTextSize(36);
-				button.setTextColor(colorWhite);
-				button.setText(characters[characterIndex++]);
-			}
-		}
-		
-		/*TableRow row = new TableRow(layout.getContext());
-		for(String chr : characters) {
-			if (row.getChildCount() == 3) {
+		layout.removeAllViews();
+			
+		TableRow row = new TableRow(layout.getContext());
+		for(char chr : characters) {
+			// Create button
+			FlatButtonRating button = new FlatButtonRating(layout.getContext(), null);
+			button.setText("" + chr);
+			button.setTextSize(30);
+			button.setTextColor(colorWhite);
+			button.setBaseColor(colorBlueLight);
+			button.setShadowColor(colorBlueDark);
+			TableRow.LayoutParams buttonLayout = new TableRow.LayoutParams(0, 300);
+			buttonLayout.setMargins(padding, padding, padding, padding);
+			button.setLayoutParams(buttonLayout);
+			
+			row.addView(button);
+			
+			// Move to next row if current row is full
+			if (row.getChildCount() == buttonsPerRow) {
 				layout.addView(row);
 				row = new TableRow(layout.getContext());
 			}
-		}*/
+		}
 	}
 }
