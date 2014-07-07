@@ -1,8 +1,31 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	    xmlns:tools="http://schemas.android.com/tools"
-  	    tools:context="${packageName}.${activityClass}"
-	    android:layout_width="match_parent"
-	    android:layout_height="match_parent">
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="${packageName}.${activityClass}"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    
+    <RadioGroup
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="horizontal"
+	    android:checkedButton="@+id/level_alphabet_lower">
+	    <RadioButton android:id="@+id/level_alphabet_upper"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="@string/level_alphabet_upper_label"
+	        android:onClick="onRadioButtonClicked"/>
+	    <RadioButton android:id="@+id/level_alphabet_lower"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="@string/level_alphabet_lower_label"
+	        android:onClick="onRadioButtonClicked"/>
+   	    <RadioButton android:id="@+id/level_number"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="@string/level_number_label"
+	        android:onClick="onRadioButtonClicked"/>
+	</RadioGroup>
 
 	<ScrollView
 	    android:layout_width="match_parent"

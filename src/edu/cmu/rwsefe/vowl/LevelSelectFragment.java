@@ -38,7 +38,7 @@ public class LevelSelectFragment extends Fragment {
 		final int buttonsPerRow = 3;
 		final int padding = 10;
 		
-		TableLayout layout = (TableLayout) view.findViewById(R.id.levelTable);
+		TableLayout layout = (TableLayout) view;//.findViewById(R.id.levelTable);
 		layout.removeAllViews();
 			
 		TableRow row = new TableRow(layout.getContext());
@@ -61,6 +61,11 @@ public class LevelSelectFragment extends Fragment {
 				layout.addView(row);
 				row = new TableRow(layout.getContext());
 			}
+		}
+		
+		// Add last row if not empty
+		if (row.getChildCount() > 0) {
+			layout.addView(row);
 		}
 	}
 }
