@@ -1,11 +1,12 @@
 package edu.cmu.rwsefe.vowl;
 
+import java.util.Random;
+
 import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import edu.cmu.rwsefe.vowl.ui.FlatButtonRating;
@@ -38,9 +39,11 @@ public class LevelSelectFragment extends Fragment {
 		final int buttonsPerRow = 3;
 		final int padding = 10;
 		
-		TableLayout layout = (TableLayout) view;//.findViewById(R.id.levelTable);
+		final Random random = new Random();
+		
+		TableLayout layout = (TableLayout) view;
 		layout.removeAllViews();
-			
+		
 		TableRow row = new TableRow(layout.getContext());
 		for(char chr : characters) {
 			// Create button
@@ -50,6 +53,7 @@ public class LevelSelectFragment extends Fragment {
 			button.setTextColor(colorWhite);
 			button.setBaseColor(colorBlueLight);
 			button.setShadowColor(colorBlueDark);
+			button.setRating(random.nextInt(FlatButtonRating.MAX_STARS + 1));
 			TableRow.LayoutParams buttonLayout = new TableRow.LayoutParams(0, 300);
 			buttonLayout.setMargins(padding, padding, padding, padding);
 			button.setLayoutParams(buttonLayout);

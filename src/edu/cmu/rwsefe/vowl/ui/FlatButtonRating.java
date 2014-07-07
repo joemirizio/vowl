@@ -19,6 +19,7 @@ import android.widget.RatingBar;
 import edu.cmu.rwsefe.vowl.R;
 
 public class FlatButtonRating extends FlatButton {
+	public static final int MAX_STARS = 5;
 	protected RatingBar mRatingBar;
 	
 	public FlatButtonRating(Context context, AttributeSet attributes) {
@@ -42,9 +43,8 @@ public class FlatButtonRating extends FlatButton {
 		int scaledWidth = getWidth();
 		
 		mRatingBar.setIsIndicator(true);
-		mRatingBar.setNumStars(5);
+		mRatingBar.setNumStars(MAX_STARS);
 		mRatingBar.setStepSize(1.0f);
-		setRating(3);
 		
 		mRatingBar.measure(
 				MeasureSpec.getSize(mRatingBar.getMeasuredWidth()), 
@@ -70,7 +70,7 @@ public class FlatButtonRating extends FlatButton {
 		
 	}
 	
-	protected void setRating(float rating) {
+	public void setRating(float rating) {
 		mRatingBar.setRating(rating);
 	}
 }
