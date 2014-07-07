@@ -1,6 +1,6 @@
 LOCAL_PATH := $(call my-dir)
 
-PATHH := C:\Sites\vowl\jni
+PATHH := $(LOCAL_PATH)
 
 include $(CLEAR_VARS)
 

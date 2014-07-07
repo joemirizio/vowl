@@ -1,11 +1,11 @@
 package edu.cmu.rwsefe.vowl;
 
+import java.io.IOException;
 import java.util.HashMap;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
@@ -16,6 +16,8 @@ import android.view.Gravity;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
+
+import com.canvas.AssetInstaller;
 
 public class CanvasActivity extends Activity {
 
@@ -53,6 +55,13 @@ public class CanvasActivity extends Activity {
 		display.getSize(point);
 		width = point.x;
 		height = point.y;
+		
+		AssetInstaller assetInstaller = new AssetInstaller(getApplicationContext(), "projects");
+		try {
+			assetInstaller.execute();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
 		canvasView = new CanvasView(this, this);
 		main = new LinearLayout(this);
