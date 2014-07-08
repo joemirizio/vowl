@@ -36,6 +36,7 @@ public class CanvasActivity extends Activity {
 			throw new MissingResourceException("Resource 'character' is missing from bundle", CanvasActivity.class.getName(), BUNDLE_CHARACTER);
 		}
 		
+		// Install LipiTK components
 		AssetInstaller assetInstaller = new AssetInstaller(getApplicationContext(), "projects");
 		try {
 			assetInstaller.execute();
