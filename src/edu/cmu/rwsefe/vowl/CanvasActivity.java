@@ -2,6 +2,7 @@ package edu.cmu.rwsefe.vowl;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -11,6 +12,7 @@ import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.WindowManager;
@@ -18,6 +20,9 @@ import android.widget.LinearLayout;
 import android.widget.RatingBar;
 
 import com.canvas.AssetInstaller;
+
+import edu.cmu.rwsefe.vowl.model.CharacterResult;
+import edu.cmu.rwsefe.vowl.model.DatabaseHandler;
 
 public class CanvasActivity extends Activity {
 
@@ -134,6 +139,17 @@ public class CanvasActivity extends Activity {
 			
 			rb.setRating(rating);
 			topLayout.addView(rb);
+			
+			DatabaseHandler db = new DatabaseHandler(getApplicationContext());
+			CharacterResult newCharacter = new CharacterResult((int) letter.charAt(0), confidence);
+			db.addCharacterResult(newCharacter);
+			Log.d("CanvasActivityDB", "ADDING " + newCharacter.getUnicodeValue() + " : " + newCharacter.getConfidence());
+			
+			List<CharacterResult> results = db.getAllCharacterResults();
+			
+			for(CharacterResult result: results) {
+				Log.d("CanvasActivityDB", result.getUnicodeValue() + " : " + result.getConfidence());
+			}
 		}
 		@Override
 		protected void onPreExecute(){

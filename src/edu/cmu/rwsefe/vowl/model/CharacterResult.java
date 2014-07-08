@@ -1,15 +1,21 @@
 package edu.cmu.rwsefe.vowl.model;
 
 
-public class Character {
+public class CharacterResult {
 	
 	private int id;
 	private int unicodeValue;
 	private int confidence;
 	//private Stroke stroke;
 	
-	public Character(int newId, int newUnicodeValue, int newConfidence) {
+	public CharacterResult(int newId, int newUnicodeValue, int newConfidence) {
 		id = newId;
+		unicodeValue = newUnicodeValue;
+		confidence = newConfidence;
+		//stroke = newStroke;
+	}
+	
+	public CharacterResult(int newUnicodeValue, int newConfidence) {
 		unicodeValue = newUnicodeValue;
 		confidence = newConfidence;
 		//stroke = newStroke;

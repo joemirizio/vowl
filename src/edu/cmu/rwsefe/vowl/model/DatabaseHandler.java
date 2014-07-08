@@ -18,16 +18,16 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	
 	//Column names
 	private static final String ID = "id";
-	private static final String UNICODE_VALUE = "unicodeValue";
+	private static final String UNICODE_VALUE = "unicode_value";
 	private static final String CONFIDENCE = "confidence";
 	private static final String[] COLUMNS = {ID, UNICODE_VALUE, CONFIDENCE};
 	
 	
 	private static final String CREATE_CHARACTER_TABLE = 
-			"CREATE_TABLE characters ( " +
-			"id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-			"unicodeValue INTEGER, " +
-			"confidence INTEGER";
+			"CREATE TABLE characters ( "
+			+ ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+			+ UNICODE_VALUE + " INTEGER, "
+			+ CONFIDENCE + " INTEGER )";
 			
 	
 	public DatabaseHandler(Context context) {
@@ -49,7 +49,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         this.onCreate(db);
 	}
 	
-	public void addCharacter(Character newCharacter) {
+	public void addCharacterResult(CharacterResult newCharacter) {
 		
 		// 1. get reference to writable DB
 		SQLiteDatabase db = this.getWritableDatabase();
@@ -68,13 +68,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		db.close();
 	}
 	
-	public List<Character> getCharacter(String newUnicodeValue) {
+	public List<CharacterResult> getCharacterResults(int newUnicodeValue) {
 		
 		
 		// 1. get reference to readable DB
         SQLiteDatabase db = this.getReadableDatabase();
         
-        String selectQuery = "SELECT * FROM characters WHERE unicodeValue = " + newUnicodeValue;
+        String selectQuery = "SELECT * FROM characters WHERE unicode_value = " + newUnicodeValue;
  
         // 2. build query
         Cursor cursor = db.rawQuery(selectQuery, null);
@@ -82,14 +82,43 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         if (cursor != null)
             cursor.moveToFirst();
 
-        List<Character> characters = new ArrayList<Character>();
+        List<CharacterResult> characters = new ArrayList<CharacterResult>();
         
         // 4. build book object
         do {
-            Character newCharacter = new Character(
+            CharacterResult newCharacter = new CharacterResult(
             		cursor.getColumnIndex(ID),
             		cursor.getColumnIndex(UNICODE_VALUE), 
             		cursor.getColumnIndex(CONFIDENCE));
+            
+            characters.add(newCharacter);
+        } while(cursor.moveToNext());
+ 
+        // 5. return book
+        return characters;
+	}
+	
+	public List<CharacterResult> getAllCharacterResults()
+	{
+		// 1. get reference to readable DB
+        SQLiteDatabase db = this.getReadableDatabase();
+        
+        String selectQuery = "SELECT * FROM characters";
+ 
+        // 2. build query
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        // 3. if we got results get the first one
+        if (cursor != null)
+            cursor.moveToFirst();
+
+        List<CharacterResult> characters = new ArrayList<CharacterResult>();
+        
+        // 4. build book object
+        do {
+            CharacterResult newCharacter = new CharacterResult(
+            		cursor.getInt(cursor.getColumnIndex(ID)),
+            		cursor.getInt(cursor.getColumnIndex(UNICODE_VALUE)), 
+            		cursor.getInt(cursor.getColumnIndex(CONFIDENCE)));
             
             characters.add(newCharacter);
         } while(cursor.moveToNext());
