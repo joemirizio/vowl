@@ -2,6 +2,7 @@ package edu.cmu.rwsefe.vowl;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.EventListener;
 import java.util.HashMap;
 
 import android.annotation.SuppressLint;
@@ -12,6 +13,7 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PointF;
 import android.os.CountDownTimer;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -30,7 +32,7 @@ public class CanvasView extends View implements OnTouchListener {
 	private LipiTKJNIInterface lipitkInterface;
 	private LipiTKJNIInterface recognizer;
 	private Stroke currentStroke;
-	private CanvasActivity canvasActivity;
+	//private CanvasActivity canvasActivity;
 	private HashMap<String, Integer> characters;
 	private ArrayList<Values> vals = new ArrayList<Values>();
 	private int minY = 480;
@@ -42,6 +44,7 @@ public class CanvasView extends View implements OnTouchListener {
 
 	private Path drawPath;
 	private Paint canvasPaint;
+	private ScoreEventListener mScoreEventListener;
 
 	// global variable imports
 	private static boolean timerFlag = true;
@@ -52,10 +55,8 @@ public class CanvasView extends View implements OnTouchListener {
 
 
 	@SuppressLint("NewApi")
-	public CanvasView(Context context, CanvasActivity canvas) {
-		super(context);
-		// TODO Auto-generated constructor stub
-		canvasActivity = canvas;
+	public CanvasView(Context context, AttributeSet attributes) {
+		super(context, attributes);
 		paint = new Paint();
 		setFocusable(true);
 		setFocusableInTouchMode(true);
@@ -227,7 +228,9 @@ public class CanvasView extends View implements OnTouchListener {
 		public void onFinish() {
 			System.out.println("Timer Flag :: " + timerFlag);
 			if (longPressFlag) {
-				canvasActivity.processDialogBox();
+				if (mScoreEventListener != null) {
+					mScoreEventListener.onScore();
+				}
 				isUserWriting = false;
 				isFirststroke = true;
 			}
@@ -243,6 +246,14 @@ public class CanvasView extends View implements OnTouchListener {
 			System.out.println("Tick tick Flag :: " + timerFlag);
 		}
 
+	}
+	
+	public void setScoreEventListener(ScoreEventListener scoreEventListener) {
+		mScoreEventListener = scoreEventListener;
+	}
+	
+	public interface ScoreEventListener extends EventListener {
+		public void onScore();
 	}
 
 	public class MyLongPressCount extends CountDownTimer {

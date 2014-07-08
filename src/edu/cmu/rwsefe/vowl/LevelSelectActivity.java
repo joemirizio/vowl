@@ -23,7 +23,7 @@ public class LevelSelectActivity extends Activity {
 	        	String level = mlevelSelect.getLevelFromGridPosition(position);
 	        	// Start canvas activity
 	        	Intent intent = new Intent(v.getContext(), CanvasActivity.class);
-	        	intent.putExtra("letter", level);
+	        	intent.putExtra(CanvasActivity.BUNDLE_CHARACTER, level);
 	        	startActivity(intent);
 	        }
 		});
