@@ -1,13 +1,12 @@
 package edu.cmu.rwsefe.vowl;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.RadioButton;
-import android.widget.Toast;
 
 public class LevelSelectActivity extends Activity {
 
@@ -22,8 +21,10 @@ public class LevelSelectActivity extends Activity {
 		mlevelSelect.setLevelClickListener(new OnItemClickListener() {
 	        public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
 	        	String level = mlevelSelect.getLevelFromGridPosition(position);
-	        	// TODO Remove and launch canvas
-	        	Toast.makeText(LevelSelectActivity.this, "" + level, Toast.LENGTH_SHORT).show();
+	        	// Start canvas activity
+	        	Intent intent = new Intent(v.getContext(), CanvasActivity.class);
+	        	intent.putExtra("letter", level);
+	        	startActivity(intent);
 	        }
 		});
 	}
