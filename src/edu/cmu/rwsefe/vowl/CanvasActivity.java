@@ -89,9 +89,7 @@ public class CanvasActivity extends Activity {
 				LinearLayout.LayoutParams.WRAP_CONTENT,
 				height/8));
 		topLayout.setGravity(Gravity.TOP);
-		
-		horizontalTopLayout = 
-		
+				
 		bottomLayout = new LinearLayout(this);
 		bottomLayout.setOrientation(LinearLayout.HORIZONTAL);
 		bottomLayout.setLayoutParams(new LinearLayout.LayoutParams(
