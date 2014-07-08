@@ -8,5 +8,12 @@
     <string name="title_activity_splash">SplashActivity</string>
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_level_select">LevelSelect</string>
-
+    <string name="level_alphabet_upper_label">A</string>
+    <string name="level_alphabet_lower_label">a</string>
+    <string name="level_numerals_label">1</string>
+    
+    <!-- Level Categories -->
+    <string name="latin_alphabet_upper">ABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
+    <string name="latin_alphabet_lower">abcdefghijklmnopqrstuvwxyz</string>
+    <string name="latin_numerals">0123456789</string>
 </resources>

@@ -1,73 +1,111 @@
 package edu.cmu.rwsefe.vowl;
 
+import java.util.Random;
+
 import android.app.Fragment;
-import android.content.Intent;
+import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TableLayout;
-import android.widget.TableRow;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.BaseAdapter;
+import android.widget.GridView;
+import android.widget.Toast;
+import edu.cmu.rwsefe.vowl.ui.FlatButtonRating;
 
 
 public class LevelSelectFragment extends Fragment {
-	
-	public static final String LATIN_UPPER_ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-	public static final String LATIN_LOWER_ALPHABET = LATIN_UPPER_ALPHABET.toLowerCase();
-	public static final String LATIN_NUMBERS = "0123456789";
-	
+
+	final Random random = new Random();
+
+	private LevelAdapter mLevelAdapter;
+	private GridView mLevelGridView;
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 	    Bundle savedInstanceState) {
 	    // Inflate the layout for this fragment
 	    View view = inflater.inflate(R.layout.fragment_level_select, container, false);
-	    
-	    String labels = LATIN_LOWER_ALPHABET;
-	    generateLevelButtons(view, labels);
-	    
-	    final Button button = (Button) view.findViewById(R.id.navButton);
-		button.setOnClickListener(new OnClickListener() {
-			
-		    String buttonText = (String) button.getText();
 
-			@Override
-			public void onClick(View v) {
-				Intent intent = new Intent(v.getContext(), CanvasActivity.class);
-				intent.putExtra("letter", buttonText);
-				startActivity(intent);
-			}	
+	    String initalLevel = getActivity().getResources().getString(R.string.latin_alphabet_lower);
 
-		});
-	    
+	    mLevelGridView = (GridView) view.findViewById(R.id.levelGrid);
+	    mLevelAdapter = new LevelAdapter(getActivity(), initalLevel);
+	    mLevelGridView.setAdapter(mLevelAdapter);
+
 	    return view;
 	}
-	
-	protected void generateLevelButtons(View view, String labels) {
-		String[] characters = labels.split("");
-		int characterCount = characters.length;
-		int characterIndex = 1;
-		int colorWhite = this.getResources().getColor(R.color.white);
-		TableLayout layout = (TableLayout) view.findViewById(R.id.levelTable);
-		
-		// TODO: Make level button builder dynamic
-		for (int rowIndex = 0; rowIndex < layout.getChildCount(); rowIndex++) {
-			TableRow row = (TableRow) layout.getChildAt(rowIndex);
-			for (int buttonIndex = 0; buttonIndex < row.getChildCount(); buttonIndex++) {
-				Button button = (Button) row.getChildAt(buttonIndex);
-				button.setTextSize(36);
-				button.setTextColor(colorWhite);
-				button.setText(characters[characterIndex++]);
-			}
-		}
-		
-		/*TableRow row = new TableRow(layout.getContext());
-		for(String chr : characters) {
-			if (row.getChildCount() == 3) {
-				layout.addView(row);
-				row = new TableRow(layout.getContext());
-			}
-		}*/
+
+	public void setLevelCategory(int levelCategoryId) {
+		String levels = getActivity().getResources().getString(levelCategoryId);
+		mLevelAdapter.setLevels(levels);
+	}
+
+	public void setLevelClickListener(OnItemClickListener clickListener) {
+		mLevelGridView.setOnItemClickListener(clickListener);
+	}
+
+	public String getLevelFromGridPosition(int position) {
+		return mLevelAdapter.getItem(position).toString();
+	}
+
+
+	class LevelAdapter extends BaseAdapter {
+	    private Context mContext;
+	    private String mLevels;
+
+	    final int colorWhite;
+	    final int colorBlueLight;
+	    final int colorBlueDark;
+
+	    public LevelAdapter(Context c, String levels) {
+	        mContext = c;
+	        mLevels = levels;
+
+	    	colorWhite = c.getResources().getColor(R.color.white);
+	    	colorBlueLight = c.getResources().getColor(R.color.blueLight);
+	    	colorBlueDark = c.getResources().getColor(R.color.blueDark);
+	    }
+
+	    public void setLevels(String levels) {
+	    	mLevels = levels;
+	    	notifyDataSetChanged();
+	    }
+
+	    public int getCount() {
+	        return mLevels.length();
+	    }
+
+	    public Object getItem(int position) {
+	        return mLevels.charAt(position);
+	    }
+
+	    public long getItemId(int position) {
+	        return 0;
+	    }
+
+	    public View getView(int position, View convertView, ViewGroup parent) {
+	    	String chr = "" + mLevels.charAt(position);
+
+	    	// Create and style button
+	    	FlatButtonRating button = new FlatButtonRating(mContext, null);
+			button.setText("" + chr);
+			button.setTextSize(30);
+			button.setTextColor(colorWhite);
+			button.setBaseColor(colorBlueLight);
+			button.setShadowColor(colorBlueDark);
+			button.setHeight(300);
+			button.setRating(random.nextInt(FlatButtonRating.MAX_STARS + 1));
+
+			// Let level select capture clicks
+			button.setClickable(false);
+			button.setFocusable(false);
+
+			return button;
+	    }
 	}
 }
