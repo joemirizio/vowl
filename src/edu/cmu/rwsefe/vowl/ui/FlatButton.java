@@ -1,4 +1,4 @@
-package edu.cmu.rwsefe.vowl;
+package edu.cmu.rwsefe.vowl.ui;
 
 import java.util.Arrays;
 
@@ -16,7 +16,10 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
-import edu.cmu.rwsefe.vowl.CustomTextView;
+import edu.cmu.rwsefe.vowl.R;
+import edu.cmu.rwsefe.vowl.R.color;
+import edu.cmu.rwsefe.vowl.R.styleable;
+import edu.cmu.rwsefe.vowl.ui.CustomTextView;
 
 public class FlatButton extends Button {
 	protected ShapeDrawable mBase;
@@ -34,7 +37,7 @@ public class FlatButton extends Button {
 		this.init(context, attributes);
 	}
 
-	private void init(Context context, AttributeSet attributes) {
+	protected void init(Context context, AttributeSet attributes) {
 	    TypedArray attrs = context.obtainStyledAttributes(attributes, R.styleable.FlatButton);
 	    
 	    mShadowOffset = attrs.getInteger(R.styleable.FlatButton_shadowOffset, 30);
@@ -49,8 +52,10 @@ public class FlatButton extends Button {
 	    } else {
 	    	mTextStyle = new StyleSpan(Typeface.NORMAL);
 	    }
-	    this.applyCustomFont();
 		
+	    // Override default button look
+	    this.setBackgroundColor(getResources().getColor(android.R.color.transparent));
+	    
 		// Recycle TypedArray
 		attrs.recycle();
 	}
