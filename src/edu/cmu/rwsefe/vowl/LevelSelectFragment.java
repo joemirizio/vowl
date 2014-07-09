@@ -5,16 +5,13 @@ import java.util.Random;
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
-import android.widget.Toast;
+import edu.cmu.rwsefe.vowl.model.DatabaseHandler;
 import edu.cmu.rwsefe.vowl.ui.FlatButtonRating;
 
 
@@ -51,6 +48,10 @@ public class LevelSelectFragment extends Fragment {
 
 	public String getLevelFromGridPosition(int position) {
 		return mLevelAdapter.getItem(position).toString();
+	}
+	
+	public void notifyDataSetChanged() {
+		mLevelAdapter.notifyDataSetChanged();
 	}
 
 
@@ -90,6 +91,13 @@ public class LevelSelectFragment extends Fragment {
 
 	    public View getView(int position, View convertView, ViewGroup parent) {
 	    	String chr = "" + mLevels.charAt(position);
+	    	
+	    	DatabaseHandler db = new DatabaseHandler(getActivity());
+	    	int maxConfidence = db.getMaxConfidence((int)chr.charAt(0));
+	    	db.close();
+	    	
+	    	// Confidence to star algorithm not full determined
+	    	int starRating = maxConfidence / 10;
 
 	    	// Create and style button
 	    	FlatButtonRating button = new FlatButtonRating(mContext, null);
@@ -99,7 +107,7 @@ public class LevelSelectFragment extends Fragment {
 			button.setBaseColor(colorBlueLight);
 			button.setShadowColor(colorBlueDark);
 			button.setHeight(300);
-			button.setRating(random.nextInt(FlatButtonRating.MAX_STARS + 1));
+			button.setRating(starRating);
 
 			// Let level select capture clicks
 			button.setClickable(false);

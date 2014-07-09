@@ -120,47 +120,53 @@ public class CanvasActivity extends Activity {
 		@Override
 		protected void onPostExecute(String sResponse) {
 			dialog.dismiss();
-			HashMap<String,Integer> characters = canvasView.getCharacterResults();
-			Integer confidenceFromHash = characters.get(letter);
-			if (confidenceFromHash != null) {
-				confidence = confidenceFromHash;
-			}
-			else {
-				confidence = 0;
-			}
+			processResults();
 			
-			//startActivity(showResults);
-			
-			RatingBar rb = new RatingBar(CanvasActivity.this);
-			rb.setIsIndicator(true);
-			rb.setNumStars(MAX_STARS);
-			
-			int rating = confidence / 10;
-			
-			rb.setRating(rating);
-			topLayout.addView(rb);
-			
-			DatabaseHandler db = new DatabaseHandler(getApplicationContext());
-			CharacterResult newCharacter = new CharacterResult((int) letter.charAt(0), confidence);
-			db.addCharacterResult(newCharacter);
-			Log.d("CanvasActivityDB", "ADDING " + newCharacter.getUnicodeValue() + " : " + newCharacter.getConfidence());
-			
-			List<CharacterResult> results = db.getAllCharacterResults();
-			
-			for(CharacterResult result: results) {
-				Log.d("CanvasActivityDB", result.getUnicodeValue() + " : " + result.getConfidence());
-			}
 		}
 		@Override
 		protected void onPreExecute(){
 			dialog = ProgressDialog.show(CanvasActivity.this, "Processing","Please wait...", true);
-			
 		}
 	}
 	
 	public void processDialogBox(){
 		ProgressdialogClass dialogBox=new ProgressdialogClass();
 		dialogBox.execute();
+	}
+	
+	public void processResults() {
+		HashMap<String,Integer> characters = canvasView.getCharacterResults();
+		Integer confidenceFromHash = characters.get(letter);
+		if (confidenceFromHash != null) {
+			confidence = confidenceFromHash;
+		}
+		else {
+			confidence = 0;
+		}
+		
+		//startActivity(showResults);
+		
+		RatingBar rb = new RatingBar(CanvasActivity.this);
+		rb.setIsIndicator(true);
+		rb.setNumStars(MAX_STARS);
+		
+		int rating = confidence / 10;
+		
+		rb.setRating(rating);
+		topLayout.addView(rb);
+		
+		DatabaseHandler db = new DatabaseHandler(getApplicationContext());
+		CharacterResult newCharacter = new CharacterResult((int) letter.charAt(0), confidence);
+		db.addCharacterResult(newCharacter);
+		Log.d("CanvasActivityDB", "ADDING " + newCharacter.getUnicodeValue() + " : " + newCharacter.getConfidence());
+		
+		List<CharacterResult> results = db.getAllCharacterResults();
+		
+		for(CharacterResult result: results) {
+			Log.d("CanvasActivityDB", result.getUnicodeValue() + " : " + result.getConfidence());
+		}
+		
+		db.close();
 	}
 	
 	public String getLetter() {

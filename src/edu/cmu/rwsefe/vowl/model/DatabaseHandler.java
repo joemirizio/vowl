@@ -63,9 +63,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		db.insert(CHARACTER_TABLE, // table
 		        null, //nullColumnHack
 		        values); // key/value -> keys = column names/ values = column values
-		
-		// 4. close
-		db.close();
 	}
 	
 	public List<CharacterResult> getCharacterResults(int newUnicodeValue) {
@@ -84,7 +81,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         List<CharacterResult> characters = new ArrayList<CharacterResult>();
         
-        // 4. build book object
+        // 4. build character object
         do {
             CharacterResult newCharacter = new CharacterResult(
             		cursor.getColumnIndex(ID),
@@ -94,7 +91,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             characters.add(newCharacter);
         } while(cursor.moveToNext());
  
-        // 5. return book
+        // 5. return character
         return characters;
 	}
 	
@@ -113,7 +110,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         List<CharacterResult> characters = new ArrayList<CharacterResult>();
         
-        // 4. build book object
+        // 4. build character object
         do {
             CharacterResult newCharacter = new CharacterResult(
             		cursor.getInt(cursor.getColumnIndex(ID)),
@@ -123,8 +120,30 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             characters.add(newCharacter);
         } while(cursor.moveToNext());
  
-        // 5. return book
+        // 5. return character
         return characters;
+	}
+	
+	public int getMaxConfidence(int newUnicodeValue) {
+		
+		// 1. get reference to readable DB
+        SQLiteDatabase db = this.getReadableDatabase();
+        
+        String selectQuery = "SELECT MAX (confidence) FROM characters WHERE unicode_value = " + newUnicodeValue;
+ 
+        // 2. build query
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        // 3. if we got results get the first one
+        if (cursor != null)
+            cursor.moveToFirst();
+        else
+        	return 0;
+        
+        // 4. Get Confidence
+        int maxConfidence = cursor.getInt(0);
+         
+        // 5. return confidence
+        return maxConfidence;
 	}
 
 }

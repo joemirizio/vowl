@@ -47,4 +47,13 @@ public class LevelSelectActivity extends Activity {
 	            break;
 	    }
 	}
+	
+	@Override
+	public void onResume() {
+		super.onResume();
+		
+		//Refresh stars
+		mlevelSelect.notifyDataSetChanged();
+	}
+	
 }
