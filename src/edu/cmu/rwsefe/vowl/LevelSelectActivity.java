@@ -53,7 +53,7 @@ public class LevelSelectActivity extends Activity {
 		super.onResume();
 		
 		//Refresh stars
-		mlevelSelect.notifyDataSetChanged();
+		mlevelSelect.updateLevelViews();
 	}
 	
 }

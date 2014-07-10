@@ -1,6 +1,7 @@
 package edu.cmu.rwsefe.vowl.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import android.content.ContentValues;
@@ -144,6 +145,31 @@ public class DatabaseHandler extends SQLiteOpenHelper {
          
         // 5. return confidence
         return maxConfidence;
+	}
+	
+	public HashMap<Integer, Integer> getMaxScoreForAllCharacters()
+	{
+		// 1. get reference to readable DB
+        SQLiteDatabase db = this.getReadableDatabase();
+        
+        String selectQuery = "SELECT id, unicode_value, MAX(confidence) FROM characters GROUP BY unicode_value";
+ 
+        // 2. build query
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        // 3. if we got results get the first one
+        if (cursor != null)
+            cursor.moveToFirst();
+
+        HashMap<Integer, Integer>  characterHash = new HashMap<Integer, Integer>();
+        
+        // 4. build character object
+        do {
+            characterHash.put(cursor.getInt(1),
+            		cursor.getInt(2));
+        } while(cursor.moveToNext());
+ 
+        // 5. return character
+        return characterHash;
 	}
 
 }

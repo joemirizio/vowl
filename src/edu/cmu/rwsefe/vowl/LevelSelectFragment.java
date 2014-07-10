@@ -1,5 +1,6 @@
 package edu.cmu.rwsefe.vowl;
 
+import java.util.HashMap;
 import java.util.Random;
 
 import android.app.Fragment;
@@ -21,6 +22,7 @@ public class LevelSelectFragment extends Fragment {
 
 	private LevelAdapter mLevelAdapter;
 	private GridView mLevelGridView;
+	private HashMap<Integer, Integer> mMaxScoreCharacters;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -33,7 +35,7 @@ public class LevelSelectFragment extends Fragment {
 	    mLevelGridView = (GridView) view.findViewById(R.id.levelGrid);
 	    mLevelAdapter = new LevelAdapter(getActivity(), initalLevel);
 	    mLevelGridView.setAdapter(mLevelAdapter);
-
+	    
 	    return view;
 	}
 
@@ -50,8 +52,15 @@ public class LevelSelectFragment extends Fragment {
 		return mLevelAdapter.getItem(position).toString();
 	}
 	
-	public void notifyDataSetChanged() {
+	public void updateLevelViews() {
+		updateMaxScores();
 		mLevelAdapter.notifyDataSetChanged();
+	}
+	
+	public void updateMaxScores() {
+    	DatabaseHandler db = new DatabaseHandler(getActivity());
+    	mMaxScoreCharacters = db.getMaxScoreForAllCharacters();
+    	db.close();
 	}
 
 
@@ -92,12 +101,13 @@ public class LevelSelectFragment extends Fragment {
 	    public View getView(int position, View convertView, ViewGroup parent) {
 	    	String chr = "" + mLevels.charAt(position);
 	    	
-	    	DatabaseHandler db = new DatabaseHandler(getActivity());
-	    	int maxConfidence = db.getMaxConfidence((int)chr.charAt(0));
-	    	db.close();
+	    	Integer maxScore = mMaxScoreCharacters.get((int)chr.charAt(0));
+	    	int starRating = 0;
 	    	
-	    	// Confidence to star algorithm not full determined
-	    	int starRating = maxConfidence / 10;
+	    	if (maxScore != null)
+	    	
+		    	// Confidence to star algorithm not full determined
+		    	starRating = maxScore / 10;
 
 	    	// Create and style button
 	    	FlatButtonRating button = new FlatButtonRating(mContext, null);
