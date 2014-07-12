@@ -19,13 +19,11 @@ import android.view.View.OnTouchListener;
 
 import com.canvas.LipiTKJNIInterface;
 import com.canvas.LipitkResult;
-import com.canvas.Page;
 import com.canvas.Stroke;
 
 public class CanvasView extends View implements OnTouchListener {
 
 	private ArrayList<Stroke> strokes;
-	private Page page;
 	private Stroke[] recognitionStrokes;
 	private LipiTKJNIInterface lipitkInterface;
 	private LipiTKJNIInterface recognizer;
@@ -78,7 +76,6 @@ public class CanvasView extends View implements OnTouchListener {
 		String path = externalFileDir.getPath();
 		lipitkInterface = new LipiTKJNIInterface(path, "SHAPEREC_ALPHANUM");
 		lipitkInterface.initialize();
-		page = new Page(lipitkInterface);
 		recognizer = lipitkInterface;
 
 		drawPath = new Path();

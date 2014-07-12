@@ -157,7 +157,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         // 2. build query
         Cursor cursor = db.rawQuery(selectQuery, null);
         // 3. if we got results get the first one
-        if (cursor != null)
+        if (cursor != null && cursor.getCount() > 0)
             cursor.moveToFirst();
 
         HashMap<Integer, Integer>  characterHash = new HashMap<Integer, Integer>();
