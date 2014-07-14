@@ -39,10 +39,12 @@
             android:text="&lt;"
             android:textColor="@color/white"
             android:textSize="42sp"
+            android:onClick="onClickLevelPrev"
             vowl:baseColor="@color/purpleLight"
             vowl:shadowColor="@color/purpleDark" />
         
         <edu.cmu.rwsefe.vowl.ui.FlatButton
+            android:id="@+id/canvasLevelSpeak"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
@@ -51,6 +53,7 @@
             android:text="(•)"
             android:textColor="@color/white"
             android:textSize="42sp"
+            android:onClick="onClickLevelSpeak"
             vowl:baseColor="@color/blueLight"
             vowl:shadowColor="@color/blueDark" />
 
@@ -64,6 +67,7 @@
             android:text=">"
             android:textColor="@color/white"
         	android:textSize="42sp"
+        	android:onClick="onClickLevelNext"
             vowl:baseColor="@color/purpleLight"
             vowl:shadowColor="@color/purpleDark"/>
         

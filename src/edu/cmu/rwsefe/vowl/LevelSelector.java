@@ -73,7 +73,6 @@ public class LevelSelector {
 		}
 		mCurrentIndex = index;
 		if (mLevelChangeListener != null) {
-			Log.d(TAG, "OnChangeListener");
 			mLevelChangeListener.onLevelChange(mCurrentIndex);
 		}
 		return getLevel();

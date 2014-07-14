@@ -2,16 +2,16 @@ package edu.cmu.rwsefe.vowl;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.MissingResourceException;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.speech.tts.TextToSpeech;
 import android.util.Log;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.RatingBar;
 
 import com.canvas.AssetInstaller;
@@ -29,6 +29,7 @@ public class CanvasActivity extends Activity {
 	private RatingBar mRatingBar;
 	private LevelSelector mLevelSelector;
 	private int mConfidence;
+	private TextToSpeech mTextToSpeech;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -76,24 +77,43 @@ public class CanvasActivity extends Activity {
 			}
 		});
 		
-		// Set level navigation OnClickListeners
-		Button levelNavPrev = (Button) this.findViewById(R.id.canvasLevelNavPrev);
-		Button levelNavNext = (Button) this.findViewById(R.id.canvasLevelNavNext);
-		levelNavPrev.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) { Log.d(TAG, "PREV LEVEL"); mLevelSelector.prevLevel(); }
-		});
-		levelNavNext.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) { Log.d(TAG, "NEXT LEVEL"); mLevelSelector.nextLevel(); }
-		});
-		
-		
 		mRatingBar = (RatingBar) this.findViewById(R.id.canvasRatingBar);
+		
+		mTextToSpeech = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
+			@Override
+			public void onInit(int status) {
+				if (status == TextToSpeech.SUCCESS) {
+					int result = mTextToSpeech.setLanguage(Locale.US);
+		            if (result == TextToSpeech.LANG_MISSING_DATA || 
+		            		result == TextToSpeech.LANG_NOT_SUPPORTED) {
+		                Log.e("TTS", "This Language is not supported");
+		            }
+			    } else { 
+			    	Log.e("TTS", "Initilization Failed!");
+			    }
+			}
+		});
+	}
+	
+	@Override
+	public void onDestroy() {
+		mTextToSpeech.shutdown();
+		super.onDestroy();
+	}
+	
+	public void onClickLevelPrev(View v) {
+		mLevelSelector.prevLevel();
+	}
+	
+	public void onClickLevelNext(View v) {
+		mLevelSelector.nextLevel();
+	}
+	
+	public void onClickLevelSpeak(View v) {
+		mTextToSpeech.speak(mLevelSelector.getLevel(), TextToSpeech.QUEUE_FLUSH, null);
 	}
 	
 	public void onLevelChange(int index) {
-		Log.d(TAG, "ChangedLevel");
 		mCanvasView.initializeStroke();
 		mCanvasView.setOutlineCharacter(mLevelSelector.getLevel());
 	}
