@@ -46,6 +46,7 @@ public class CanvasActivity extends Activity {
 
 		// Set score listener for canvas view
 		mCanvasView = (CanvasView) this.findViewById(R.id.canvas);
+		mCanvasView.setOutlineCharacter(mCharacter);
 		mCanvasView.setScoreEventListener(new ScoreEventListener() {
 			public void onScore() {
 				processDialogBox();

@@ -9,7 +9,9 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.DashPathEffect;
 import android.graphics.Paint;
+import android.graphics.Paint.Align;
 import android.graphics.Path;
 import android.graphics.Point;
 import android.graphics.PointF;
@@ -23,6 +25,8 @@ import android.view.View.OnTouchListener;
 import com.canvas.LipiTKJNIInterface;
 import com.canvas.LipitkResult;
 import com.canvas.Stroke;
+
+import edu.cmu.rwsefe.vowl.ui.CustomTextView;
 
 public class CanvasView extends View implements OnTouchListener {
 
@@ -45,6 +49,14 @@ public class CanvasView extends View implements OnTouchListener {
 
 	private Path drawPath;
 	private ScoreEventListener mScoreEventListener;
+	
+	// Guides and outline
+	private Paint mSolidPaint;
+	private Paint mDottedPaint;
+	private Paint mOutlinePaint;
+	private Path mSolidGuides;
+	private Path mDottedGuides;
+	private String mOutlineCharacter = "x";
 
 	// global variable imports
 	private static boolean timerFlag = true;
@@ -75,15 +87,16 @@ public class CanvasView extends View implements OnTouchListener {
 		currentStroke = new Stroke();
 		strokes = new ArrayList<Stroke>();
 		characters = new HashMap<String, Integer>();
-		
-		Context contextlipi = getContext();
-		File externalFileDir = contextlipi.getExternalFilesDir(null);
-		String path = externalFileDir.getPath();
-		lipitkInterface = new LipiTKJNIInterface(path, "SHAPEREC_ALPHANUM");
-		lipitkInterface.initialize();
-		recognizer = lipitkInterface;
-
 		drawPath = new Path();
+		
+		if (!isInEditMode()) {
+			Context contextlipi = getContext();
+			File externalFileDir = contextlipi.getExternalFilesDir(null);
+			String path = externalFileDir.getPath();
+			lipitkInterface = new LipiTKJNIInterface(path, "SHAPEREC_ALPHANUM");
+			lipitkInterface.initialize();
+			recognizer = lipitkInterface;
+		}
 	}
 
 	public boolean onTouch(View v, MotionEvent event) {
@@ -176,10 +189,52 @@ public class CanvasView extends View implements OnTouchListener {
 	public HashMap<String, Integer> getCharacterResults() {
 		return characters;
 	}
+	
+	private void buildGuides() {
+		// Solid guide
+		mSolidPaint = new Paint(paint);
+		mSolidPaint.setColor(
+				isInEditMode() ? Color.GRAY : this.getResources().getColor(R.color.grayMedium));
+		mSolidGuides = new Path();
+		int top_offset = 10;
+		int x_height = (int)(getHeight() * (2.0/4.0));
+		mSolidGuides.moveTo(0, top_offset);
+		mSolidGuides.lineTo(getWidth(), top_offset);
+		mSolidGuides.moveTo(0, top_offset + x_height);
+		mSolidGuides.lineTo(getWidth(), top_offset + x_height);
+		// Dotted guide
+		mDottedPaint = new Paint(paint);
+		mDottedPaint.setColor(
+				isInEditMode() ? Color.LTGRAY : this.getResources().getColor(R.color.grayLight));
+		mDottedPaint.setPathEffect(new DashPathEffect(new float[] {10,20}, 0));
+		mDottedGuides = new Path();
+		mDottedGuides.moveTo(0, top_offset + x_height / 2);
+		mDottedGuides.lineTo(getWidth(), top_offset + x_height / 2);
+		mDottedGuides.moveTo(0, top_offset + (int)(x_height * 1.5));
+		mDottedGuides.lineTo(getWidth(), top_offset + (int)(x_height * 1.5));
+		// Character outline
+		mOutlinePaint = new Paint();
+		mOutlinePaint.setTextAlign(Align.CENTER);
+		mOutlinePaint.setTextSize(getHeight() / 2);
+		mOutlinePaint.setColor(mDottedPaint.getColor());
+		if (!isInEditMode()) {
+			mOutlinePaint.setTypeface(CustomTextView.getCustomTypeface(getContext(), "FredokaOne-Regular.ttf"));
+		}
+	}
+	
+	public void setOutlineCharacter(String outlineCharacter) {
+		mOutlineCharacter = outlineCharacter;
+	}
 
 	@Override
 	protected void onDraw(Canvas canvas) {
+		if (mSolidGuides == null || mDottedGuides == null) {
+			buildGuides();
+		}
 		canvas.save();
+		canvas.drawPath(mSolidGuides, mSolidPaint);
+		canvas.drawPath(mDottedGuides, mDottedPaint);
+		canvas.drawText(mOutlineCharacter, getWidth() / 2, getHeight() / 2, mOutlinePaint);
 		canvas.drawPath(drawPath, paint);
 		canvas.restore();
 	}
