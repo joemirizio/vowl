@@ -82,12 +82,7 @@ public class CanvasView extends View implements OnTouchListener {
 		paint.setStrokeCap(Paint.Cap.ROUND);
 		paint.setStrokeWidth(15);
 		
-		counter = new MyCount(700, 1000);
-		myLongPress = new MyLongPressCount(3000, 1000);
-		currentStroke = new Stroke();
-		strokes = new ArrayList<Stroke>();
-		characters = new HashMap<String, Integer>();
-		drawPath = new Path();
+		initializeStroke();
 		
 		if (!isInEditMode()) {
 			Context contextlipi = getContext();
@@ -98,7 +93,6 @@ public class CanvasView extends View implements OnTouchListener {
 			recognizer = lipitkInterface;
 		}
 	}
-
 	public boolean onTouch(View v, MotionEvent event) {
 		Point vs = new Point((int) event.getX(), (int) event.getY());
 		float X = (float) vs.x;
@@ -159,6 +153,16 @@ public class CanvasView extends View implements OnTouchListener {
 		}
 
 		return true;
+	}
+		
+	public void initializeStroke() {
+		// TODO Reset static variables?
+		counter = new MyCount(700, 1000);
+		myLongPress = new MyLongPressCount(3000, 1000);
+		currentStroke = new Stroke();
+		strokes = new ArrayList<Stroke>();
+		characters = new HashMap<String, Integer>();
+		drawPath = new Path();
 	}
 
 	public void addStroke() {
@@ -224,6 +228,8 @@ public class CanvasView extends View implements OnTouchListener {
 	
 	public void setOutlineCharacter(String outlineCharacter) {
 		mOutlineCharacter = outlineCharacter;
+		// Force a redraw
+		invalidate();
 	}
 
 	@Override

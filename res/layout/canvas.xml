@@ -30,6 +30,7 @@
         android:orientation="horizontal">
         
         <edu.cmu.rwsefe.vowl.ui.FlatButton
+            android:id="@+id/canvasLevelNavPrev"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
@@ -54,6 +55,7 @@
             vowl:shadowColor="@color/blueDark" />
 
         <edu.cmu.rwsefe.vowl.ui.FlatButton
+            android:id="@+id/canvasLevelNavNext"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
