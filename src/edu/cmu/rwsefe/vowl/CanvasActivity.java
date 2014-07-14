@@ -2,6 +2,7 @@ package edu.cmu.rwsefe.vowl;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.MissingResourceException;
 
@@ -18,6 +19,8 @@ import com.canvas.AssetInstaller;
 
 import edu.cmu.rwsefe.vowl.CanvasView.ScoreEventListener;
 import edu.cmu.rwsefe.vowl.LevelSelector.LevelChangeListener;
+import edu.cmu.rwsefe.vowl.model.CharacterResult;
+import edu.cmu.rwsefe.vowl.model.DatabaseHandler;
 
 public class CanvasActivity extends Activity {
 
@@ -119,7 +122,7 @@ public class CanvasActivity extends Activity {
 	}
 	
 	public void processDialogBox(){
-		ProgressdialogClass dialogBox=new ProgressdialogClass();
+		ProgressdialogClass dialogBox = new ProgressdialogClass();
 		dialogBox.execute();
 	}
 	
@@ -134,8 +137,10 @@ public class CanvasActivity extends Activity {
 		@Override
 		protected void onPostExecute(String sResponse) {
 			dialog.dismiss();
+			
+			String character = mLevelSelector.getLevel();
 			HashMap<String,Integer> characters = mCanvasView.getCharacterResults();
-			Integer confidenceFromHash = characters.get(mLevelSelector.getLevel());
+			Integer confidenceFromHash = characters.get(character);
 			if (confidenceFromHash != null) {
 				mConfidence = confidenceFromHash;
 			}
@@ -145,10 +150,26 @@ public class CanvasActivity extends Activity {
 			
 			int rating = mConfidence / 10;
 			mRatingBar.setRating(rating);
+
+			saveRatingToDatabase(character, mConfidence);
 		}
 		@Override
 		protected void onPreExecute(){
-			dialog = ProgressDialog.show(CanvasActivity.this, "Processing","Please wait...", true);
+			dialog = ProgressDialog.show(CanvasActivity.this, "Processing", "Please wait...", true);
 		}
+	}
+	
+	public void saveRatingToDatabase(String character, int confidence) {
+		DatabaseHandler db = new DatabaseHandler(getApplicationContext());
+		CharacterResult newCharacter = new CharacterResult((int) character.charAt(0), confidence);
+		db.addCharacterResult(newCharacter);
+		Log.d(TAG + "-DB", "ADDING " + newCharacter.getUnicodeValue() + " : " + newCharacter.getConfidence());
+		
+		List<CharacterResult> results = db.getAllCharacterResults();
+		
+		for(CharacterResult result: results) {
+			Log.d(TAG + "-DB", result.getUnicodeValue() + " : " + result.getConfidence());
+		}
+		db.close();
 	}
 }
