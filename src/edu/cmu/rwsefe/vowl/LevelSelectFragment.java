@@ -1,6 +1,5 @@
 package edu.cmu.rwsefe.vowl;
 
-import java.util.HashMap;
 import java.util.Random;
 
 import android.app.Fragment;
@@ -14,6 +13,7 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 import edu.cmu.rwsefe.vowl.LevelSelector.LevelSetListener;
 import edu.cmu.rwsefe.vowl.model.DatabaseHandler;
+import edu.cmu.rwsefe.vowl.model.ScoreKeeper;
 import edu.cmu.rwsefe.vowl.ui.FlatButtonRating;
 
 
@@ -24,7 +24,7 @@ public class LevelSelectFragment extends Fragment {
 	private LevelAdapter mLevelAdapter;
 	private GridView mLevelGridView;
 	private LevelSelector mLevelSelector;
-	private HashMap<Integer, Integer> mMaxScoreCharacters;
+	private ScoreKeeper mScoreKeeper;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -34,11 +34,13 @@ public class LevelSelectFragment extends Fragment {
 
 	    String initialLevel = getActivity().getResources().getString(R.string.latin_alphabet_lower);
 	    mLevelSelector = new LevelSelector(initialLevel);
+	    
+	    mScoreKeeper = new ScoreKeeper(getActivity());
 
 	    mLevelGridView = (GridView) view.findViewById(R.id.levelGrid);
-	    mLevelAdapter = new LevelAdapter(getActivity(), mLevelSelector);
+	    mLevelAdapter = new LevelAdapter(getActivity(), mLevelSelector, mScoreKeeper);
 	    mLevelGridView.setAdapter(mLevelAdapter);
-
+  
 	    return view;
 	}
 
@@ -60,28 +62,30 @@ public class LevelSelectFragment extends Fragment {
 	}
 
 	public void updateLevelViews() {
-		updateMaxScores();
+		mScoreKeeper.updateScores();
 		mLevelAdapter.notifyDataSetChanged();
 	}
-
-	public void updateMaxScores() {
-    	DatabaseHandler db = new DatabaseHandler(getActivity());
-    	mMaxScoreCharacters = db.getMaxScoreForAllCharacters();
-    	db.close();
+	
+	@Override
+	public void onDestroy() {
+		mScoreKeeper.close();
+		super.onDestroy();
 	}
 
 
 	class LevelAdapter extends BaseAdapter {
 	    private Context mContext;
 	    private LevelSelector mLevelSelector;
+	    private ScoreKeeper mScoreKeeper;
 
 	    final int colorWhite;
 	    final int colorBlueLight;
 	    final int colorBlueDark;
 
-	    public LevelAdapter(Context c, LevelSelector levelSelector) {
+	    public LevelAdapter(Context c, LevelSelector levelSelector, ScoreKeeper scoreKeeper) {
 	        mContext = c;
 	        mLevelSelector = levelSelector;
+	        mScoreKeeper = scoreKeeper;
 	        mLevelSelector.setLevelSetListener(new LevelSetListener() {
 	        	public void onLevelSet() {
 	        		notifyDataSetChanged();
@@ -106,18 +110,13 @@ public class LevelSelectFragment extends Fragment {
 	    }
 
 	    public View getView(int position, View convertView, ViewGroup parent) {
-	    	String chr = "" + mLevelSelector.getLevel(position);
+	    	String character = "" + mLevelSelector.getLevel(position);
 
-			// TODO Confidence to star algorithm not full determined
-	    	int rating = 0;
-	    	if (mMaxScoreCharacters != null) {
-		    	Integer maxScore = mMaxScoreCharacters.get((int)chr.charAt(0));
-	    		rating = (maxScore != null) ? maxScore / 10 : rating;
-	    	}
+	    	int rating = mScoreKeeper.getScoreRating(character);
 
 	    	// Create and style button
 	    	FlatButtonRating button = new FlatButtonRating(mContext, null);
-			button.setText("" + chr);
+			button.setText("" + character);
 			button.setTextSize(30);
 			button.setTextColor(colorWhite);
 			button.setBaseColor(colorBlueLight);

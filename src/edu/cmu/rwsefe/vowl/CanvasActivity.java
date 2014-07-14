@@ -2,7 +2,6 @@ package edu.cmu.rwsefe.vowl;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
 import java.util.MissingResourceException;
 
@@ -19,8 +18,7 @@ import com.canvas.AssetInstaller;
 
 import edu.cmu.rwsefe.vowl.CanvasView.ScoreEventListener;
 import edu.cmu.rwsefe.vowl.LevelSelector.LevelChangeListener;
-import edu.cmu.rwsefe.vowl.model.CharacterResult;
-import edu.cmu.rwsefe.vowl.model.DatabaseHandler;
+import edu.cmu.rwsefe.vowl.model.ScoreKeeper;
 
 public class CanvasActivity extends Activity {
 
@@ -31,6 +29,7 @@ public class CanvasActivity extends Activity {
 	private CanvasView mCanvasView;
 	private RatingBar mRatingBar;
 	private LevelSelector mLevelSelector;
+	private ScoreKeeper mScoreKeeper;
 	private int mConfidence;
 	private TextToSpeech mTextToSpeech;
 	
@@ -62,6 +61,8 @@ public class CanvasActivity extends Activity {
 			}
 		});
 		
+		mScoreKeeper = new ScoreKeeper(this);
+		
 		// Install LipiTK components
 		AssetInstaller assetInstaller = new AssetInstaller(getApplicationContext(), "projects");
 		try {
@@ -72,7 +73,6 @@ public class CanvasActivity extends Activity {
 
 		// Set score listener for canvas view
 		mCanvasView = (CanvasView) this.findViewById(R.id.canvas);
-		mCanvasView.setOutlineCharacter(mLevelSelector.getLevel());
 		mCanvasView.setScoreEventListener(new ScoreEventListener() {
 			@Override
 			public void onScore() {
@@ -96,11 +96,15 @@ public class CanvasActivity extends Activity {
 			    }
 			}
 		});
+		
+		// Initialize view for level
+		onLevelChange(mLevelSelector.getLevelIndex());
 	}
 	
 	@Override
 	public void onDestroy() {
 		mTextToSpeech.shutdown();
+		mScoreKeeper.close();
 		super.onDestroy();
 	}
 	
@@ -119,6 +123,9 @@ public class CanvasActivity extends Activity {
 	public void onLevelChange(int index) {
 		mCanvasView.initializeStroke();
 		mCanvasView.setOutlineCharacter(mLevelSelector.getLevel());
+		// Set rating from database
+		String character = mLevelSelector.getLevel();
+		mRatingBar.setRating(mScoreKeeper.getScoreRating(character));
 	}
 	
 	public void processDialogBox(){
@@ -151,25 +158,12 @@ public class CanvasActivity extends Activity {
 			int rating = mConfidence / 10;
 			mRatingBar.setRating(rating);
 
-			saveRatingToDatabase(character, mConfidence);
+			// Save confidence score to database
+			mScoreKeeper.saveScore(character, mConfidence);
 		}
 		@Override
 		protected void onPreExecute(){
 			dialog = ProgressDialog.show(CanvasActivity.this, "Processing", "Please wait...", true);
 		}
-	}
-	
-	public void saveRatingToDatabase(String character, int confidence) {
-		DatabaseHandler db = new DatabaseHandler(getApplicationContext());
-		CharacterResult newCharacter = new CharacterResult((int) character.charAt(0), confidence);
-		db.addCharacterResult(newCharacter);
-		Log.d(TAG + "-DB", "ADDING " + newCharacter.getUnicodeValue() + " : " + newCharacter.getConfidence());
-		
-		List<CharacterResult> results = db.getAllCharacterResults();
-		
-		for(CharacterResult result: results) {
-			Log.d(TAG + "-DB", result.getUnicodeValue() + " : " + result.getConfidence());
-		}
-		db.close();
 	}
 }
