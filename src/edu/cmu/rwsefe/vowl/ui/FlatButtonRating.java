@@ -31,7 +31,7 @@ public class FlatButtonRating extends FlatButton {
 	protected void init(Context context, AttributeSet attributes) {
 		super.init(context, attributes);
 		
-		mRatingBar = new FlatRatingBar(context, attributes);	
+		mRatingBar = new FlatRatingBar(context, attributes, android.R.attr.ratingBarStyleSmall);	
 	}
 	
 	@Override

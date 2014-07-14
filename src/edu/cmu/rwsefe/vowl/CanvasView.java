@@ -2,16 +2,21 @@ package edu.cmu.rwsefe.vowl;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.EventListener;
 import java.util.HashMap;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.DashPathEffect;
 import android.graphics.Paint;
+import android.graphics.Paint.Align;
 import android.graphics.Path;
+import android.graphics.Point;
 import android.graphics.PointF;
 import android.os.CountDownTimer;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -19,20 +24,22 @@ import android.view.View.OnTouchListener;
 
 import com.canvas.LipiTKJNIInterface;
 import com.canvas.LipitkResult;
-import com.canvas.Page;
 import com.canvas.Stroke;
+
+import edu.cmu.rwsefe.vowl.ui.CustomTextView;
 
 public class CanvasView extends View implements OnTouchListener {
 
+	private static final String TAG = CanvasView.class.getName();
+	
 	private ArrayList<Stroke> strokes;
-	private Page page;
 	private Stroke[] recognitionStrokes;
 	private LipiTKJNIInterface lipitkInterface;
 	private LipiTKJNIInterface recognizer;
 	private Stroke currentStroke;
-	private CanvasActivity canvasActivity;
+	//private CanvasActivity canvasActivity;
 	private HashMap<String, Integer> characters;
-	private ArrayList<Values> vals = new ArrayList<Values>();
+	private ArrayList<Point> vals = new ArrayList<Point>();
 	private int minY = 480;
 	private int maxY = 0;
 	private int minX = 800;
@@ -41,7 +48,15 @@ public class CanvasView extends View implements OnTouchListener {
 	private MyLongPressCount myLongPress;
 
 	private Path drawPath;
-	private Paint canvasPaint;
+	private ScoreEventListener mScoreEventListener;
+	
+	// Guides and outline
+	private Paint mSolidPaint;
+	private Paint mDottedPaint;
+	private Paint mOutlinePaint;
+	private Path mSolidGuides;
+	private Path mDottedGuides;
+	private String mOutlineCharacter = "x";
 
 	// global variable imports
 	private static boolean timerFlag = true;
@@ -50,16 +65,15 @@ public class CanvasView extends View implements OnTouchListener {
 	private static boolean isUserWriting=true;
 	private static boolean isFirststroke = true;
 
-
 	@SuppressLint("NewApi")
-	public CanvasView(Context context, CanvasActivity canvas) {
-		super(context);
-		// TODO Auto-generated constructor stub
-		canvasActivity = canvas;
-		paint = new Paint();
+	public CanvasView(Context context, AttributeSet attributes) {
+		super(context, attributes);
+		
 		setFocusable(true);
 		setFocusableInTouchMode(true);
-		this.setOnTouchListener(this);
+		setOnTouchListener(this);
+		
+		paint = new Paint();
 		paint.setColor(Color.BLACK);
 		paint.setAntiAlias(true);
 		paint.setDither(true);
@@ -67,115 +81,88 @@ public class CanvasView extends View implements OnTouchListener {
 		paint.setStrokeJoin(Paint.Join.ROUND);
 		paint.setStrokeCap(Paint.Cap.ROUND);
 		paint.setStrokeWidth(15);
-		counter = new MyCount(700, 1000);
-		myLongPress = new MyLongPressCount(3000, 1000);
-		currentStroke = new Stroke();
-		strokes = new ArrayList<Stroke>();
-		recognizer = null;
-		characters = new HashMap<String, Integer>();
-		Context contextlipi = getContext();
-		File externalFileDir = contextlipi.getExternalFilesDir(null);
-		String path = externalFileDir.getPath();
-		lipitkInterface = new LipiTKJNIInterface(path, "SHAPEREC_ALPHANUM");
-		lipitkInterface.initialize();
-		page = new Page(lipitkInterface);
-		recognizer = lipitkInterface;
-
-		drawPath = new Path();
-		canvasPaint = new Paint(Paint.DITHER_FLAG);
+		
+		initializeStroke();
+		
+		if (!isInEditMode()) {
+			Context contextlipi = getContext();
+			File externalFileDir = contextlipi.getExternalFilesDir(null);
+			String path = externalFileDir.getPath();
+			lipitkInterface = new LipiTKJNIInterface(path, "SHAPEREC_ALPHANUM");
+			lipitkInterface.initialize();
+			recognizer = lipitkInterface;
+		}
 	}
-
 	public boolean onTouch(View v, MotionEvent event) {
-		Values vs = new Values();
-
-		vs.x = (int) event.getX();
-		vs.y = (int) event.getY();
+		Point vs = new Point((int) event.getX(), (int) event.getY());
 		float X = (float) vs.x;
 		float Y = (float) vs.y;
 		PointF p = new PointF(X, Y);
 		currentStroke.addPoint(p);
 
 		switch (event.getAction()) {
-		case MotionEvent.ACTION_DOWN: {
-
+		case MotionEvent.ACTION_DOWN:
+			
 			drawPath.moveTo(X, Y);
-
 			counter.cancel();
 			myLongPress.start();
 			isUserWriting = true;
-
-			if (vs.y > maxY)
-				maxY = vs.y;
-			if (vs.y < minY)
-				minY = vs.y;
-
-			if (vs.x > maxX)
-				maxX = vs.x;
-			if (vs.x < minX)
-				minX = vs.x;
-
 			vals.add(vs);
 			invalidate();
-			System.out.println("action down stroke values===");
 
+			if (vs.y > maxY) { maxY = vs.y;	}
+			if (vs.y < minY) { minY = vs.y;	}
+			if (vs.x > maxX) { maxX = vs.x; }
+			if (vs.x < minX) { minX = vs.x;	}
+
+			Log.i(TAG, "ACTION - Down Stroke:");
 			break;
-		}
-		case MotionEvent.ACTION_MOVE: {
+			
+		case MotionEvent.ACTION_MOVE:
 
 			drawPath.lineTo(X, Y);
-
 			counter.cancel();
-
-			// myLongPress.cancel();
 			longPressFlag = true;
-
 			vals.add(vs);
-
-			if (vs.y > maxY)
-				maxY = vs.y;
-			if (vs.y < minY)
-				minY = vs.y;
-
-			if (vs.x > maxX)
-				maxX = vs.x;
-			if (vs.x < minX)
-				minX = vs.x;
-
-			System.out.println("action move stroke values===");
 			invalidate();
+
+			if (vs.y > maxY) { maxY = vs.y;	}
+			if (vs.y < minY) { minY = vs.y;	}
+			if (vs.x > maxX) { maxX = vs.x; }
+			if (vs.x < minX) { minX = vs.x;	}
+
+			Log.i(TAG, "ACTION - Move Stroke:");
 			break;
-		}
-		case MotionEvent.ACTION_UP: {
-
-			/*
-			 * this condition should be checked only once for the first stroke
-			 * after a time out
-			 */
-			if (isFirststroke) {
-				if ((maxY - minY) < 30 && (maxY != minY)) {
-					isUserWriting = false;
-				}
+			
+		case MotionEvent.ACTION_UP:
+			// This condition should be checked only once for the first stroke
+			// after a time out
+			if (isFirststroke && (maxY - minY) < 30 && (maxY != minY)) {
+				isUserWriting = false;
 			}
 
-			if (isFirststroke
-					&& isUserWriting == false) {
-				isFirststroke = true;
-			} else {
-				isFirststroke = false;
-			}
+			isFirststroke = (isFirststroke && !isUserWriting);
 
 			if (isUserWriting) {
 				counter.start();
 			}
 
 			myLongPress.cancel();
-			System.out.println("action up stroke values===");
-
+			Log.i(TAG, "ACTION - Up Stroke:");
 			break;
-		}
 		}
 
 		return true;
+	}
+		
+	public void initializeStroke() {
+		// TODO Reset static variables?
+		counter = new MyCount(700, 1000);
+		myLongPress = new MyLongPressCount(3000, 1000);
+		currentStroke = new Stroke();
+		strokes = new ArrayList<Stroke>();
+		characters = new HashMap<String, Integer>();
+		drawPath = new Path();
 	}
 
 	public void addStroke() {
@@ -186,8 +173,8 @@ public class CanvasView extends View implements OnTouchListener {
 		LipitkResult[] results = recognizer.recognize(recognitionStrokes);
 
 		for (LipitkResult result : results) {
-			Log.e("jni", "ShapeID = " + result.Id + " Confidence = "
-					+ result.Confidence);
+			Log.i(TAG, "ShapeID = " + result.Id + 
+					", Confidence = " + result.Confidence);
 		}
 
 		String configFileDirectory = recognizer.getLipiDirectory()
@@ -201,22 +188,73 @@ public class CanvasView extends View implements OnTouchListener {
 		}
 
 		recognitionStrokes = null;
-
 	}
 
 	public HashMap<String, Integer> getCharacterResults() {
 		return characters;
 	}
+	
+	private void buildGuides() {
+		// Solid guide
+		mSolidPaint = new Paint(paint);
+		mSolidPaint.setColor(
+				isInEditMode() ? Color.GRAY : this.getResources().getColor(R.color.grayMedium));
+		mSolidGuides = new Path();
+		int top_offset = 10;
+		int x_height = (int)(getHeight() * (2.0/4.0));
+		mSolidGuides.moveTo(0, top_offset);
+		mSolidGuides.lineTo(getWidth(), top_offset);
+		mSolidGuides.moveTo(0, top_offset + x_height);
+		mSolidGuides.lineTo(getWidth(), top_offset + x_height);
+		// Dotted guide
+		mDottedPaint = new Paint(paint);
+		mDottedPaint.setColor(
+				isInEditMode() ? Color.LTGRAY : this.getResources().getColor(R.color.grayLight));
+		mDottedPaint.setPathEffect(new DashPathEffect(new float[] {10,20}, 0));
+		mDottedGuides = new Path();
+		mDottedGuides.moveTo(0, top_offset + x_height / 2);
+		mDottedGuides.lineTo(getWidth(), top_offset + x_height / 2);
+		mDottedGuides.moveTo(0, top_offset + (int)(x_height * 1.5));
+		mDottedGuides.lineTo(getWidth(), top_offset + (int)(x_height * 1.5));
+		// Character outline
+		mOutlinePaint = new Paint();
+		mOutlinePaint.setTextAlign(Align.CENTER);
+		mOutlinePaint.setTextSize(getHeight() / 2);
+		mOutlinePaint.setColor(mDottedPaint.getColor());
+		if (!isInEditMode()) {
+			mOutlinePaint.setTypeface(CustomTextView.getCustomTypeface(getContext(), "FredokaOne-Regular.ttf"));
+		}
+	}
+	
+	public void setOutlineCharacter(String outlineCharacter) {
+		mOutlineCharacter = outlineCharacter;
+		// Force a redraw
+		invalidate();
+	}
 
 	@Override
 	protected void onDraw(Canvas canvas) {
-
+		if (mSolidGuides == null || mDottedGuides == null) {
+			buildGuides();
+		}
 		canvas.save();
+		canvas.drawPath(mSolidGuides, mSolidPaint);
+		canvas.drawPath(mDottedGuides, mDottedPaint);
+		canvas.drawText(mOutlineCharacter, getWidth() / 2, getHeight() / 2, mOutlinePaint);
 		canvas.drawPath(drawPath, paint);
 		canvas.restore();
-
 	}
 
+	public void setScoreEventListener(ScoreEventListener scoreEventListener) {
+		mScoreEventListener = scoreEventListener;
+	}
+	
+	
+	
+	public interface ScoreEventListener extends EventListener {
+		public void onScore();
+	}
+	
 	public class MyCount extends CountDownTimer {
 
 		public MyCount(long millisInFuture, long countDownInterval) {
@@ -227,15 +265,12 @@ public class CanvasView extends View implements OnTouchListener {
 		public void onFinish() {
 			System.out.println("Timer Flag :: " + timerFlag);
 			if (longPressFlag) {
-				canvasActivity.processDialogBox();
+				if (mScoreEventListener != null) {
+					mScoreEventListener.onScore();
+				}
 				isUserWriting = false;
 				isFirststroke = true;
 			}
-
-			else {
-
-			}
-
 		}
 
 		@Override
@@ -244,7 +279,7 @@ public class CanvasView extends View implements OnTouchListener {
 		}
 
 	}
-
+	
 	public class MyLongPressCount extends CountDownTimer {
 
 		public MyLongPressCount(long millisInFuture, long countDownInterval) {
@@ -254,25 +289,13 @@ public class CanvasView extends View implements OnTouchListener {
 		@Override
 		public void onFinish() {
 			longPressFlag = false;
-			System.out.println("Long press timer expiry: Timer Flag :: "
-					+ timerFlag);
-			// canObj.ClearCanvas();
-
+			Log.i(TAG, "Long press timer expiry: Timer Flag :: " + timerFlag);
 		}
 
 		@Override
 		public void onTick(long millisUntilFinished) {
-			System.out.println("Tick tick Flag :: " + timerFlag);
+			Log.i(TAG, "Tick tick Flag :: " + timerFlag);
 		}
 
-	}
-}
-
-class Values {
-	int x, y;
-
-	@Override
-	public String toString() {
-		return x + ", " + y;
 	}
 }

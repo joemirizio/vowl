@@ -1,12 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+    xmlns:vowl="http://schemas.android.com/apk/res/edu.cmu.rwsefe.vowl"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    >
-<TextView  
-    android:layout_width="fill_parent" 
-    android:layout_height="wrap_content" 
+    android:orientation="vertical"
+    android:padding="10dp">
     
-    />
+    <edu.cmu.rwsefe.vowl.ui.FlatRatingBar
+        android:id="@+id/canvasRatingBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"
+        android:isIndicator="true"
+        android:numStars="5"
+        android:rating="0"
+        android:stepSize="1.0" />
+    
+    <edu.cmu.rwsefe.vowl.CanvasView
+        android:id="@+id/canvas"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="12"
+        />
+    
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        
+        <edu.cmu.rwsefe.vowl.ui.FlatButton
+            android:id="@+id/canvasLevelNavPrev"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:layout_weight="1"
+            android:paddingTop="20dp"
+            android:text="&lt;"
+            android:textColor="@color/white"
+            android:textSize="42sp"
+            android:onClick="onClickLevelPrev"
+            vowl:baseColor="@color/purpleLight"
+            vowl:shadowColor="@color/purpleDark" />
+        
+        <edu.cmu.rwsefe.vowl.ui.FlatButton
+            android:id="@+id/canvasLevelSpeak"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:layout_weight="1"
+            android:paddingTop="20dp"
+            android:text="(•)"
+            android:textColor="@color/white"
+            android:textSize="42sp"
+            android:onClick="onClickLevelSpeak"
+            vowl:baseColor="@color/blueLight"
+            vowl:shadowColor="@color/blueDark" />
+
+        <edu.cmu.rwsefe.vowl.ui.FlatButton
+            android:id="@+id/canvasLevelNavNext"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingTop="20dp"
+            android:layout_margin="20dp"
+            android:text=">"
+            android:textColor="@color/white"
+        	android:textSize="42sp"
+        	android:onClick="onClickLevelNext"
+            vowl:baseColor="@color/purpleLight"
+            vowl:shadowColor="@color/purpleDark"/>
+        
+    </LinearLayout>
+	
 </LinearLayout>

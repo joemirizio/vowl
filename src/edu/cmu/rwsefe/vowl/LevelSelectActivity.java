@@ -20,10 +20,13 @@ public class LevelSelectActivity extends Activity {
 		mlevelSelect = (LevelSelectFragment) this.getFragmentManager().findFragmentById(R.id.level_select_fragment);
 		mlevelSelect.setLevelClickListener(new OnItemClickListener() {
 	        public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-	        	String level = mlevelSelect.getLevelFromGridPosition(position);
+	        	LevelSelector levelSelector = mlevelSelect.getLevelSelector();
+	        	levelSelector.setLevelIndex(position);
+	        	
 	        	// Start canvas activity
 	        	Intent intent = new Intent(v.getContext(), CanvasActivity.class);
-	        	intent.putExtra("letter", level);
+	        	intent.putExtra(CanvasActivity.BUNDLE_LEVELS, levelSelector.getLevels());
+	        	intent.putExtra(CanvasActivity.BUNDLE_LEVEL_INDEX, levelSelector.getLevelIndex());
 	        	startActivity(intent);
 	        }
 		});
@@ -47,4 +50,13 @@ public class LevelSelectActivity extends Activity {
 	            break;
 	    }
 	}
+	
+	@Override
+	public void onResume() {
+		super.onResume();
+		
+		//Refresh stars
+		mlevelSelect.updateLevelViews();
+	}
+	
 }

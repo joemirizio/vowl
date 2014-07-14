@@ -2,60 +2,68 @@ package edu.cmu.rwsefe.vowl;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Locale;
+import java.util.MissingResourceException;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Context;
-import android.content.res.Resources;
-import android.graphics.Point;
-import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.Display;
-import android.view.Gravity;
-import android.view.WindowManager;
-import android.widget.LinearLayout;
+import android.speech.tts.TextToSpeech;
+import android.util.Log;
+import android.view.View;
 import android.widget.RatingBar;
 
 import com.canvas.AssetInstaller;
 
+import edu.cmu.rwsefe.vowl.CanvasView.ScoreEventListener;
+import edu.cmu.rwsefe.vowl.LevelSelector.LevelChangeListener;
+import edu.cmu.rwsefe.vowl.model.ScoreKeeper;
+
 public class CanvasActivity extends Activity {
 
-	private int width;
-	private int height;
-	private CanvasView canvasView;
-	private String letter;
-	private int confidence;
+	private final String TAG = CanvasActivity.class.getName();
+	public final static String BUNDLE_LEVELS = "levels";
+	public final static String BUNDLE_LEVEL_INDEX = "levelIndex";
 	
-	//Layouts
-	private LinearLayout main;
-	private LinearLayout topLayout;
-	private LinearLayout horizontalTopLayout;
-	private LinearLayout drawable;
-	private LinearLayout bottomLayout;
-
-	//Constants
-	private static final int MAX_STARS = 5;
+	private CanvasView mCanvasView;
+	private RatingBar mRatingBar;
+	private LevelSelector mLevelSelector;
+	private ScoreKeeper mScoreKeeper;
+	private int mConfidence;
+	private TextToSpeech mTextToSpeech;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		// Restore any saved state 
 		super.onCreate(savedInstanceState);
+		setContentView(R.layout.canvas);
 		
-		// Possible to modify based on Joe's implementation
+		// Get character from bundle
 		Bundle bundle = getIntent().getExtras();
-		String intentLetter = bundle.getString("letter");
-		//String intentLetter = "a";
-		if(intentLetter != null) {
-			letter = intentLetter;
+		String levels = bundle.getString(BUNDLE_LEVELS);
+		int levelIndex = bundle.getInt(BUNDLE_LEVEL_INDEX, -1);
+		if (levels == null) {
+			throw new MissingResourceException("Resource is missing from bundle", 
+					CanvasActivity.class.getName(), BUNDLE_LEVELS);
+		}
+		if (levelIndex < 0) {
+			throw new MissingResourceException("Resource is missing from bundle", 
+					CanvasActivity.class.getName(), BUNDLE_LEVEL_INDEX);
 		}
 		
-		Display display = ((WindowManager) getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
-		Point point = new Point();
-		display.getSize(point);
-		width = point.x;
-		height = point.y;
+		// Initialize LevelSelector and set LevelChangeListener
+		mLevelSelector = new LevelSelector(levels, levelIndex);
+		mLevelSelector.setLevelChangeListener(new LevelChangeListener() {
+			@Override
+			public void onLevelChange(int index) {
+				CanvasActivity.this.onLevelChange(index);
+			}
+		});
 		
+		mScoreKeeper = new ScoreKeeper(this);
+		
+		// Install LipiTK components
 		AssetInstaller assetInstaller = new AssetInstaller(getApplicationContext(), "projects");
 		try {
 			assetInstaller.execute();
@@ -63,47 +71,66 @@ public class CanvasActivity extends Activity {
 			e.printStackTrace();
 		}
 
-		canvasView = new CanvasView(this, this);
-		main = new LinearLayout(this);
-		main.setOrientation(LinearLayout.VERTICAL);
-		main.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, 
-				LinearLayout.LayoutParams.FILL_PARENT));
+		// Set score listener for canvas view
+		mCanvasView = (CanvasView) this.findViewById(R.id.canvas);
+		mCanvasView.setScoreEventListener(new ScoreEventListener() {
+			@Override
+			public void onScore() {
+				processDialogBox();
+			}
+		});
 		
+		mRatingBar = (RatingBar) this.findViewById(R.id.canvasRatingBar);
 		
-		drawable = new LinearLayout(this);
-		drawable.setOrientation(LinearLayout.VERTICAL);
-		drawable.setLayoutParams(new LinearLayout.LayoutParams(
-				LinearLayout.LayoutParams.FILL_PARENT, 
-				height * 3 / 4));
-		//drawable.setBackgroundColor(0xFFFFCC99);
+		mTextToSpeech = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
+			@Override
+			public void onInit(int status) {
+				if (status == TextToSpeech.SUCCESS) {
+					int result = mTextToSpeech.setLanguage(Locale.US);
+		            if (result == TextToSpeech.LANG_MISSING_DATA || 
+		            		result == TextToSpeech.LANG_NOT_SUPPORTED) {
+		                Log.e("TTS", "This Language is not supported");
+		            }
+			    } else { 
+			    	Log.e("TTS", "Initilization Failed!");
+			    }
+			}
+		});
 		
-		Resources resource = getResources();
-		Drawable notebook = resource.getDrawable(R.drawable.notebook_paper_hi);
-		drawable.setBackgroundDrawable(notebook);
-
-		drawable.addView(canvasView);
-
-		topLayout = new LinearLayout(this);
-		topLayout.setOrientation(LinearLayout.VERTICAL);
-		topLayout.setLayoutParams(new LinearLayout.LayoutParams(
-				LinearLayout.LayoutParams.WRAP_CONTENT,
-				height/8));
-		topLayout.setGravity(Gravity.TOP);
-		
-		horizontalTopLayout = 
-		
-		bottomLayout = new LinearLayout(this);
-		bottomLayout.setOrientation(LinearLayout.HORIZONTAL);
-		bottomLayout.setLayoutParams(new LinearLayout.LayoutParams(
-				LinearLayout.LayoutParams.FILL_PARENT,
-				(height/8)));
-		bottomLayout.setGravity(Gravity.BOTTOM);
-
-		main.addView(topLayout);
-		main.addView(drawable);
-		main.addView(bottomLayout);
-		setContentView(main);
-
+		// Initialize view for level
+		onLevelChange(mLevelSelector.getLevelIndex());
+	}
+	
+	@Override
+	public void onDestroy() {
+		mTextToSpeech.shutdown();
+		mScoreKeeper.close();
+		super.onDestroy();
+	}
+	
+	public void onClickLevelPrev(View v) {
+		mLevelSelector.prevLevel();
+	}
+	
+	public void onClickLevelNext(View v) {
+		mLevelSelector.nextLevel();
+	}
+	
+	public void onClickLevelSpeak(View v) {
+		mTextToSpeech.speak(mLevelSelector.getLevel(), TextToSpeech.QUEUE_FLUSH, null);
+	}
+	
+	public void onLevelChange(int index) {
+		mCanvasView.initializeStroke();
+		mCanvasView.setOutlineCharacter(mLevelSelector.getLevel());
+		// Set rating from database
+		String character = mLevelSelector.getLevel();
+		mRatingBar.setRating(mScoreKeeper.getScoreRating(character));
+	}
+	
+	public void processDialogBox(){
+		ProgressdialogClass dialogBox = new ProgressdialogClass();
+		dialogBox.execute();
 	}
 	
 	class ProgressdialogClass extends AsyncTask<Void, Void, String> {
@@ -111,49 +138,32 @@ public class CanvasActivity extends Activity {
 		
 		@Override
 		protected String doInBackground(Void... unsued) {
-			canvasView.addStroke();
+			mCanvasView.addStroke();
 			return null;
 		}
 		@Override
 		protected void onPostExecute(String sResponse) {
 			dialog.dismiss();
-			HashMap<String,Integer> characters = canvasView.getCharacterResults();
-			Integer confidenceFromHash = characters.get(letter);
+			
+			String character = mLevelSelector.getLevel();
+			HashMap<String,Integer> characters = mCanvasView.getCharacterResults();
+			Integer confidenceFromHash = characters.get(character);
 			if (confidenceFromHash != null) {
-				confidence = confidenceFromHash;
+				mConfidence = confidenceFromHash;
 			}
 			else {
-				confidence = 0;
+				mConfidence = 0;
 			}
 			
-			//startActivity(showResults);
-			
-			RatingBar rb = new RatingBar(CanvasActivity.this);
-			rb.setIsIndicator(true);
-			rb.setNumStars(MAX_STARS);
-			
-			int rating = confidence / 10;
-			
-			rb.setRating(rating);
-			topLayout.addView(rb);
+			int rating = mConfidence / 10;
+			mRatingBar.setRating(rating);
+
+			// Save confidence score to database
+			mScoreKeeper.saveScore(character, mConfidence);
 		}
 		@Override
 		protected void onPreExecute(){
-			dialog = ProgressDialog.show(CanvasActivity.this, "Processing","Please wait...", true);
-			
+			dialog = ProgressDialog.show(CanvasActivity.this, "Processing", "Please wait...", true);
 		}
-	}
-	
-	public void processDialogBox(){
-		ProgressdialogClass dialogBox=new ProgressdialogClass();
-		dialogBox.execute();
-	}
-	
-	public String getLetter() {
-		return letter;
-	}
-	
-	public int getConfidence() {
-		return confidence;
 	}
 }
