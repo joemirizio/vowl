@@ -123,6 +123,18 @@ public class MainFragment extends Fragment {
 					startActivity(intent);
 				}
 			});
+			
+			
+			// Start Speech to text when the speech button is clicked
+			Button button2 = (Button) rootView.findViewById(R.id.speech_button);
+			
+			button2.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					Intent intent = new Intent(v.getContext(), SpeechActivity.class);
+					startActivity(intent);
+				}
+			});
 	
 			return rootView;
 		}
