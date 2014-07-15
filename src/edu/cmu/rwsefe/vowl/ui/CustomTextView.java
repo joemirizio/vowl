@@ -12,6 +12,12 @@ import android.text.style.MetricAffectingSpan;
 import android.util.AttributeSet;
 import android.widget.TextView;
 
+
+//import android.text.style.MetricAffectingSpan;
+//import android.util.AttributeSet;
+//import android.widget.TextView;
+
+
 /**
  * A {@link TextView} supporting cached custom {@link Typeface}s.
  * 
