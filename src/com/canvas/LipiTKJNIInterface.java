@@ -3,6 +3,7 @@ package com.canvas;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+//import java.io.FileReader;
 
 import android.graphics.PointF;
 import android.util.Log;
