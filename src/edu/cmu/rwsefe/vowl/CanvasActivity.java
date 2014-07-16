@@ -124,6 +124,7 @@ public class CanvasActivity extends Activity {
 		mCanvasView.initializeStroke();
 		mCanvasView.setOutlineCharacter(mLevelSelector.getLevel());
 		// Set rating from database
+		mScoreKeeper.updateScores();
 		String character = mLevelSelector.getLevel();
 		mRatingBar.setRating(mScoreKeeper.getScoreRating(character));
 	}
