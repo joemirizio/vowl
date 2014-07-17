@@ -14,6 +14,7 @@ import android.widget.GridView;
 import edu.cmu.rwsefe.vowl.LevelSelector.LevelSetListener;
 import edu.cmu.rwsefe.vowl.model.DatabaseHandler;
 import edu.cmu.rwsefe.vowl.model.ScoreKeeper;
+import edu.cmu.rwsefe.vowl.model.UserSettings;
 import edu.cmu.rwsefe.vowl.ui.FlatButtonRating;
 
 
@@ -32,7 +33,7 @@ public class LevelSelectFragment extends Fragment {
 	    // Inflate the layout for this fragment
 	    View view = inflater.inflate(R.layout.fragment_level_select, container, false);
 
-	    String initialLevel = getActivity().getResources().getString(R.string.latin_alphabet_lower);
+	    String initialLevel = UserSettings.getInstance().getLetters();
 	    mLevelSelector = new LevelSelector(initialLevel);
 	    
 	    mScoreKeeper = new ScoreKeeper(getActivity());
@@ -44,8 +45,7 @@ public class LevelSelectFragment extends Fragment {
 	    return view;
 	}
 
-	public void setLevelCategory(int levelCategoryId) {
-		String levels = getActivity().getResources().getString(levelCategoryId);
+	public void setLevelCategory(String levels) {
 		mLevelSelector.setLevels(levels);
 	}
 

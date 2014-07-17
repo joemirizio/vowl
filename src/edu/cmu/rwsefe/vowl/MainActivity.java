@@ -3,6 +3,7 @@ package edu.cmu.rwsefe.vowl;
 import java.util.Locale;
 import java.util.logging.Logger;
 
+import edu.cmu.rwsefe.vowl.model.UserSettings;
 import android.app.Activity;
 import android.app.ActionBar;
 import android.app.Fragment;
@@ -34,13 +35,15 @@ public class MainActivity extends FragmentActivity {
 
     private Fragment mainFragment;
     private Fragment splashFragment;
-    
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+
+		UserSettings.getInstance().Initialize(getApplicationContext());
+
 		setContentView(R.layout.activity_main);
-        
+
         // Add the fragments to the 'fragment_container' FrameLayout
         FragmentTransaction ft = this.getFragmentManager().beginTransaction();
         mainFragment = new MainFragment();
@@ -49,28 +52,28 @@ public class MainActivity extends FragmentActivity {
         ft.add(R.id.fragment_container, splashFragment);
         ft.commit();
 	}
-	
+
 	public void menuLearnOnClick(View v) {
 		// Start level select when nav button is clicked
 		Intent intent = new Intent(v.getContext(), LevelSelectActivity.class);
 		startActivity(intent);
 	}
-	
+
 	public void menuPracticeOnClick(View v) {
 		// TODO Implement practice mode
 		Toast.makeText(this, "Practice mode not implemented", Toast.LENGTH_SHORT).show();
 	}
-	
+
 	public void menuPlayOnClick(View v) {
 		// TODO Implement play mode
 		Toast.makeText(this, "Play mode not implemented", Toast.LENGTH_SHORT).show();
 	}
-	
+
 	public void settingsOnClick(View v) {
-		// TODO Implement settings
-		Toast.makeText(this, "Settings not implemented", Toast.LENGTH_SHORT).show();
+		Intent intent = new Intent(v.getContext(), UserSettingsActivity.class);
+		startActivity(intent);
 	}
-	
+
 	@Override
 	protected void onResume() {
 		super.onResume();

@@ -29,6 +29,9 @@
         <activity
             android:name="edu.cmu.rwsefe.vowl.CanvasActivity" >
         </activity>
+        <activity
+            android:name="edu.cmu.rwsefe.vowl.UserSettingsActivity" >
+        </activity>
     </application>
 
 </manifest>
