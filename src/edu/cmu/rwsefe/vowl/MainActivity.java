@@ -28,7 +28,7 @@ import android.widget.TextView;
 
 public class MainActivity extends FragmentActivity {
 
-	private static final String TAG = "MainActivity";
+	private static final String TAG = MainActivity.class.getName();
 
     private Fragment mainFragment;
     private Fragment splashFragment;
@@ -44,7 +44,14 @@ public class MainActivity extends FragmentActivity {
         mainFragment = new MainFragment();
         splashFragment = new SplashFragment();
         ft.add(R.id.fragment_container, mainFragment);
-        ft.add(R.id.fragment_container, splashFragment, "a");
+        ft.add(R.id.fragment_container, splashFragment);
         ft.commit();
+	}
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		View v = this.findViewById(R.id.pager);
+		Log.d(TAG, "Height: " + v.getHeight());
 	}
 }
