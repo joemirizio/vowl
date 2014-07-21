@@ -15,6 +15,7 @@
 	    tools:context="edu.cmu.rwsefe.vowl.MainActivity" />
 	
 	<edu.cmu.rwsefe.vowl.ui.FlatButton
+	    android:id="@+id/main_settings"
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
 	    android:layout_gravity="center"
@@ -24,6 +25,7 @@
 	    android:paddingLeft="30dp"
 	    android:paddingRight="30dp"
 	    android:paddingTop="0dp"
+	    android:onClick="settingsOnClick"
 	    vowl:baseColor="@color/purpleLight"
 	    vowl:shadowColor="@color/purpleDark" />
 

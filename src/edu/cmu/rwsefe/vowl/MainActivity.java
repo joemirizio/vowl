@@ -26,6 +26,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends FragmentActivity {
 
@@ -49,10 +50,25 @@ public class MainActivity extends FragmentActivity {
         ft.commit();
 	}
 	
-	public void menuChoice1OnClick(View v) {
+	public void menuLearnOnClick(View v) {
 		// Start level select when nav button is clicked
 		Intent intent = new Intent(v.getContext(), LevelSelectActivity.class);
 		startActivity(intent);
+	}
+	
+	public void menuPracticeOnClick(View v) {
+		// TODO Implement practice mode
+		Toast.makeText(this, "Practice mode not implemented", Toast.LENGTH_SHORT).show();
+	}
+	
+	public void menuPlayOnClick(View v) {
+		// TODO Implement play mode
+		Toast.makeText(this, "Play mode not implemented", Toast.LENGTH_SHORT).show();
+	}
+	
+	public void settingsOnClick(View v) {
+		// TODO Implement settings
+		Toast.makeText(this, "Settings not implemented", Toast.LENGTH_SHORT).show();
 	}
 	
 	@Override

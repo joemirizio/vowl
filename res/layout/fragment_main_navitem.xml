@@ -25,7 +25,7 @@
         android:textColor="@color/white"
         android:textSize="42sp"
         android:visibility="gone"
-        android:onClick="menuChoice1OnClick"
+        android:onClick="menuLearnOnClick"
         vowl:baseColor="@color/redLight"      
         vowl:shadowColor="@color/redDark" />
     
@@ -43,6 +43,7 @@
         android:textColor="@color/white"
         android:textSize="42sp"
        	android:visibility="gone"
+       	android:onClick="menuPracticeOnClick"
         vowl:baseColor="@color/blueLight"      
         vowl:shadowColor="@color/blueDark" />
     
@@ -60,6 +61,7 @@
         android:textColor="@color/white"
         android:textSize="42sp"
         android:visibility="gone"
+        android:onClick="menuPlayOnClick"
         vowl:baseColor="@color/greenLight"
         vowl:shadowColor="@color/greenDark" />
 
