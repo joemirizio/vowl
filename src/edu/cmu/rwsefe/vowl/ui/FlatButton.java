@@ -13,24 +13,19 @@ import android.text.SpannableString;
 import android.text.style.MetricAffectingSpan;
 import android.text.style.StyleSpan;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.widget.Button;
-import android.widget.TextView;
 import edu.cmu.rwsefe.vowl.R;
-import edu.cmu.rwsefe.vowl.R.color;
-import edu.cmu.rwsefe.vowl.R.styleable;
-import edu.cmu.rwsefe.vowl.ui.CustomTextView;
 
 public class FlatButton extends Button {
 	protected ShapeDrawable mBase;
 	protected ShapeDrawable mShadow;
 	
 	protected int mShadowOffset;
-	protected int mCornerRadius;
 	protected int mBaseColor, mShadowColor;
 	protected MetricAffectingSpan mTextStyle;
 	
 	private String mFormattedTextCache;
+	private float[] mCorners = new float[8];
 	
 	public FlatButton(Context context, AttributeSet attributes) {
 		super(context, attributes);
@@ -41,7 +36,13 @@ public class FlatButton extends Button {
 	    TypedArray attrs = context.obtainStyledAttributes(attributes, R.styleable.FlatButton);
 	    
 	    mShadowOffset = attrs.getInteger(R.styleable.FlatButton_shadowOffset, 30);
-	    mCornerRadius = attrs.getInteger(R.styleable.FlatButton_cornerRadius, 50);
+	    
+	    float cornerRadius = attrs.getFloat(R.styleable.FlatButton_cornerRadius, 50f);
+	    float topLeftCornerRadius = attrs.getFloat(R.styleable.FlatButton_topLeftCornerRadius, cornerRadius);
+	    float topRightCornerRadius = attrs.getFloat(R.styleable.FlatButton_topRightCornerRadius, cornerRadius);
+	    float bottomRightCornerRadius = attrs.getFloat(R.styleable.FlatButton_bottomRightCornerRadius, cornerRadius);
+	    float bottomLeftCornerRadius = attrs.getFloat(R.styleable.FlatButton_bottomLeftCornerRadius, cornerRadius); 
+	    setCornerRadius(topLeftCornerRadius, topRightCornerRadius, bottomRightCornerRadius, bottomLeftCornerRadius);
 	    
 	    mBaseColor = attrs.getColor(R.styleable.FlatButton_baseColor, getResources().getColor(R.color.redLight));
 	    mShadowColor = attrs.getColor(R.styleable.FlatButton_shadowColor, getResources().getColor(R.color.redDark));
@@ -79,12 +80,9 @@ public class FlatButton extends Button {
 		// Offset text by the shadow offset
 		this.setPadding(getPaddingLeft(), getPaddingTop() - mShadowOffset, 
 				getPaddingRight(), getPaddingBottom());
-		
-		float[] roundCorners = new float[8];
-		Arrays.fill(roundCorners, mCornerRadius);
     	
 		// Base
-		mBase = new ShapeDrawable(new RoundRectShape(roundCorners, null, null));
+		mBase = new ShapeDrawable(new RoundRectShape(mCorners, null, null));
 		mBase.getPaint().setColor(mBaseColor);
 		mBase.setBounds(0, 0, scaledWidth, scaledHeight);
 
@@ -104,6 +102,15 @@ public class FlatButton extends Button {
 		}
 		
 		super.onDraw(canvas);
+	}
+	
+	public void setCornerRadius(float radius) {
+		Arrays.fill(mCorners, radius);
+	}
+	
+	public void setCornerRadius(float topLeft, float topRight, float bottomRight, float bottomLeft) {
+		mCorners = new float[] { topLeft, topLeft, topRight, topRight, 
+				bottomRight, bottomRight, bottomLeft, bottomLeft };
 	}
 	
 	public void setBaseColor(int color) {

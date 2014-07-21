@@ -34,8 +34,8 @@ public class LevelSelectActivity extends Activity {
 	
 	public void onRadioButtonClicked(View view) {
 	    // Is the button now checked?
-	    boolean checked = ((RadioButton) view).isChecked();
-	    if (!checked) { return; }
+	    //boolean checked = ((RadioButton) view).isChecked();
+	    //if (!checked) { return; }
 	    
 	    // Check which radio button was clicked
 	    switch(view.getId()) {

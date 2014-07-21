@@ -6,7 +6,11 @@
     
     <declare-styleable name="FlatButton">
         <attr name="shadowOffset" format="integer" />
-        <attr name="cornerRadius" format="integer" />
+        <attr name="cornerRadius" format="float" />
+        <attr name="topLeftCornerRadius" format="float" />
+        <attr name="topRightCornerRadius" format="float" />
+        <attr name="bottomLeftCornerRadius" format="float" />
+        <attr name="bottomRightCornerRadius" format="float" />
         <attr name="baseColor" format="color" />
         <attr name="shadowColor" format="color" />
     </declare-styleable>

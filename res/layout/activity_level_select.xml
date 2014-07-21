@@ -1,31 +1,76 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:vowl="http://schemas.android.com/apk/res/edu.cmu.rwsefe.vowl"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="${packageName}.${activityClass}"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-    
-    <RadioGroup
-	    android:layout_width="fill_parent"
-	    android:layout_height="wrap_content"
-	    android:orientation="horizontal"
-	    android:checkedButton="@+id/level_alphabet_lower">
-	    <RadioButton android:id="@+id/level_alphabet_upper"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:text="@string/level_alphabet_upper_label"
-	        android:onClick="onRadioButtonClicked"/>
-	    <RadioButton android:id="@+id/level_alphabet_lower"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:text="@string/level_alphabet_lower_label"
-	        android:onClick="onRadioButtonClicked"/>
-   	    <RadioButton android:id="@+id/level_numerals"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:text="@string/level_numerals_label"
-	        android:onClick="onRadioButtonClicked"/>
-	</RadioGroup>
+
+	
+	<LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp">
+        
+        <edu.cmu.rwsefe.vowl.ui.FlatButton
+            android:id="@+id/level_alphabet_lower"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="0dp"
+            android:layout_weight="1"
+            android:paddingTop="20dp"
+            android:layout_gravity="center"
+            android:text="@string/level_alphabet_lower_label"
+            android:textColor="@color/white"
+            android:textSize="30sp"
+            android:onClick="onRadioButtonClicked"
+            vowl:baseColor="@color/purpleLight"
+            vowl:shadowColor="@color/purpleDark"
+            vowl:topLeftCornerRadius="50"
+            vowl:topRightCornerRadius="0"
+            vowl:bottomRightCornerRadius="0"
+            vowl:bottomLeftCornerRadius="50" />
+        
+        <edu.cmu.rwsefe.vowl.ui.FlatButton
+            android:id="@+id/level_alphabet_upper"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="0dp"
+            android:layout_weight="1"
+            android:paddingTop="20dp"
+            android:layout_gravity="center"
+            android:text="@string/level_alphabet_upper_label"
+            android:textColor="@color/white"
+            android:textSize="30sp"
+            android:onClick="onRadioButtonClicked"
+            vowl:baseColor="@color/purpleLight"
+            vowl:shadowColor="@color/purpleDark"
+            vowl:cornerRadius="0" />
+
+        <edu.cmu.rwsefe.vowl.ui.FlatButton
+            android:id="@+id/level_numerals"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingTop="20dp"
+            android:layout_margin="0dp"
+            android:layout_gravity="center"
+            android:text="@string/level_numerals_label"
+            android:textColor="@color/white"
+        	android:textSize="30sp"
+        	android:onClick="onRadioButtonClicked"
+            vowl:baseColor="@color/purpleLight"
+            vowl:shadowColor="@color/purpleDark"
+            vowl:topLeftCornerRadius="0"
+            vowl:topRightCornerRadius="50"
+            vowl:bottomRightCornerRadius="50"
+            vowl:bottomLeftCornerRadius="0" />
+        
+    </LinearLayout>
 
 
     <fragment
