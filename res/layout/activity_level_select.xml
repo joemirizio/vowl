@@ -28,12 +28,12 @@
 	</RadioGroup>
 
 
-		    <fragment
-		        android:id="@+id/level_select_fragment"
-		        android:name="edu.cmu.rwsefe.vowl.LevelSelectFragment"
-		        android:layout_width="match_parent"
-		        android:layout_height="match_parent"
-		        tools:layout="@layout/fragment_level_select" />
+    <fragment
+        android:id="@+id/level_select_fragment"
+        android:name="edu.cmu.rwsefe.vowl.LevelSelectFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:layout="@layout/fragment_level_select" />
 
 
 </LinearLayout>
