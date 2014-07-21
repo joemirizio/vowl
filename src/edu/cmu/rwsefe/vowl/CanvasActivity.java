@@ -12,7 +12,11 @@ import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.widget.ImageView;
 import android.widget.RatingBar;
+import android.view.animation.Animation.AnimationListener;
+import android.view.animation.AnimationUtils;
 
 import com.canvas.AssetInstaller;
 
@@ -25,6 +29,7 @@ public class CanvasActivity extends Activity {
 	private final String TAG = CanvasActivity.class.getName();
 	public final static String BUNDLE_LEVELS = "levels";
 	public final static String BUNDLE_LEVEL_INDEX = "levelIndex";
+	Animation animationSlideInLeft, animationSlideOutRight;
 	
 	private CanvasView mCanvasView;
 	private RatingBar mRatingBar;
@@ -33,11 +38,23 @@ public class CanvasActivity extends Activity {
 	private int mConfidence;
 	private TextToSpeech mTextToSpeech;
 	
+	 ImageView image1;
+	 ImageView curSlidingImage;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		// Restore any saved state 
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.canvas);
+		image1 = (ImageView)findViewById(R.id.image1);
+		image1.setVisibility(View.GONE);// keep the image invisible on create
+		
+		animationSlideInLeft = AnimationUtils.loadAnimation(this, android.R.anim.slide_in_left);
+		animationSlideOutRight = AnimationUtils.loadAnimation(this, android.R.anim.slide_out_right);
+		animationSlideInLeft.setDuration(1000);
+		animationSlideOutRight.setDuration(1000);
+		animationSlideInLeft.setAnimationListener(animationSlideInLeftListener);
+		animationSlideOutRight.setAnimationListener(animationSlideOutRightListener);
 		
 		// Get character from bundle
 		Bundle bundle = getIntent().getExtras();
@@ -101,6 +118,10 @@ public class CanvasActivity extends Activity {
 		onLevelChange(mLevelSelector.getLevelIndex());
 	}
 	
+	
+	
+	
+	
 	@Override
 	public void onDestroy() {
 		mTextToSpeech.shutdown();
@@ -156,7 +177,13 @@ public class CanvasActivity extends Activity {
 			}
 			
 			int rating = mConfidence / 10;
-			mRatingBar.setRating(rating);
+//			dialog = ProgressDialog.show(CanvasActivity.this, "GOOD JOB!!", "Please wait...", false);
+			
+			curSlidingImage = image1;
+		    image1.startAnimation(animationSlideInLeft);
+		    image1.setVisibility(View.VISIBLE);
+			
+		       mRatingBar.setRating(rating);
 
 			// Save confidence score to database
 			mScoreKeeper.saveScore(character, mConfidence);
@@ -166,4 +193,80 @@ public class CanvasActivity extends Activity {
 			dialog = ProgressDialog.show(CanvasActivity.this, "Processing", "Please wait...", true);
 		}
 	}
+	
+//Animation------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- 	
+	 AnimationListener animationSlideInLeftListener
+	 = new AnimationListener(){
+
+	  @Override
+	  public void onAnimationEnd(Animation animation) {
+	   // TODO Auto-generated method stub
+	   
+	   if(curSlidingImage == image1){
+	    image1.startAnimation(animationSlideOutRight);
+	   }
+//	   else if(curSlidingImage == image2){
+//	    image2.startAnimation(animationSlideOutRight);
+//	   }else if(curSlidingImage == image3){
+//	    image3.startAnimation(animationSlideOutRight);
+//	   }
+//	   
+	  }
+
+	  @Override
+	  public void onAnimationRepeat(Animation animation) {
+	   // TODO Auto-generated method stub
+	   
+	  }
+
+	  @Override
+	  public void onAnimationStart(Animation animation) {
+	   // TODO Auto-generated method stub
+	   
+	  }};
+	  
+	  
+	  
+
+	  AnimationListener animationSlideOutRightListener
+	  = new AnimationListener(){
+	    @Override
+	   public void onAnimationEnd(Animation animation) {
+	    // TODO Auto-generated method stub
+	     if(curSlidingImage == image1){
+//	      curSlidingImage = image2;
+//	      image2.startAnimation(animationSlideInLeft);
+	      image1.setVisibility(View.INVISIBLE);
+//	      image2.setVisibility(View.VISIBLE);
+//	      image3.setVisibility(View.INVISIBLE);
+//	     }else if(curSlidingImage == image2){
+//	      curSlidingImage = image3;
+//	      image3.startAnimation(animationSlideInLeft);
+//	      image1.setVisibility(View.INVISIBLE);
+//	      image2.setVisibility(View.INVISIBLE);
+//	      image3.setVisibility(View.VISIBLE);
+//	     }else if(curSlidingImage == image3){
+//	      curSlidingImage = image1;
+//	      image1.startAnimation(animationSlideInLeft);
+//	      image1.setVisibility(View.VISIBLE);
+//	      image2.setVisibility(View.INVISIBLE);
+//	      image3.setVisibility(View.INVISIBLE);
+//	     }
+	   }
+	    }
+
+	   @Override
+	   public void onAnimationRepeat(Animation animation) {
+	    // TODO Auto-generated method stub
+	    
+	   }
+	   @Override
+	   public void onAnimationStart(Animation animation) {
+	    // TODO Auto-generated method stub
+	     
+	   }};
+
+//Animation-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------	  
+	
+	
 }
