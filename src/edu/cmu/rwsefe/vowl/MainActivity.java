@@ -9,6 +9,7 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.os.Bundle;
@@ -46,6 +47,12 @@ public class MainActivity extends FragmentActivity {
         ft.add(R.id.fragment_container, mainFragment);
         ft.add(R.id.fragment_container, splashFragment);
         ft.commit();
+	}
+	
+	public void menuChoice1OnClick(View v) {
+		// Start level select when nav button is clicked
+		Intent intent = new Intent(v.getContext(), LevelSelectActivity.class);
+		startActivity(intent);
 	}
 	
 	@Override
