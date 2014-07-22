@@ -13,6 +13,7 @@
         <attr name="bottomRightCornerRadius" format="float" />
         <attr name="baseColor" format="color" />
         <attr name="shadowColor" format="color" />
+        <attr name="isPressed" format="boolean" />
     </declare-styleable>
 
 </resources>

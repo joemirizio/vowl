@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.RadioButton;
+import edu.cmu.rwsefe.vowl.ui.FlatButton;
 
 public class LevelSelectActivity extends Activity {
 
@@ -36,7 +36,9 @@ public class LevelSelectActivity extends Activity {
 	    // Is the button now checked?
 	    //boolean checked = ((RadioButton) view).isChecked();
 	    //if (!checked) { return; }
-	    
+	    ((FlatButton) view).press();
+		
+		
 	    // Check which radio button was clicked
 	    switch(view.getId()) {
 	        case R.id.level_alphabet_upper:

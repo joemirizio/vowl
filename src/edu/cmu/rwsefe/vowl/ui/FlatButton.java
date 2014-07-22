@@ -13,10 +13,13 @@ import android.text.SpannableString;
 import android.text.style.MetricAffectingSpan;
 import android.text.style.StyleSpan;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.widget.Button;
 import edu.cmu.rwsefe.vowl.R;
 
 public class FlatButton extends Button {
+	public static final String TAG = FlatButton.class.getName();
+	
 	protected ShapeDrawable mBase;
 	protected ShapeDrawable mShadow;
 	
@@ -26,6 +29,7 @@ public class FlatButton extends Button {
 	
 	private String mFormattedTextCache;
 	private float[] mCorners = new float[8];
+	private boolean mIsPressed;
 	
 	public FlatButton(Context context, AttributeSet attributes) {
 		super(context, attributes);
@@ -35,7 +39,8 @@ public class FlatButton extends Button {
 	protected void init(Context context, AttributeSet attributes) {
 	    TypedArray attrs = context.obtainStyledAttributes(attributes, R.styleable.FlatButton);
 	    
-	    mShadowOffset = attrs.getInteger(R.styleable.FlatButton_shadowOffset, 30);
+	    mIsPressed = attrs.getBoolean(R.styleable.FlatButton_isPressed, false);
+	    setShadowOffset(attrs.getInteger(R.styleable.FlatButton_shadowOffset, 30));
 	    
 	    float cornerRadius = attrs.getFloat(R.styleable.FlatButton_cornerRadius, 50f);
 	    float topLeftCornerRadius = attrs.getFloat(R.styleable.FlatButton_topLeftCornerRadius, cornerRadius);
@@ -69,27 +74,28 @@ public class FlatButton extends Button {
 		mFormattedTextCache = styledText.toString();
 	}
 	
-	@Override
-	protected void onSizeChanged(int xNew, int yNew, int xOld, int yOld){
-    	super.onSizeChanged(xNew, yNew, xOld, yOld);
-    	
-    	// TODO: Scale shadowOffset and cornerRadius
-		int scaledHeight = (int)(getHeight() - mShadowOffset);
-		int scaledWidth = getWidth();
+	protected void rebuildGraphics() {
+		// TODO: Scale shadowOffset and cornerRadius
+		int scaledHeight = (int)(getMeasuredHeight() - mShadowOffset);
+		int scaledWidth = getMeasuredWidth();
 		
-		// Offset text by the shadow offset
-		this.setPadding(getPaddingLeft(), getPaddingTop() - mShadowOffset, 
-				getPaddingRight(), getPaddingBottom());
+		int buttonTopOffset = (mIsPressed) ? mShadowOffset : 0;
     	
 		// Base
 		mBase = new ShapeDrawable(new RoundRectShape(mCorners, null, null));
 		mBase.getPaint().setColor(mBaseColor);
-		mBase.setBounds(0, 0, scaledWidth, scaledHeight);
+		mBase.setBounds(0, buttonTopOffset, scaledWidth, buttonTopOffset + scaledHeight);
 
 		// Shadow
 		mShadow = new ShapeDrawable(mBase.getShape());
 		mShadow.getPaint().setColor(mShadowColor);
 		mShadow.setBounds(0, mShadowOffset, scaledWidth, scaledHeight + mShadowOffset);
+	}
+	
+	@Override
+	protected void onSizeChanged(int xNew, int yNew, int xOld, int yOld){
+    	super.onSizeChanged(xNew, yNew, xOld, yOld);
+    	rebuildGraphics();
 	}
 
 	@Override
@@ -102,6 +108,18 @@ public class FlatButton extends Button {
 		}
 		
 		super.onDraw(canvas);
+	}
+	
+	@Override
+	public void setPressed(boolean isPressed) {
+		mIsPressed = isPressed;
+		//this.setGravity(Gravity.);
+		rebuildGraphics();
+		super.setPressed(isPressed);
+	}
+	
+	public void press() {
+		setPressed(!mIsPressed);
 	}
 	
 	public void setCornerRadius(float radius) {
@@ -119,6 +137,13 @@ public class FlatButton extends Button {
 	
 	public void setShadowColor(int color) {
 		mShadowColor = color;
+	}
+	
+	public void setShadowOffset(int offset) {
+		// Offset text by the shadow offset
+		this.setPadding(getPaddingLeft(), getPaddingTop() + mShadowOffset - offset, 
+				getPaddingRight(), getPaddingBottom());
+		mShadowOffset = offset;
 	}
 
 	@Override
