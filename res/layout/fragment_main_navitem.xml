@@ -1,42 +1,68 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:vowl="http://schemas.android.com/apk/res/edu.cmu.rwsefe.vowl"
+    android:id="@+id/nav_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:orientation="horizontal"
     tools:context="edu.cmu.rwsefe.vowl.MainActivity$PlaceholderFragment" >
 
-    <!-- <edu.cmu.rwsefe.vowl.CustomTextView
-        android:id="@+id/section_label"
-        
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="20pt"
-        vowl:fontFamily="FredokaOne-Regular.ttf"/>-->
-
-
-    <!-- <Button 
-        android:id="@+id/menuItem"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="20pt"
-        android:fontFamily="FredokaOne-Regular.ttf"
-   	/>-->
-
     <edu.cmu.rwsefe.vowl.ui.FlatButton
-        android:id="@+id/nav_button"
+        android:id="@+id/main_nav_learn"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="50dp"
-        android:drawableBottom="@drawable/book_icon"
+      	android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:drawableBottom="@drawable/learn_icon"
         android:padding="20dp"
-        android:text="@string/menu_choice1"
+        android:text="@string/main_nav_learn"
         android:textColor="@color/white"
         android:textSize="42sp"
+        android:visibility="gone"
+        android:onClick="menuLearnOnClick"
         vowl:baseColor="@color/redLight"      
         vowl:shadowColor="@color/redDark" />
+    
+    <edu.cmu.rwsefe.vowl.ui.FlatButton
+        android:id="@+id/main_nav_practice"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+      	android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:drawableBottom="@drawable/practice_icon"
+        android:padding="20dp"
+        android:text="@string/main_nav_practice"
+        android:textColor="@color/white"
+        android:textSize="42sp"
+       	android:visibility="gone"
+       	android:onClick="menuPracticeOnClick"
+        vowl:baseColor="@color/blueLight"      
+        vowl:shadowColor="@color/blueDark" />
+    
+    <edu.cmu.rwsefe.vowl.ui.FlatButton
+        android:id="@+id/main_nav_play"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="20dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:layout_marginTop="20dp"
+        android:drawableBottom="@drawable/play_icon"
+        android:padding="20dp"
+        android:text="@string/main_nav_play"
+        android:textColor="@color/white"
+        android:textSize="42sp"
+        android:visibility="gone"
+        android:onClick="menuPlayOnClick"
+        vowl:baseColor="@color/greenLight"
+        vowl:shadowColor="@color/greenDark" />
 
 </LinearLayout>

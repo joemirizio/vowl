@@ -1,33 +1,25 @@
 package edu.cmu.rwsefe.vowl;
 
-import java.util.Locale;
+import java.util.ArrayList;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Intent;
-import android.graphics.Canvas;
-import android.graphics.ColorFilter;
-import android.graphics.Paint;
-import android.graphics.Point;
-import android.graphics.Rect;
-import android.graphics.RectF;
-import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.text.Spannable;
-import android.text.SpannableString;
+import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.SurfaceView;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.TextView;
+import android.widget.LinearLayout;
 
 
 public class MainFragment extends Fragment {
+	
+	public static final String TAG = MainFragment.class.getName();
 	
 	/**
 	 * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -78,10 +70,14 @@ public class MainFragment extends Fragment {
 			// below).
 			return PlaceholderFragment.newInstance(position + 1);
 		}
+		
+		@Override
+		public float getPageWidth(int position) {
+			return 1f;
+		}
 	
 		@Override
 		public int getCount() {
-			// Show 3 total pages.
 			return 3;
 		}
 	}
@@ -110,19 +106,13 @@ public class MainFragment extends Fragment {
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container,
 				Bundle savedInstanceState) {
-			View rootView = inflater.inflate(R.layout.fragment_main_navitem, container,
-					false);
+			View rootView = inflater.inflate(R.layout.fragment_main_navitem, container, false);
 			
-			// Start level select when nav button is clicked
-			Button button = (Button) rootView.findViewById(R.id.nav_button);
-			button.setText(R.string.menu_choice1);
-			button.setOnClickListener(new OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					Intent intent = new Intent(v.getContext(), LevelSelectActivity.class);
-					startActivity(intent);
-				}
-			});
+			// Make the appropriate button visible
+			int buttonIndex = getArguments().getInt(ARG_SECTION_NUMBER) - 1;
+			Button button = (Button) ((LinearLayout) 
+					rootView.findViewById(R.id.nav_layout)).getChildAt(buttonIndex);
+			button.setVisibility(View.VISIBLE);
 	
 			return rootView;
 		}

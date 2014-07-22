@@ -37,10 +37,6 @@ public class FlatButtonRating extends FlatButton {
 	@Override
 	protected void onSizeChanged(int xNew, int yNew, int xOld, int yOld){
     	super.onSizeChanged(xNew, yNew, xOld, yOld);
-    	
-    	// TODO Scale shadowOffset and cornerRadius
-		int scaledHeight = (int)(getHeight() - mShadowOffset);
-		int scaledWidth = getWidth();
 		
 		mRatingBar.setIsIndicator(true);
 		mRatingBar.setNumStars(MAX_STARS);
