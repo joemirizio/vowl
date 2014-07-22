@@ -30,6 +30,7 @@ public class FlatButton extends Button {
 	private String mFormattedTextCache;
 	private float[] mCorners = new float[8];
 	private boolean mIsPressed;
+	private boolean mIsSticky;
 	
 	public FlatButton(Context context, AttributeSet attributes) {
 		super(context, attributes);
@@ -79,7 +80,7 @@ public class FlatButton extends Button {
 		int scaledHeight = (int)(getMeasuredHeight() - mShadowOffset);
 		int scaledWidth = getMeasuredWidth();
 		
-		int buttonTopOffset = (mIsPressed) ? mShadowOffset : 0;
+		int buttonTopOffset = (mIsPressed || mIsSticky) ? mShadowOffset : 0;
     	
 		// Base
 		mBase = new ShapeDrawable(new RoundRectShape(mCorners, null, null));
@@ -106,16 +107,18 @@ public class FlatButton extends Button {
 		if (!getText().equals(mFormattedTextCache)) {
 			applyCustomFont();
 		}
-		
 		super.onDraw(canvas);
 	}
 	
 	@Override
 	public void setPressed(boolean isPressed) {
-		mIsPressed = isPressed;
-		//this.setGravity(Gravity.);
-		rebuildGraphics();
 		super.setPressed(isPressed);
+		mIsPressed = isPressed;
+		rebuildGraphics();
+	}
+	
+	public void setSticky(boolean isSticky) {
+		mIsSticky = isSticky;
 	}
 	
 	public void press() {

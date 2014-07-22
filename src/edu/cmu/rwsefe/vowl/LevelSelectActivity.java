@@ -3,7 +3,9 @@ package edu.cmu.rwsefe.vowl;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import edu.cmu.rwsefe.vowl.ui.FlatButton;
@@ -32,12 +34,16 @@ public class LevelSelectActivity extends Activity {
 		});
 	}
 	
-	public void onRadioButtonClicked(View view) {
-	    // Is the button now checked?
-	    //boolean checked = ((RadioButton) view).isChecked();
-	    //if (!checked) { return; }
-	    ((FlatButton) view).press();
+	public void onCharacterSetClicked(View view) {
 		
+		ViewGroup characterSets = (ViewGroup) findViewById(R.id.character_sets);
+		for (int i = 0; i < characterSets.getChildCount(); i++) {
+			FlatButton characterSet = (FlatButton) characterSets.getChildAt(i);
+			// Make the active button sticky
+			characterSet.setSticky(characterSet.getId() == view.getId());
+			// Reset state of buttons
+			characterSet.setPressed(false);
+		}
 		
 	    // Check which radio button was clicked
 	    switch(view.getId()) {
