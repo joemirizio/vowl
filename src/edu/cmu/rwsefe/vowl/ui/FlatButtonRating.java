@@ -1,25 +1,16 @@
 package edu.cmu.rwsefe.vowl.ui;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapShader;
 import android.graphics.Canvas;
-import android.graphics.Shader;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.ClipDrawable;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.LayerDrawable;
-import android.graphics.drawable.ShapeDrawable;
-import android.graphics.drawable.StateListDrawable;
-import android.graphics.drawable.shapes.RoundRectShape;
-import android.graphics.drawable.shapes.Shape;
 import android.util.AttributeSet;
-import android.view.Gravity;
 import android.widget.RatingBar;
-import edu.cmu.rwsefe.vowl.R;
 
 public class FlatButtonRating extends FlatButton {
+	
 	public static final int MAX_STARS = 5;
+	
+	private static final int RATING_BAR_OFFSET = 20;
+	
 	protected RatingBar mRatingBar;
 	
 	public FlatButtonRating(Context context, AttributeSet attributes) {
@@ -49,21 +40,15 @@ public class FlatButtonRating extends FlatButton {
 	}
 
 	@Override
-	protected void onDraw(Canvas canvas) {
-		super.onDraw(canvas);
-		
-		int ratingBarOffset = 20;
+	protected void onDrawContent(Canvas canvas) {
+		super.onDrawContent(canvas);
+
+		canvas.save();
 		canvas.translate(
 				this.getWidth() / 2 - mRatingBar.getWidth() / 2, 
-				this.getHeight() - mShadowOffset - mRatingBar.getHeight() - ratingBarOffset);
+				this.getHeight() - mShadowOffset - mRatingBar.getHeight() - RATING_BAR_OFFSET);
 		mRatingBar.draw(canvas);
 		canvas.restore();
-	}
-
-	@Override
-	protected void onLayout(boolean changed, int l, int t, int r, int b) {
-		// TODO Auto-generated method stub
-		
 	}
 	
 	public void setRating(float rating) {
