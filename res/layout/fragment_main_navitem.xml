@@ -65,4 +65,10 @@
         vowl:baseColor="@color/greenLight"
         vowl:shadowColor="@color/greenDark" />
 
+    <Button
+        android:id="@+id/settingsButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/settings_label" />
+
 </LinearLayout>

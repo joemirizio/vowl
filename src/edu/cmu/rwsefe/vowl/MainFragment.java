@@ -18,9 +18,9 @@ import android.widget.LinearLayout;
 
 
 public class MainFragment extends Fragment {
-	
+
 	public static final String TAG = MainFragment.class.getName();
-	
+
 	/**
 	 * The {@link android.support.v4.view.PagerAdapter} that will provide
 	 * fragments for each of the sections. We use a {@link FragmentPagerAdapter}
@@ -34,14 +34,14 @@ public class MainFragment extends Fragment {
 	 * The {@link ViewPager} that will host the section contents.
 	 */
 	ViewPager mViewPager;
-	
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 	    Bundle savedInstanceState) {
 	    // Inflate the layout for this fragment
 	    return inflater.inflate(R.layout.fragment_main, container, false);
 	}
-	
+
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		// Create the adapter that will return a fragment for each of the three
@@ -58,11 +58,11 @@ public class MainFragment extends Fragment {
 	 * one of the sections/tabs/pages.
 	 */
 	public class SectionsPagerAdapter extends FragmentPagerAdapter {
-	
+
 		public SectionsPagerAdapter(FragmentManager fm) {
 			super(fm);
 		}
-	
+
 		@Override
 		public Fragment getItem(int position) {
 			// getItem is called to instantiate the fragment for the given page.
@@ -70,12 +70,12 @@ public class MainFragment extends Fragment {
 			// below).
 			return PlaceholderFragment.newInstance(position + 1);
 		}
-		
+
 		@Override
 		public float getPageWidth(int position) {
 			return 1f;
 		}
-	
+
 		@Override
 		public int getCount() {
 			return 3;
@@ -91,7 +91,7 @@ public class MainFragment extends Fragment {
 		 * fragment.
 		 */
 		private static final String ARG_SECTION_NUMBER = "section_number";
-	
+
 		/**
 		 * Returns a new instance of this fragment for the given section number.
 		 */
@@ -102,20 +102,20 @@ public class MainFragment extends Fragment {
 			fragment.setArguments(args);
 			return fragment;
 		}
-	
+
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container,
 				Bundle savedInstanceState) {
 			View rootView = inflater.inflate(R.layout.fragment_main_navitem, container, false);
-			
+
 			// Make the appropriate button visible
 			int buttonIndex = getArguments().getInt(ARG_SECTION_NUMBER) - 1;
-			Button button = (Button) ((LinearLayout) 
+			Button button = (Button) ((LinearLayout)
 					rootView.findViewById(R.id.nav_layout)).getChildAt(buttonIndex);
 			button.setVisibility(View.VISIBLE);
-	
+
 			return rootView;
 		}
-		
+
 	}
 }

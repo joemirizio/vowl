@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import edu.cmu.rwsefe.vowl.model.UserSettings;
 import edu.cmu.rwsefe.vowl.ui.FlatButton;
 
 public class LevelSelectActivity extends Activity {
@@ -47,14 +48,14 @@ public class LevelSelectActivity extends Activity {
 		
 	    // Check which radio button was clicked
 	    switch(view.getId()) {
-	        case R.id.level_alphabet_upper:
-	        	mlevelSelect.setLevelCategory(R.string.latin_alphabet_upper);
-	            break;
 	        case R.id.level_alphabet_lower:
-	        	mlevelSelect.setLevelCategory(R.string.latin_alphabet_lower);
+	        	mlevelSelect.setLevelCategory(UserSettings.getInstance().getLetters());
+	            break;
+	        case R.id.level_alphabet_upper:
+	        	mlevelSelect.setLevelCategory(UserSettings.getInstance().getUppercaseLetters());
 	            break;
 	        case R.id.level_numerals:
-	        	mlevelSelect.setLevelCategory(R.string.latin_numerals);
+	        	mlevelSelect.setLevelCategory(UserSettings.getInstance().getNumerals());
 	            break;
 	    }
 	}
