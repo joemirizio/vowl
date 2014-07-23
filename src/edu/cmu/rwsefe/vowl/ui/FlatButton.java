@@ -79,13 +79,11 @@ public class FlatButton extends Button {
 		// TODO: Scale shadowOffset and cornerRadius
 		int scaledHeight = (int)(getMeasuredHeight() - mShadowOffset);
 		int scaledWidth = getMeasuredWidth();
-		
-		int buttonTopOffset = (mIsPressed || mIsSticky) ? mShadowOffset : 0;
-    	
+		    	
 		// Base
 		mBase = new ShapeDrawable(new RoundRectShape(mCorners, null, null));
 		mBase.getPaint().setColor(mBaseColor);
-		mBase.setBounds(0, buttonTopOffset, scaledWidth, buttonTopOffset + scaledHeight);
+		mBase.setBounds(0, 0, scaledWidth, scaledHeight);
 
 		// Shadow
 		mShadow = new ShapeDrawable(mBase.getShape());
@@ -101,13 +99,28 @@ public class FlatButton extends Button {
 
 	@Override
 	protected void onDraw(Canvas canvas) {
-		mShadow.draw(canvas);
-		mBase.draw(canvas);
 		// Reset custom font if text changed
 		if (!getText().equals(mFormattedTextCache)) {
 			applyCustomFont();
 		}
+		
+		// Draw shadow
+		mShadow.draw(canvas);
+		
+		// Translate down if pressed
+		canvas.save();
+		if (mIsPressed || mIsSticky) {
+			canvas.translate(0, mShadowOffset);
+		}
+		
+		// Draw content
+		onDrawContent(canvas);
 		super.onDraw(canvas);
+		canvas.restore();
+	}
+	
+	protected void onDrawContent(Canvas canvas) {
+		mBase.draw(canvas);
 	}
 	
 	@Override
