@@ -17,6 +17,12 @@
         android:numStars="5"
         android:rating="0"
         android:stepSize="1.0" />
+
+    <TextView
+        android:id="@+id/newRecord1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Record!!" />
     
     <edu.cmu.rwsefe.vowl.CanvasView
         android:id="@+id/canvas"
@@ -24,6 +30,12 @@
         android:layout_height="0dp"
         android:layout_weight="12"
         />
+
+    <TextView
+        android:id="@+id/image1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Good Job!!" />
     
     <LinearLayout
         android:layout_width="fill_parent"
@@ -71,6 +83,7 @@
         	android:onClick="onClickLevelNext"
             vowl:baseColor="@color/purpleLight"
             vowl:shadowColor="@color/purpleDark"/>
+        
         
     </LinearLayout>
 	
