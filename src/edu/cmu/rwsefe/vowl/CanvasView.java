@@ -177,8 +177,8 @@ public class CanvasView extends View implements OnTouchListener {
 					", Confidence = " + result.Confidence);
 		}
 
-		String configFileDirectory = recognizer.getLipiDirectory()
-				+ "/projects/alphanumeric/config/";
+		String configFileDirectory = recognizer.getLipiDirectory() + 
+				"/projects/" + UserSettings.getInstance().getProject() + "/config/";
 		characters.clear();
 		for (LipitkResult result : results) {
 			String key = recognizer.getSymbolName(result.Id,

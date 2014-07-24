@@ -63,14 +63,6 @@ public class CanvasActivity extends Activity {
 		
 		mScoreKeeper = new ScoreKeeper(this);
 		
-		// Install LipiTK components
-		AssetInstaller assetInstaller = new AssetInstaller(getApplicationContext(), "projects");
-		try {
-			assetInstaller.execute();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
 		// Set score listener for canvas view
 		mCanvasView = (CanvasView) this.findViewById(R.id.canvas);
 		mCanvasView.setScoreEventListener(new ScoreEventListener() {

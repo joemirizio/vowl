@@ -3,13 +3,16 @@ package com.canvas;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-import android.graphics.PointF;
 import android.util.Log;
 
 public class LipiTKJNIInterface {
 	private String _lipiDirectory;
 	private String _project;
+	
+	private static final Pattern UNICODE_MAP_PATTERN = Pattern.compile("(\\d+)=\\s(0x[0-9A-F]{4})");
 	
 	static
 	{
@@ -61,6 +64,31 @@ public class LipiTKJNIInterface {
 			return "-1";
 		}
 		return "0";
+	}
+	
+	public static String getCharactersFromUnicodeMapFile(File file) {
+		
+		StringBuilder builder = new StringBuilder();
+		
+	
+		if (file != null) {
+			try {
+				String line;
+				BufferedReader unicodeMapFileReader = new BufferedReader(new FileReader(file));
+				while((line=unicodeMapFileReader.readLine())!=null) {
+					Matcher matcher = UNICODE_MAP_PATTERN.matcher(line);
+					if (matcher.matches()) {
+						builder.append((char)Integer.parseInt(matcher.group(2)));
+					}
+				}
+				unicodeMapFileReader.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+		}
+		
+		return builder.toString();
 	}
 	
 	public void initialize() {
