@@ -16,6 +16,7 @@ import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
@@ -38,9 +39,10 @@ public class CanvasActivity extends Activity {
 	private int mConfidence;
 	private TextToSpeech mTextToSpeech;
 	
-	TextView image1;  //Ambarish 
-	TextView curSlidingImage; //Ambarish
-	TextView newRecord;
+	ImageView image1;  //Ambarish 
+	ImageView curSlidingImage; //Ambarish
+	TextView newRecord; //Ambarish
+	TextView goodJob; //Ambarish
 	Animation animationSlideInLeft, animationSlideOutRight; //Ambarish
 	private Button prev_btn;//Ambarish
 	int old_score;//Ambarish
@@ -59,11 +61,14 @@ public class CanvasActivity extends Activity {
 //----Start---------------------------------Ambarish 
 		prev_btn = (Button)findViewById(R.id.canvasLevelNavPrev);	
 		
-		image1 = (TextView)findViewById(R.id.image1);
+		image1 = (ImageView)findViewById(R.id.image1);
 		image1.setVisibility(View.GONE);// keep the image invisible on create
 		
 		newRecord = (TextView)findViewById(R.id.newRecord1);
 		newRecord.setVisibility(View.GONE);// keep the image invisible on create
+		
+		goodJob = (TextView)findViewById(R.id.GoodJob);
+		goodJob.setVisibility(View.GONE);// keep the image invisible on create
 		
 		animationSlideInLeft = AnimationUtils.loadAnimation(this, android.R.anim.slide_in_left);
 		animationSlideOutRight = AnimationUtils.loadAnimation(this, android.R.anim.slide_out_right);
@@ -197,6 +202,7 @@ public class CanvasActivity extends Activity {
 			curSlidingImage = image1; //Ambarish
 		    image1.startAnimation(animationSlideInLeft);  //Ambarish
 		    image1.setVisibility(View.VISIBLE);  //Ambarish
+		    goodJob.setVisibility(View.VISIBLE);
 		    
 			 prev_btn.setVisibility(View.GONE);
 
