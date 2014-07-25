@@ -1,11 +1,15 @@
 package edu.cmu.rwsefe.vowl;
 
-import java.io.File;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
+import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.PreferenceFragment;
@@ -20,35 +24,13 @@ public class UserSettingsFragment extends PreferenceFragment implements OnShared
 		
 		super.onCreate(savedInstanceState);
 		addPreferencesFromResource(R.xml.user_settings);
+
+		ListPreference languageListPreference = (ListPreference)findPreference("script");
 		
-		
-		// Creating dynamic ListPreference
-		List<String> scriptList = new ArrayList<String>();
-		ListPreference scriptListPreference = (ListPreference)findPreference("script");
-		
-		if(scriptListPreference != null) {
-			File projectFolder = new File(UserSettings.getInstance().getProjectPath());
-			if(projectFolder.isDirectory()) {
-				File[] characterPacks = projectFolder.listFiles();
-				for (File characterPack : characterPacks) {
-					if(characterPack.isDirectory()) {
-						scriptList.add(characterPack.getName());
-					}
-				}
-				
-				// Initializing entries and values for list preference
-				int numberOfScripts = scriptList.size();
-				String entries[] = new String[numberOfScripts];
-				String values[] = new String[numberOfScripts];
-				
-				for (int i = 0; i < scriptList.size(); i++) {
-					entries[i] = scriptList.get(i);
-					values[i] = scriptList.get(i).toUpperCase();
-				}
-				
-				scriptListPreference.setEntries(entries);
-				scriptListPreference.setEntryValues(values);
-			}			
+		if(languageListPreference != null) {
+				        
+	        languageListPreference.setEntries(UserSettings.getInstance().getLanguageNames());
+	        languageListPreference.setEntryValues(UserSettings.getInstance().getLanguageValues());
 		}
 	}
 	

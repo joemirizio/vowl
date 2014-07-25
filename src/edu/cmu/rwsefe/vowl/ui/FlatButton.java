@@ -16,6 +16,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.widget.Button;
 import edu.cmu.rwsefe.vowl.R;
+import edu.cmu.rwsefe.vowl.model.UserSettings;
 
 public class FlatButton extends Button {
 	public static final String TAG = FlatButton.class.getName();
@@ -55,7 +56,7 @@ public class FlatButton extends Button {
 	
 		// Set custom font if not displaying in editor
 	    if (!this.isInEditMode()) {
-	    	mTextStyle = new CustomTextView.TypefaceSpan(context, "FredokaOne-Regular.ttf");
+	    	mTextStyle = new CustomTextView.TypefaceSpan(context, UserSettings.getInstance().getFont());
 	    } else {
 	    	mTextStyle = new StyleSpan(Typeface.NORMAL);
 	    }

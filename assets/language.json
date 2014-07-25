@@ -1,0 +1,23 @@
+{
+  "languages": [
+    {
+	  "value": "english",
+      "name": "English",
+	  "script": "alphanumeric"
+    },
+	{
+	  "value": "spanish",
+      "name": "Español",
+	  "script": "alphanumeric"
+    },
+    {
+	  "value": "hindi",
+      "name": "Hindi",
+	  "script": "devnagari"
+    }
+  ],
+  "scripts": {
+  	"alphanumeric": "FredokaOne-Regular.ttf",
+  	"devnagari": "Akshar.ttf"
+  }
+}

@@ -11,9 +11,7 @@ import android.util.Log;
 public class LipiTKJNIInterface {
 	private String _lipiDirectory;
 	private String _project;
-	
-	private static final Pattern UNICODE_MAP_PATTERN = Pattern.compile("(\\d+)=\\s(0x[0-9A-F]{4})");
-	
+		
 	static
 	{
 		try {
@@ -65,32 +63,7 @@ public class LipiTKJNIInterface {
 		}
 		return "0";
 	}
-	
-	public static String getCharactersFromUnicodeMapFile(File file) {
 		
-		StringBuilder builder = new StringBuilder();
-		
-	
-		if (file != null) {
-			try {
-				String line;
-				BufferedReader unicodeMapFileReader = new BufferedReader(new FileReader(file));
-				while((line=unicodeMapFileReader.readLine())!=null) {
-					Matcher matcher = UNICODE_MAP_PATTERN.matcher(line);
-					if (matcher.matches()) {
-						builder.append((char)Integer.parseInt(matcher.group(2)));
-					}
-				}
-				unicodeMapFileReader.close();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			
-		}
-		
-		return builder.toString();
-	}
-	
 	public void initialize() {
 		initializeNative(_lipiDirectory, _project);
 	}
