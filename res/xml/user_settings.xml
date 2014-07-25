@@ -5,8 +5,7 @@
 	    <ListPreference
 	        android:key="script"
 	        android:title="Script"
-	        android:entries="@array/scripts"
-	        android:entryValues="@array/scriptValues" />
+	        android:summary="Choose Script" />
  	    
 	</PreferenceCategory>
 

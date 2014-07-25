@@ -22,6 +22,7 @@ public class UserSettings {
 	private String mLetters;
 	private String mUppercaseLetters;
 	private String mNumerals;
+	private String mProjectPath;
 	
 	
 	public UserSettings() {}
@@ -30,6 +31,7 @@ public class UserSettings {
 		mContext = context;
 		mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
 		mScript = mSharedPreferences.getString("script", DEFAULT_SCRIPT);
+		mProjectPath = mContext.getExternalFilesDir(null).getPath() + "/" + "projects";
 		updateAttributes(mScript);
 	}
 	
@@ -54,6 +56,10 @@ public class UserSettings {
 	
 	public String getNumerals() {
 		return mNumerals;
+	}
+	
+	public String getProjectPath() {
+		return mProjectPath;
 	}
 	
 	public void updateAttributes(String script) {

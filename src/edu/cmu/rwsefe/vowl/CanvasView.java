@@ -26,6 +26,7 @@ import com.canvas.LipiTKJNIInterface;
 import com.canvas.LipitkResult;
 import com.canvas.Stroke;
 
+import edu.cmu.rwsefe.vowl.model.UserSettings;
 import edu.cmu.rwsefe.vowl.ui.CustomTextView;
 
 public class CanvasView extends View implements OnTouchListener {
@@ -178,7 +179,7 @@ public class CanvasView extends View implements OnTouchListener {
 		}
 
 		String configFileDirectory = recognizer.getLipiDirectory() + 
-				"/projects/" + UserSettings.getInstance().getProject() + "/config/";
+				"/projects/" + UserSettings.getInstance().getScriptName() + "/config/";
 		characters.clear();
 		for (LipitkResult result : results) {
 			String key = recognizer.getSymbolName(result.Id,

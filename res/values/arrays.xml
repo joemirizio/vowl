@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+
 <resources>
+<!--  
     <string-array name="scripts">
         <item name="latin">latin</item>
         <item name="devnagari">devnagari</item>
@@ -8,4 +11,6 @@
         <item name="latin">latin</item>
         <item name="devnagari">devnagari</item>
     </string-array>
+-->
 </resources>
+

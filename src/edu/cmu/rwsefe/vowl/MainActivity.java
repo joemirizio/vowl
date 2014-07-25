@@ -26,7 +26,16 @@ public class MainActivity extends FragmentActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		// Install LipiTK components
+		AssetInstaller assetInstaller = new AssetInstaller(getApplicationContext(), "projects");
+		try {
+			assetInstaller.execute();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
 		UserSettings.getInstance().Initialize(getApplicationContext());
+		
 
 		setContentView(R.layout.activity_main);
 
@@ -37,14 +46,6 @@ public class MainActivity extends FragmentActivity {
         ft.add(R.id.fragment_container, mainFragment);
         ft.add(R.id.fragment_container, splashFragment);
         ft.commit();
-        
-		// Install LipiTK components
-		AssetInstaller assetInstaller = new AssetInstaller(getApplicationContext(), "projects");
-		try {
-			assetInstaller.execute();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 	}
 
 	public void menuLearnOnClick(View v) {
