@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.RatingBar;
 
 import com.canvas.AssetInstaller;
@@ -33,11 +34,21 @@ public class CanvasActivity extends Activity {
 	private int mConfidence;
 	private TextToSpeech mTextToSpeech;
 	
+	
+	private Button prev_btn;//Ambarish
+	private Button refresh_btn;//Ambarish
+	private Button audio_btn;//	Ambarish: canvasLevelSpeak 
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		// Restore any saved state 
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.canvas);
+		
+		prev_btn = (Button)findViewById(R.id.canvasLevelNavPrev);//Ambarish
+		refresh_btn = (Button)findViewById(R.id.Redo);//Ambarish
+		audio_btn = (Button)findViewById(R.id.canvasLevelSpeak);//Ambarish
+		refresh_btn.setVisibility(View.GONE); //Ambarish, Refesh button is now hidden
 		
 		// Get character from bundle
 		Bundle bundle = getIntent().getExtras();
@@ -112,6 +123,13 @@ public class CanvasActivity extends Activity {
 		mLevelSelector.prevLevel();
 	}
 	
+	public void onClickRefresh(View v) {   //Ambarish refresh button
+		mLevelSelector.prevLevel();
+		mLevelSelector.nextLevel();
+	}
+	
+	
+	
 	public void onClickLevelNext(View v) {
 		mLevelSelector.nextLevel();
 	}
@@ -155,6 +173,11 @@ public class CanvasActivity extends Activity {
 			else {
 				mConfidence = 0;
 			}
+			
+			prev_btn.setVisibility(View.GONE); //Ambarish button is now hidden
+			audio_btn.setVisibility(View.GONE); //Ambarish button is now hidden
+			refresh_btn.setVisibility(View.VISIBLE); //Ambarish button is now hidden
+			
 			
 			int rating = mConfidence / 10;
 			mRatingBar.setRating(rating);
