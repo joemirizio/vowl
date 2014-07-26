@@ -37,6 +37,7 @@ public class CanvasActivity extends Activity {
 	
 	private Button prev_btn;//Ambarish
 	private Button refresh_btn;//Ambarish
+	private Button audio_btn;//	Ambarish: canvasLevelSpeak 
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -46,7 +47,8 @@ public class CanvasActivity extends Activity {
 		
 		prev_btn = (Button)findViewById(R.id.canvasLevelNavPrev);//Ambarish
 		refresh_btn = (Button)findViewById(R.id.Redo);//Ambarish
-		refresh_btn.setVisibility(View.GONE); //Ambarish Refesh button is now hidden
+		audio_btn = (Button)findViewById(R.id.canvasLevelSpeak);//Ambarish
+		refresh_btn.setVisibility(View.GONE); //Ambarish, Refesh button is now hidden
 		
 		// Get character from bundle
 		Bundle bundle = getIntent().getExtras();
@@ -173,7 +175,9 @@ public class CanvasActivity extends Activity {
 			}
 			
 			prev_btn.setVisibility(View.GONE); //Ambarish button is now hidden
-			refresh_btn.setVisibility(View.VISIBLE);
+			audio_btn.setVisibility(View.GONE); //Ambarish button is now hidden
+			refresh_btn.setVisibility(View.VISIBLE); //Ambarish button is now hidden
+			
 			
 			int rating = mConfidence / 10;
 			mRatingBar.setRating(rating);
