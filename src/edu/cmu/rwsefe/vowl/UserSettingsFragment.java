@@ -1,15 +1,7 @@
 package edu.cmu.rwsefe.vowl;
 
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
-import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.PreferenceFragment;
@@ -38,7 +30,7 @@ public class UserSettingsFragment extends PreferenceFragment implements OnShared
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 		
 		if (key.contentEquals("script")) {
-			UserSettings.getInstance().updateAttributes(sharedPreferences.getString(key, "latin"));
+			UserSettings.getInstance().updateLanguage(sharedPreferences.getString(key, "latin"));
 		}
 	}
 	
