@@ -3,8 +3,7 @@ package edu.cmu.rwsefe.vowl.model;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.MissingResourceException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -19,12 +18,14 @@ public class Script {
 	protected String[] mCharacterSets;
 	protected String mFont;
 	protected String mScriptValue;
+	protected String mShapeRecognizer;
 	
 	public Script(String language) {
 		mScriptValue = getScriptFromLanguage(language);
 		mFont = readFontFromJSON(mScriptValue);
 		String characters = getCharacterFromUnicodeMapFile(mScriptValue);
 		mCharacterSets = getCharacterSetsFromString(characters);
+		mShapeRecognizer = getShapeRecognizer(mScriptValue);
 	}
 	
 	public String[] getCharacterSets() {
@@ -38,6 +39,10 @@ public class Script {
 	public String getScriptValue()
 	{
 		return mScriptValue;
+	}
+	
+	public String getShapeRecognizer() {
+		return mShapeRecognizer;
 	}
 	
 	private static String getScriptFromLanguage(String language) {
@@ -140,19 +145,68 @@ public class Script {
 		return characterSets;
 	}
 	
-	private static String readFontFromJSON(String script) {
+	private static String readFontFromJSON(String scriptValue) {
 		String font = null;
 		try {
 	        JSONObject jsonObject = new JSONObject(UserSettings.getInstance().getJSONString());
 	        JSONObject scriptHash = jsonObject.getJSONObject("scripts");
-	        font = scriptHash.getString(script);
+	        font = scriptHash.getString(scriptValue);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
 
 		}
 		
+		if (font == null) {
+			font = "FredokaOne-Regular.ttf";
+		}
+		
 		return font;
+	}
+	
+	private static String getShapeRecognizer(String scriptValue) {
+		
+		String shapeRecString = null;
+		
+		// Pattern of shape to unicode character mapping in LipiTK configuration file
+		Pattern lipiEnginePattern = Pattern.compile("(SHAPEREC_\\w+)\\s*=\\s*(\\w+)\\(\\w+\\)");
+		
+		String fileName = UserSettings.getInstance().getProjectPath() + "/lipiengine.cfg";
+		
+		File lipiEngineFile = new File(UserSettings.getInstance().getProjectPath() + "/lipiengine.cfg");
+		
+		try {
+			
+			// Open unicode map file for reading
+			BufferedReader lipiEngineFileReader = new BufferedReader(new FileReader(lipiEngineFile));
+			String line;
+			
+			// Iterate through each line in unicode map file
+			while((line=lipiEngineFileReader.readLine())!=null) {
+				
+				Matcher matcher = lipiEnginePattern.matcher(line);
+				
+				// Check if line matches shape to unicode map pattern
+				if (matcher.matches()) {
+					
+					if(scriptValue.equals(matcher.group(2))) {
+						shapeRecString = matcher.group(1);
+					}
+				}
+			}
+			
+			lipiEngineFileReader.close();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		if (shapeRecString == null) {
+			throw new MissingResourceException("Shape Recognizer is missing from lipiEngine config", 
+					Script.class.getName(), "Shape Recognizer");
+		}
+		
+		return shapeRecString;
 	}
 
 }
