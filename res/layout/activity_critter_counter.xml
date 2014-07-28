@@ -18,9 +18,16 @@
         android:stepSize="1.0" />
     
     <edu.cmu.rwsefe.vowl.mode.play.critter.CritterCanvas
-        android:id="@+id/play_critter_canvas"
+        android:id="@+id/playCritterCanvas"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_world" />
+        android:text="@string/hello_world"
+        android:layout_weight="1" />
+    
+    <edu.cmu.rwsefe.vowl.CanvasView
+        android:id="@+id/playCritterWriting"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1" />
 
 </LinearLayout>

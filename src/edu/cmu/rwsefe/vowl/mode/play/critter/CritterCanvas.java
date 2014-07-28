@@ -43,6 +43,7 @@ class CritterCanvas extends CanvasView {
 			// Ensure the bounds do not intersect
 			boolean intersects;
 			Rect bounds = null;
+			int tries = 0;
 			do {
 				intersects = false;
 				int left = mRandomGen.nextInt(getWidth() - image.getIntrinsicWidth());
@@ -54,17 +55,22 @@ class CritterCanvas extends CanvasView {
 				for (Critter critter : mCritters) {
 					intersects |= bounds.intersect(critter.getBounds());
 				}
-			} while (intersects);
+			} while (intersects && tries++ < 20);
 			image.setBounds(bounds);
 			float rotation = mRandomGen.nextFloat() * 60 - 30;
 			float scale = mRandomGen.nextFloat() + 0.5f;
 			mCritters.add(new Critter(image, rotation, scale));
 		}
+		invalidate();
+	}
+	
+	public int getCritterCount() {
+		return mCritterCount;
 	}
 	
 	@Override
 	public void onLayout(boolean changed, int left, int top, int right, int bottom) {
-		generateRandomCritters(10);
+		generateRandomCritters(3);
 	}
 	
 	@Override
