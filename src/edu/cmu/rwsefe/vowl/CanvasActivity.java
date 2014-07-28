@@ -199,9 +199,11 @@ public class CanvasActivity extends Activity {
 			int rating = mConfidence / 10;
 			mRatingBar.setRating(rating);
 			
+			if(rating > 6 ){
 			curSlidingImage = goodJob; //Ambarish
 			goodJob.startAnimation(animationSlideInLeft);  //Ambarish
 			goodJob.setVisibility(View.VISIBLE);  //Ambarish
+			}
 		    
 		    
 			 prev_btn.setVisibility(View.GONE);
