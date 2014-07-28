@@ -30,5 +30,8 @@ public class SplashFragment extends Fragment implements OnClickListener {
         ft2.hide(this);
         ft2.show(this);
         ft2.commit();
+        
+        // Remove click listener
+        v.setOnClickListener(null);
 	}
 }
