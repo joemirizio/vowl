@@ -126,6 +126,10 @@ public class CanvasActivity extends Activity {
 	public void onClickRefresh(View v) {   //Ambarish refresh button
 		mLevelSelector.prevLevel();
 		mLevelSelector.nextLevel();
+		
+		prev_btn.setVisibility(View.VISIBLE); //Ambarish button is now hidden
+		audio_btn.setVisibility(View.VISIBLE); //Ambarish button is now hidden
+		refresh_btn.setVisibility(View.GONE); //Ambarish button is now hidden
 	}
 	
 	
