@@ -89,7 +89,7 @@ public class CanvasView extends View implements OnTouchListener {
 			Context contextlipi = getContext();
 			File externalFileDir = contextlipi.getExternalFilesDir(null);
 			String path = externalFileDir.getPath();
-			lipitkInterface = new LipiTKJNIInterface(path, "SHAPEREC_ALPHANUM");
+			lipitkInterface = new LipiTKJNIInterface(path, UserSettings.getInstance().getLanguage().getShapeRecognizer());
 			lipitkInterface.initialize();
 			recognizer = lipitkInterface;
 		}
