@@ -31,17 +31,15 @@
         android:layout_weight="12"
         />
 
-    <ImageView
-        android:id="@+id/image1"
-        android:layout_width="291dp"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ribbon" />
+    
 
     <TextView
         android:id="@+id/GoodJob"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Good Job!!" />
+        android:text="Good Job!!" 
+        android:textSize="32sp"
+        android:background="#EC7703"/>
     
     <LinearLayout
         android:layout_width="fill_parent"
