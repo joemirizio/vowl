@@ -42,7 +42,7 @@ public class CanvasActivity extends Activity {
 //	ImageView image1;  //Ambarish 
 	TextView curSlidingImage; //Ambarish
 	TextView newRecord; //Ambarish
-	TextView goodJob; //Ambarish
+	TextView feedbackText; //Ambarish    t.setText("done");
 	Animation animationSlideInLeft, animationSlideOutRight; //Ambarish
 	private Button prev_btn;//Ambarish
 	int old_score;//Ambarish
@@ -61,14 +61,12 @@ public class CanvasActivity extends Activity {
 //----Start---------------------------------Ambarish 
 		prev_btn = (Button)findViewById(R.id.canvasLevelNavPrev);	
 		
-		goodJob = (TextView)findViewById(R.id.GoodJob);
-		goodJob.setVisibility(View.GONE);// keep the image invisible on create
+		feedbackText = (TextView)findViewById(R.id.feedbackText);
+		feedbackText.setVisibility(View.GONE);// keep the image invisible on create
 		
 		newRecord = (TextView)findViewById(R.id.newRecord1);
 		newRecord.setVisibility(View.GONE);// keep the image invisible on create
-		
-//		goodJob = (TextView)findViewById(R.id.GoodJob);
-//		goodJob.setVisibility(View.GONE);// keep the image invisible on create
+
 		
 		animationSlideInLeft = AnimationUtils.loadAnimation(this, android.R.anim.slide_in_left);
 		animationSlideOutRight = AnimationUtils.loadAnimation(this, android.R.anim.slide_out_right);
@@ -199,10 +197,11 @@ public class CanvasActivity extends Activity {
 			int rating = mConfidence / 10;
 			mRatingBar.setRating(rating);
 			
-			if(rating > 6 ){
-			curSlidingImage = goodJob; //Ambarish
-			goodJob.startAnimation(animationSlideInLeft);  //Ambarish
-			goodJob.setVisibility(View.VISIBLE);  //Ambarish
+			if(rating > 0 ){
+		    feedbackText.setText("DONE");
+			curSlidingImage = feedbackText; //Ambarish
+			feedbackText.startAnimation(animationSlideInLeft);  //Ambarish
+			feedbackText.setVisibility(View.VISIBLE);  //Ambarish
 			}
 		    
 		    
@@ -224,7 +223,7 @@ public class CanvasActivity extends Activity {
 		}
 	}
 	
-	//Animation--------------------------------------------------------------------//Ambarish ----------------------------------------------------------------------------------------------------------------------------------------- 	
+	//Animation-------------------------------------------------------------------- 	
 		 AnimationListener animationSlideInLeftListener
 		 = new AnimationListener(){
 
@@ -232,15 +231,9 @@ public class CanvasActivity extends Activity {
 		  public void onAnimationEnd(Animation animation) {
 		   // TODO Auto-generated method stub
 		   
-		   if(curSlidingImage == goodJob){
-//		    image1.startAnimation(animationSlideOutRight);
+		   if(curSlidingImage == feedbackText){
 		   }
-//		   else if(curSlidingImage == image2){
-//		    image2.startAnimation(animationSlideOutRight);
-//		   }else if(curSlidingImage == image3){
-//		    image3.startAnimation(animationSlideOutRight);
-//		   }
-//		   
+ 
 		  }
 
 		  @Override
@@ -263,25 +256,8 @@ public class CanvasActivity extends Activity {
 		    @Override
 		   public void onAnimationEnd(Animation animation) {
 		    // TODO Auto-generated method stub
-		     if(curSlidingImage == goodJob){
-//		      curSlidingImage = image2;
-//		      image2.startAnimation(animationSlideInLeft);a
-		    	 goodJob.setVisibility(View.INVISIBLE);
-//		      image2.setVisibility(View.VISIBLE);
-//		      image3.setVisibility(View.INVISIBLE);
-//		     }else if(curSlidingImage == image2){
-//		      curSlidingImage = image3;
-//		      image3.startAnimation(animationSlideInLeft);
-//		      image1.setVisibility(View.INVISIBLE);
-//		      image2.setVisibility(View.INVISIBLE);
-//		      image3.setVisibility(View.VISIBLE);
-//		     }else if(curSlidingImage == image3){
-//		      curSlidingImage = image1;
-//		      image1.startAnimation(animationSlideInLeft);
-//		      image1.setVisibility(View.VISIBLE);
-//		      image2.setVisibility(View.INVISIBLE);
-//		      image3.setVisibility(View.INVISIBLE);
-//		     }
+		     if(curSlidingImage == feedbackText){
+		    	 feedbackText.setVisibility(View.INVISIBLE);
 		   }
 		    }
 

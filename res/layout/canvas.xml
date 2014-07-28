@@ -4,8 +4,8 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
-    android:padding="10dp">
-    
+    android:padding="10dp" >
+
     <edu.cmu.rwsefe.vowl.ui.FlatRatingBar
         android:id="@+id/canvasRatingBar"
         android:layout_width="wrap_content"
@@ -23,54 +23,50 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="New Record!!" />
-    
+
     <edu.cmu.rwsefe.vowl.CanvasView
         android:id="@+id/canvas"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="12"
-        />
-
-    
+        android:layout_weight="12" />
 
     <TextView
-        android:id="@+id/GoodJob"
+        android:id="@+id/feedbackText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Good Job!!" 
-        android:textSize="32sp"
-        android:background="#EC7703"/>
-    
+        android:background="#EC7703"
+        android:textSize="32sp" />
+
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        
+        android:orientation="horizontal" >
+
         <edu.cmu.rwsefe.vowl.ui.FlatButton
             android:id="@+id/canvasLevelNavPrev"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="20dp"
             android:layout_weight="1"
+            android:onClick="onClickLevelPrev"
             android:paddingTop="10dp"
             android:text="&lt;"
             android:textColor="@color/white"
             android:textSize="42sp"
-            android:onClick="onClickLevelPrev"
             vowl:baseColor="@color/purpleLight"
             vowl:shadowColor="@color/purpleDark" />
-        
+
         <edu.cmu.rwsefe.vowl.ui.FlatButton
             android:id="@+id/canvasLevelSpeak"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="20dp"
             android:layout_weight="1"
+            android:onClick="onClickLevelSpeak"
             android:paddingTop="10dp"
             android:text="(•)"
             android:textColor="@color/white"
             android:textSize="42sp"
-            android:onClick="onClickLevelSpeak"
             vowl:baseColor="@color/blueLight"
             vowl:shadowColor="@color/blueDark" />
 
@@ -78,17 +74,15 @@
             android:id="@+id/canvasLevelNavNext"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:paddingTop="10dp"
             android:layout_margin="20dp"
+            android:layout_weight="1"
+            android:onClick="onClickLevelNext"
+            android:paddingTop="10dp"
             android:text=">"
             android:textColor="@color/white"
-        	android:textSize="42sp"
-        	android:onClick="onClickLevelNext"
+            android:textSize="42sp"
             vowl:baseColor="@color/purpleLight"
-            vowl:shadowColor="@color/purpleDark"/>
-        
-        
+            vowl:shadowColor="@color/purpleDark" />
     </LinearLayout>
-	
+
 </LinearLayout>
