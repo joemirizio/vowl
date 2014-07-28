@@ -127,8 +127,8 @@ public class CanvasActivity extends Activity {
 		mLevelSelector.prevLevel();
 		mLevelSelector.nextLevel();
 		
-		prev_btn.setVisibility(View.VISIBLE); //Ambarish button is now hidden
-		audio_btn.setVisibility(View.VISIBLE); //Ambarish button is now hidden
+		prev_btn.setVisibility(View.VISIBLE); //Ambarish button is now visible
+		audio_btn.setVisibility(View.VISIBLE); //Ambarish button is now visible
 		refresh_btn.setVisibility(View.GONE); //Ambarish button is now hidden
 	}
 	
