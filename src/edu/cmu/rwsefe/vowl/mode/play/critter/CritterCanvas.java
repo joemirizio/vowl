@@ -22,7 +22,8 @@ class CritterCanvas extends CanvasView {
 	};
 	private final List<Drawable> mCritterImages;
 	private final List<Critter> mCritters;
-	private int mCritterCount; 
+	private int mCritterCount;
+	private Random mRandomGen = new Random();
 	
 	public CritterCanvas(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -37,26 +38,27 @@ class CritterCanvas extends CanvasView {
 	public void generateRandomCritters(int critterCount) {
 		mCritterCount = critterCount;
 		mCritters.clear();
-		Random randomGen = new Random();
 		for (int critterIndex = 0; critterIndex < mCritterCount; critterIndex++) {
-			Drawable image = getContext().getResources().getDrawable(mCritterIds[randomGen.nextInt(mCritterIds.length)]);
-			
+			Drawable image = getContext().getResources().getDrawable(mCritterIds[mRandomGen.nextInt(mCritterIds.length)]);
 			// Ensure the bounds do not intersect
 			boolean intersects;
 			Rect bounds = null;
 			do {
 				intersects = false;
-				int left = randomGen.nextInt(getWidth() - image.getIntrinsicWidth());
-				int top = randomGen.nextInt(getHeight() - image.getIntrinsicHeight());
+				int left = mRandomGen.nextInt(getWidth() - image.getIntrinsicWidth());
+				int top = mRandomGen.nextInt(getHeight() - image.getIntrinsicHeight());
 				bounds = new Rect(left, top, 
 						left + image.getIntrinsicWidth(), 
 						top + image.getIntrinsicHeight());
+				
 				for (Critter critter : mCritters) {
 					intersects |= bounds.intersect(critter.getBounds());
 				}
 			} while (intersects);
-			
-			mCritters.add(new Critter(image, bounds));
+			image.setBounds(bounds);
+			float rotation = mRandomGen.nextFloat() * 60 - 30;
+			float scale = mRandomGen.nextFloat() + 0.5f;
+			mCritters.add(new Critter(image, rotation, scale));
 		}
 	}
 	
@@ -68,18 +70,29 @@ class CritterCanvas extends CanvasView {
 	@Override
 	public void onDraw(Canvas canvas) {
 		for (Critter critter : mCritters) {
-			critter.getImage().draw(canvas);
+			canvas.save();
+			int centerX = critter.getBounds().left + critter.getBounds().width() / 2;
+			int centerY = critter.getBounds().top + critter.getBounds().height() / 2;
+			canvas.scale(
+					critter.getScale() * ((critter.getRotation() < 0) ? -1 : 1), 
+					critter.getScale(), 
+					centerX, centerY);
+            canvas.rotate(Math.abs(critter.getRotation()), centerX, centerY);
+            critter.getImage().draw(canvas);
+			canvas.restore();
 		}
 	}
 	
+	
 	class Critter {
 		private Drawable mImage;
-		private Rect mBounds;
+		private float mRotation;
+		private float mScale;
 		
-		public Critter(Drawable image, Rect bounds) {
+		public Critter(Drawable image, float rotation, float scale) {
 			mImage = image;
-			mBounds = bounds;
-			image.setBounds(bounds);
+			mRotation = rotation;
+			mScale = scale;
 		}
 		
 		public Drawable getImage() {
@@ -87,7 +100,15 @@ class CritterCanvas extends CanvasView {
 		}
 		
 		public Rect getBounds() {
-			return mBounds;
+			return mImage.getBounds();
+		}
+		
+		public float getRotation() {
+			return mRotation;
+		}
+		
+		public float getScale() {
+			return mScale;
 		}
 	}
 }

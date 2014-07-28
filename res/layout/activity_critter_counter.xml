@@ -1,13 +1,26 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="${relativePackage}.${activityClass}" >
 
+    <edu.cmu.rwsefe.vowl.ui.FlatRatingBar
+        android:id="@+id/canvasRatingBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"
+        android:isIndicator="true"
+        android:numStars="5"
+        android:rating="0"
+        android:stepSize="1.0" />
+    
     <edu.cmu.rwsefe.vowl.mode.play.critter.CritterCanvas
         android:id="@+id/play_critter_canvas"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:text="@string/hello_world" />
 
-</RelativeLayout>
+</LinearLayout>
