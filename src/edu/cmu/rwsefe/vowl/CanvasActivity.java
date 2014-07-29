@@ -173,10 +173,10 @@ public class CanvasActivity extends Activity {
 		}
 	}
 	
-	public void processConfidence(String character, int confidence) {		
+	public void processConfidence(String character, int confidence) {	
+		// TODO Change mapping?
 		int rating = confidence / 10;
 		mRatingBar.setRating(rating);
-		Log.d(TAG, "Confidence: " + confidence + ", Rating: " + rating);
 
 		setFeedbackState(true);
 		

@@ -27,10 +27,6 @@ public class ScoreKeeper {
 		Log.d(TAG, "ADDING " + newCharacter.getUnicodeValue() + " : " + newCharacter.getConfidence());
 		
 		List<CharacterResult> results = mDbHandler.getAllCharacterResults();
-		
-		for(CharacterResult result: results) {
-			Log.d(TAG, result.getUnicodeValue() + " : " + result.getConfidence());
-		}
 	}
 	
 	// TODO Confidence to star algorithm not full determined
