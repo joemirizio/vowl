@@ -37,14 +37,12 @@ public class CanvasActivity extends Activity {
 	private ScoreKeeper mScoreKeeper;
 	private int mConfidence;
 	private TextToSpeech mTextToSpeech;
-
-	// ImageView image1; //Ambarish
-	TextView curSlidingImage; // Ambarish
-	TextView newRecord; // Ambarish
-	TextView feedbackText; // Ambarish t.setText("done");
-	Animation animationSlideInLeft, animationSlideOutRight; // Ambarish
-	private Button prev_btn;// Ambarish
-	int old_score;// Ambarish
+	
+	TextView curSlidingImage;
+	TextView mNewRecordLabel;
+	TextView mFeedbackLabel;
+	Animation mAnimationSlideInLeft, mAnimationSlideOutRight;
+	int mPreviousHighScore;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -52,26 +50,19 @@ public class CanvasActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.canvas);
 
-		// ----Start---------------------------------Ambarish
-		prev_btn = (Button) findViewById(R.id.canvasLevelNavPrev);
+		mFeedbackLabel = (TextView) findViewById(R.id.canvasFeedback);
+		mNewRecordLabel = (TextView) findViewById(R.id.canvasNewRecord);
 
-		feedbackText = (TextView) findViewById(R.id.feedbackText);
-		feedbackText.setVisibility(View.GONE);// keep the image invisible on
-												// create
-
-		newRecord = (TextView) findViewById(R.id.newRecord1);
-		newRecord.setVisibility(View.GONE);// keep the image invisible on create
-
-		animationSlideInLeft = AnimationUtils.loadAnimation(this,
+		// Initialize animations
+		mAnimationSlideInLeft = AnimationUtils.loadAnimation(this,
 				android.R.anim.slide_in_left);
-		animationSlideOutRight = AnimationUtils.loadAnimation(this,
+		mAnimationSlideOutRight = AnimationUtils.loadAnimation(this,
 				android.R.anim.slide_out_right);
-		animationSlideInLeft.setDuration(1000);
-		animationSlideOutRight.setDuration(1000);
-		animationSlideInLeft.setAnimationListener(animationSlideInLeftListener);
-		animationSlideOutRight
+		mAnimationSlideInLeft.setDuration(1000);
+		mAnimationSlideOutRight.setDuration(1000);
+		mAnimationSlideInLeft.setAnimationListener(animationSlideInLeftListener);
+		mAnimationSlideOutRight
 				.setAnimationListener(animationSlideOutRightListener);
-		// ----End---------------------------------
 
 		// Get character from bundle
 		Bundle bundle = getIntent().getExtras();
@@ -200,26 +191,24 @@ public class CanvasActivity extends Activity {
 			mRatingBar.setRating(rating);
 
 			if (rating <5) {
-				feedbackText.setText("Try Again! You Can Do Better!");
-				curSlidingImage = feedbackText; // Ambarish
-				feedbackText.startAnimation(animationSlideInLeft); // Ambarish
-				feedbackText.setVisibility(View.VISIBLE); // Ambarish
+				mFeedbackLabel.setText("Try Again! You Can Do Better!");
+				curSlidingImage = mFeedbackLabel; // Ambarish
+				mFeedbackLabel.startAnimation(mAnimationSlideInLeft); // Ambarish
+				mFeedbackLabel.setVisibility(View.VISIBLE); // Ambarish
 			}
 			if (rating > 5) {
-				feedbackText.setText("Great Job!!");
-				curSlidingImage = feedbackText; // Ambarish
-				feedbackText.startAnimation(animationSlideInLeft); // Ambarish
-				feedbackText.setVisibility(View.VISIBLE); // Ambarish
+				mFeedbackLabel.setText("Great Job!!");
+				curSlidingImage = mFeedbackLabel; // Ambarish
+				mFeedbackLabel.startAnimation(mAnimationSlideInLeft); // Ambarish
+				mFeedbackLabel.setVisibility(View.VISIBLE); // Ambarish
 			}
-
-			prev_btn.setVisibility(View.GONE);
 
 			// Save confidence score to database
 			mScoreKeeper.saveScore(character, mConfidence);
 			// fetch old score
-			old_score = mScoreKeeper.getScoreRating(character);
-			if (mConfidence > old_score) {
-				newRecord.setVisibility(View.VISIBLE);// keep the image
+			mPreviousHighScore = mScoreKeeper.getScoreRating(character);
+			if (mConfidence > mPreviousHighScore) {
+				mNewRecordLabel.setVisibility(View.VISIBLE);// keep the image
 														// invisible on create
 
 			}
@@ -240,7 +229,7 @@ public class CanvasActivity extends Activity {
 		public void onAnimationEnd(Animation animation) {
 			// TODO Auto-generated method stub
 
-			if (curSlidingImage == feedbackText) {
+			if (curSlidingImage == mFeedbackLabel) {
 			}
 
 		}
@@ -262,8 +251,8 @@ public class CanvasActivity extends Activity {
 		@Override
 		public void onAnimationEnd(Animation animation) {
 			// TODO Auto-generated method stub
-			if (curSlidingImage == feedbackText) {
-				feedbackText.setVisibility(View.INVISIBLE);
+			if (curSlidingImage == mFeedbackLabel) {
+				mFeedbackLabel.setVisibility(View.INVISIBLE);
 			}
 		}
 
