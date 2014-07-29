@@ -33,17 +33,24 @@ public class CanvasActivity extends Activity {
 
 	private CanvasView mCanvasView;
 	private RatingBar mRatingBar;
+	private TextView curSlidingImage;
+	private TextView mNewRecordLabel;
+	private TextView mFeedbackLabel;
+	private Button mPreviousButton;
+	private Button mRetryButton;
+	private Button mAudioButton;
+
+	private Animation mAnimationSlideInLeft, mAnimationSlideOutRight;
+
 	private LevelSelector mLevelSelector;
 	private ScoreKeeper mScoreKeeper;
+	
 	private int mConfidence;
+	private int mPreviousHighScore;
+
 	private TextToSpeech mTextToSpeech;
 	
-	TextView curSlidingImage;
-	TextView mNewRecordLabel;
-	TextView mFeedbackLabel;
-	Animation mAnimationSlideInLeft, mAnimationSlideOutRight;
-	int mPreviousHighScore;
-
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		// Restore any saved state
@@ -52,6 +59,9 @@ public class CanvasActivity extends Activity {
 
 		mFeedbackLabel = (TextView) findViewById(R.id.canvasFeedback);
 		mNewRecordLabel = (TextView) findViewById(R.id.canvasNewRecord);
+		mPreviousButton = (Button)findViewById(R.id.canvasLevelNavPrev);
+		mRetryButton = (Button)findViewById(R.id.canvasLevelRetry);
+		mAudioButton = (Button)findViewById(R.id.canvasLevelSpeak);
 
 		// Initialize animations
 		mAnimationSlideInLeft = AnimationUtils.loadAnimation(this,
@@ -63,6 +73,7 @@ public class CanvasActivity extends Activity {
 		mAnimationSlideInLeft.setAnimationListener(animationSlideInLeftListener);
 		mAnimationSlideOutRight
 				.setAnimationListener(animationSlideOutRightListener);
+
 
 		// Get character from bundle
 		Bundle bundle = getIntent().getExtras();
@@ -140,6 +151,10 @@ public class CanvasActivity extends Activity {
 	public void onClickLevelPrev(View v) {
 		mLevelSelector.prevLevel();
 	}
+	
+	public void onClickRetry(View v) {
+		mLevelSelector.retryLevel();
+	}
 
 	public void onClickLevelNext(View v) {
 		mLevelSelector.nextLevel();
@@ -153,13 +168,22 @@ public class CanvasActivity extends Activity {
 	public void onLevelChange(int index) {
 		mCanvasView.initializeStroke();
 		mCanvasView.setOutlineCharacter(mLevelSelector.getLevel());
+		
+		setFeedbackState(false);
+		
 		// Set rating from database
 		mScoreKeeper.updateScores();
 		String character = mLevelSelector.getLevel();
 		mRatingBar.setRating(mScoreKeeper.getScoreRating(character));
 	}
-
-	public void processDialogBox() {
+	
+	public void setFeedbackState(boolean isFeedbackVisible) {
+		mPreviousButton.setVisibility(isFeedbackVisible ? View.GONE : View.VISIBLE);
+		mAudioButton.setVisibility(isFeedbackVisible ? View.GONE : View.VISIBLE);
+		mRetryButton.setVisibility(isFeedbackVisible ? View.VISIBLE : View.GONE);
+	}
+	
+	public void processDialogBox(){
 		ProgressdialogClass dialogBox = new ProgressdialogClass();
 		dialogBox.execute();
 	}
@@ -186,7 +210,9 @@ public class CanvasActivity extends Activity {
 			} else {
 				mConfidence = 0;
 			}
-
+			
+			setFeedbackState(true);
+			
 			int rating = mConfidence / 10;
 			mRatingBar.setRating(rating);
 

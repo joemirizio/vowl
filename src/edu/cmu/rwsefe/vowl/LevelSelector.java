@@ -50,6 +50,10 @@ public class LevelSelector {
 		return setLevelIndex(wrapLevelIndex(mCurrentIndex - 1));
 	}
 	
+	public String retryLevel() {
+		return setLevelIndex(wrapLevelIndex(mCurrentIndex));
+	}
+	
 	private int wrapLevelIndex(int index) {
 		if (index < 0) {
 			return mLevels.length() - 1;
