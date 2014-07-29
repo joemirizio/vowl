@@ -24,11 +24,27 @@
         android:layout_height="0dp"
         android:layout_weight="12"
         />
+
+
     
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
+        
+        <edu.cmu.rwsefe.vowl.ui.FlatButton
+	        android:id="@+id/canvasLevelRetry"
+	        android:layout_width="match_parent"
+	        android:layout_height="match_parent"
+	        android:layout_margin="20dp"
+	        android:onClick="onClickRetry"
+	        android:text="r"
+	        android:visibility="gone"
+	        android:layout_weight="1"
+	        android:textColor="@color/white"
+	        android:textSize="42sp"
+           	vowl:baseColor="@color/blueLight"
+            vowl:shadowColor="@color/blueDark" />
         
         <edu.cmu.rwsefe.vowl.ui.FlatButton
             android:id="@+id/canvasLevelNavPrev"
