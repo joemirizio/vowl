@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.RatingBar;
 
 import com.canvas.AssetInstaller;
@@ -33,11 +34,20 @@ public class CanvasActivity extends Activity {
 	private int mConfidence;
 	private TextToSpeech mTextToSpeech;
 	
+	
+	private Button mPreviousButton;
+	private Button mRetryButton;
+	private Button mAudioButton;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		// Restore any saved state 
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.canvas);
+		
+		mPreviousButton = (Button)findViewById(R.id.canvasLevelNavPrev);
+		mRetryButton = (Button)findViewById(R.id.canvasLevelRetry);
+		mAudioButton = (Button)findViewById(R.id.canvasLevelSpeak);
 		
 		// Get character from bundle
 		Bundle bundle = getIntent().getExtras();
@@ -104,6 +114,10 @@ public class CanvasActivity extends Activity {
 		mLevelSelector.prevLevel();
 	}
 	
+	public void onClickRetry(View v) {
+		mLevelSelector.retryLevel();
+	}
+	
 	public void onClickLevelNext(View v) {
 		mLevelSelector.nextLevel();
 	}
@@ -115,10 +129,19 @@ public class CanvasActivity extends Activity {
 	public void onLevelChange(int index) {
 		mCanvasView.initializeStroke();
 		mCanvasView.setOutlineCharacter(mLevelSelector.getLevel());
+		
+		setFeedbackState(false);
+		
 		// Set rating from database
 		mScoreKeeper.updateScores();
 		String character = mLevelSelector.getLevel();
 		mRatingBar.setRating(mScoreKeeper.getScoreRating(character));
+	}
+	
+	public void setFeedbackState(boolean isFeedbackVisible) {
+		mPreviousButton.setVisibility(isFeedbackVisible ? View.GONE : View.VISIBLE);
+		mAudioButton.setVisibility(isFeedbackVisible ? View.GONE : View.VISIBLE);
+		mRetryButton.setVisibility(isFeedbackVisible ? View.VISIBLE : View.GONE);
 	}
 	
 	public void processDialogBox(){
@@ -147,6 +170,8 @@ public class CanvasActivity extends Activity {
 			else {
 				mConfidence = 0;
 			}
+			
+			setFeedbackState(true);
 			
 			int rating = mConfidence / 10;
 			mRatingBar.setRating(rating);
