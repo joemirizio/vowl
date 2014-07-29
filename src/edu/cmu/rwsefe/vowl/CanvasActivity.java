@@ -35,9 +35,9 @@ public class CanvasActivity extends Activity {
 	private TextToSpeech mTextToSpeech;
 	
 	
-	private Button prev_btn;//Ambarish
-	private Button refresh_btn;//Ambarish
-	private Button audio_btn;//	Ambarish: canvasLevelSpeak 
+	private Button mPreviousButton;
+	private Button mRetryButton;
+	private Button mAudioButton;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -45,10 +45,9 @@ public class CanvasActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.canvas);
 		
-		prev_btn = (Button)findViewById(R.id.canvasLevelNavPrev);//Ambarish
-		refresh_btn = (Button)findViewById(R.id.Redo);//Ambarish
-		audio_btn = (Button)findViewById(R.id.canvasLevelSpeak);//Ambarish
-		refresh_btn.setVisibility(View.GONE); //Ambarish, Refesh button is now hidden
+		mPreviousButton = (Button)findViewById(R.id.canvasLevelNavPrev);
+		mRetryButton = (Button)findViewById(R.id.canvasLevelRetry);
+		mAudioButton = (Button)findViewById(R.id.canvasLevelSpeak);
 		
 		// Get character from bundle
 		Bundle bundle = getIntent().getExtras();
@@ -123,16 +122,9 @@ public class CanvasActivity extends Activity {
 		mLevelSelector.prevLevel();
 	}
 	
-	public void onClickRefresh(View v) {   //Ambarish refresh button
-		mLevelSelector.prevLevel();
-		mLevelSelector.nextLevel();
-		
-		prev_btn.setVisibility(View.VISIBLE); //Ambarish button is now visible
-		audio_btn.setVisibility(View.VISIBLE); //Ambarish button is now visible
-		refresh_btn.setVisibility(View.GONE); //Ambarish button is now hidden
+	public void onClickRetry(View v) {
+		mLevelSelector.retryLevel();
 	}
-	
-	
 	
 	public void onClickLevelNext(View v) {
 		mLevelSelector.nextLevel();
@@ -145,10 +137,19 @@ public class CanvasActivity extends Activity {
 	public void onLevelChange(int index) {
 		mCanvasView.initializeStroke();
 		mCanvasView.setOutlineCharacter(mLevelSelector.getLevel());
+		
+		setFeedbackState(false);
+		
 		// Set rating from database
 		mScoreKeeper.updateScores();
 		String character = mLevelSelector.getLevel();
 		mRatingBar.setRating(mScoreKeeper.getScoreRating(character));
+	}
+	
+	public void setFeedbackState(boolean isFeedbackVisible) {
+		mPreviousButton.setVisibility(isFeedbackVisible ? View.GONE : View.VISIBLE);
+		mAudioButton.setVisibility(isFeedbackVisible ? View.GONE : View.VISIBLE);
+		mRetryButton.setVisibility(isFeedbackVisible ? View.VISIBLE : View.GONE);
 	}
 	
 	public void processDialogBox(){
@@ -178,10 +179,7 @@ public class CanvasActivity extends Activity {
 				mConfidence = 0;
 			}
 			
-			prev_btn.setVisibility(View.GONE); //Ambarish button is now hidden
-			audio_btn.setVisibility(View.GONE); //Ambarish button is now hidden
-			refresh_btn.setVisibility(View.VISIBLE); //Ambarish button is now hidden
-			
+			setFeedbackState(true);
 			
 			int rating = mConfidence / 10;
 			mRatingBar.setRating(rating);
