@@ -13,7 +13,6 @@ import android.speech.tts.TextToSpeech;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
-import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.RatingBar;
@@ -33,21 +32,17 @@ public class CanvasActivity extends Activity {
 
 	private CanvasView mCanvasView;
 	private RatingBar mRatingBar;
-	private TextView curSlidingImage;
 	private TextView mNewRecordLabel;
 	private TextView mFeedbackLabel;
 	private Button mPreviousButton;
 	private Button mRetryButton;
 	private Button mAudioButton;
 
-	private Animation mAnimationSlideInLeft, mAnimationSlideOutRight;
+	private Animation mFeedbackAnimation;
 
 	private LevelSelector mLevelSelector;
 	private ScoreKeeper mScoreKeeper;
 	
-	private int mConfidence;
-	private int mPreviousHighScore;
-
 	private TextToSpeech mTextToSpeech;
 	
 	
@@ -64,16 +59,7 @@ public class CanvasActivity extends Activity {
 		mAudioButton = (Button)findViewById(R.id.canvasLevelSpeak);
 
 		// Initialize animations
-		mAnimationSlideInLeft = AnimationUtils.loadAnimation(this,
-				android.R.anim.slide_in_left);
-		mAnimationSlideOutRight = AnimationUtils.loadAnimation(this,
-				android.R.anim.slide_out_right);
-		mAnimationSlideInLeft.setDuration(1000);
-		mAnimationSlideOutRight.setDuration(1000);
-		mAnimationSlideInLeft.setAnimationListener(animationSlideInLeftListener);
-		mAnimationSlideOutRight
-				.setAnimationListener(animationSlideOutRightListener);
-
+		mFeedbackAnimation = AnimationUtils.loadAnimation(this, R.anim.feedback_slide_in_bottom);
 
 		// Get character from bundle
 		Bundle bundle = getIntent().getExtras();
@@ -181,6 +167,48 @@ public class CanvasActivity extends Activity {
 		mPreviousButton.setVisibility(isFeedbackVisible ? View.GONE : View.VISIBLE);
 		mAudioButton.setVisibility(isFeedbackVisible ? View.GONE : View.VISIBLE);
 		mRetryButton.setVisibility(isFeedbackVisible ? View.VISIBLE : View.GONE);
+		if (!isFeedbackVisible) {
+			mNewRecordLabel.setVisibility(View.INVISIBLE);
+			mFeedbackLabel.setVisibility(View.INVISIBLE);
+		}
+	}
+	
+	public void processConfidence(String character, int confidence) {		
+		int rating = confidence / 10;
+		mRatingBar.setRating(rating);
+		Log.d(TAG, "Confidence: " + confidence + ", Rating: " + rating);
+
+		setFeedbackState(true);
+		
+		String feedback = "";
+		switch (rating) {
+			case 0:
+				feedback = "try again"; break;
+			case 1:
+				feedback = "almost"; break;
+			case 2:
+				feedback = "so close"; break;
+			case 3:
+				feedback = "good"; break;
+			case 4:
+				feedback = "great job"; break;
+			case 5:
+			default:
+				feedback = "amazing!"; break;
+		}
+
+		mFeedbackLabel.setText(feedback);
+		//mFeedbackLabel.startAnimation(mFeedbackAnimation);
+		mFeedbackLabel.setVisibility(View.VISIBLE);
+		
+		// Get previous high score to determine if new record 
+		int previousHighScore = mScoreKeeper.getScoreRating(character);
+		if (confidence > previousHighScore) {
+			mNewRecordLabel.setVisibility(View.VISIBLE);
+			
+			// Save confidence score to database
+			mScoreKeeper.saveScore(character, confidence);
+		}
 	}
 	
 	public void processDialogBox(){
@@ -205,40 +233,9 @@ public class CanvasActivity extends Activity {
 			HashMap<String, Integer> characters = mCanvasView
 					.getCharacterResults();
 			Integer confidenceFromHash = characters.get(character);
-			if (confidenceFromHash != null) {
-				mConfidence = confidenceFromHash;
-			} else {
-				mConfidence = 0;
-			}
+			int confidence = (confidenceFromHash != null) ? confidenceFromHash : 0;
 			
-			setFeedbackState(true);
-			
-			int rating = mConfidence / 10;
-			mRatingBar.setRating(rating);
-
-			if (rating <5) {
-				mFeedbackLabel.setText("Try Again! You Can Do Better!");
-				curSlidingImage = mFeedbackLabel; // Ambarish
-				mFeedbackLabel.startAnimation(mAnimationSlideInLeft); // Ambarish
-				mFeedbackLabel.setVisibility(View.VISIBLE); // Ambarish
-			}
-			if (rating > 5) {
-				mFeedbackLabel.setText("Great Job!!");
-				curSlidingImage = mFeedbackLabel; // Ambarish
-				mFeedbackLabel.startAnimation(mAnimationSlideInLeft); // Ambarish
-				mFeedbackLabel.setVisibility(View.VISIBLE); // Ambarish
-			}
-
-			// Save confidence score to database
-			mScoreKeeper.saveScore(character, mConfidence);
-			// fetch old score
-			mPreviousHighScore = mScoreKeeper.getScoreRating(character);
-			if (mConfidence > mPreviousHighScore) {
-				mNewRecordLabel.setVisibility(View.VISIBLE);// keep the image
-														// invisible on create
-
-			}
-
+			processConfidence(character, confidence);
 		}
 
 		@Override
@@ -247,54 +244,4 @@ public class CanvasActivity extends Activity {
 					"Please wait...", true);
 		}
 	}
-
-	// Animation--------------------------------------------------------------------
-	AnimationListener animationSlideInLeftListener = new AnimationListener() {
-
-		@Override
-		public void onAnimationEnd(Animation animation) {
-			// TODO Auto-generated method stub
-
-			if (curSlidingImage == mFeedbackLabel) {
-			}
-
-		}
-
-		@Override
-		public void onAnimationRepeat(Animation animation) {
-			// TODO Auto-generated method stub
-
-		}
-
-		@Override
-		public void onAnimationStart(Animation animation) {
-			// TODO Auto-generated method stub
-
-		}
-	};
-
-	AnimationListener animationSlideOutRightListener = new AnimationListener() {
-		@Override
-		public void onAnimationEnd(Animation animation) {
-			// TODO Auto-generated method stub
-			if (curSlidingImage == mFeedbackLabel) {
-				mFeedbackLabel.setVisibility(View.INVISIBLE);
-			}
-		}
-
-		@Override
-		public void onAnimationRepeat(Animation animation) {
-			// TODO Auto-generated method stub
-
-		}
-
-		@Override
-		public void onAnimationStart(Animation animation) {
-			// TODO Auto-generated method stub
-
-		}
-	};
-
-	// Animation----------------------------------------------------------------------------------
-
 }
