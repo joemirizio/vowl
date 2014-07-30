@@ -15,6 +15,8 @@
 bin/
 gen/
 obj/
+lint.xml
+.cproject
 
 # LipiTk
 libs/armeabi
