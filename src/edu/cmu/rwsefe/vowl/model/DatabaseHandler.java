@@ -20,16 +20,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	//Column names
 	private static final String ID = "id";
 	private static final String UNICODE_VALUE = "unicode_value";
-	private static final String CONFIDENCE = "confidence";
-	private static final String[] COLUMNS = {ID, UNICODE_VALUE, CONFIDENCE};
-	
+	private static final String CONFIDENCE = "confidence";	
 	
 	private static final String CREATE_CHARACTER_TABLE = 
-			"CREATE TABLE characters ( "
+			"CREATE TABLE " + CHARACTER_TABLE + " ( "
 			+ ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
 			+ UNICODE_VALUE + " INTEGER, "
 			+ CONFIDENCE + " INTEGER )";
-			
 	
 	public DatabaseHandler(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -39,14 +36,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	@Override
 	public void onCreate(SQLiteDatabase db) {
 		db.execSQL(CREATE_CHARACTER_TABLE);
-		
 	}
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-		
-        db.execSQL("DROP TABLE IF EXISTS characters");
-        
+        db.execSQL("DROP TABLE IF EXISTS " + CHARACTER_TABLE);
         this.onCreate(db);
 	}
 	
@@ -72,7 +66,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		// 1. get reference to readable DB
         SQLiteDatabase db = this.getReadableDatabase();
         
-        String selectQuery = "SELECT * FROM characters WHERE unicode_value = " + newUnicodeValue;
+        String selectQuery = 
+        		"SELECT * FROM " + CHARACTER_TABLE + 
+        		" WHERE " + UNICODE_VALUE + " = " + newUnicodeValue;
  
         // 2. build query
         Cursor cursor = db.rawQuery(selectQuery, null);
@@ -101,7 +97,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		// 1. get reference to readable DB
         SQLiteDatabase db = this.getReadableDatabase();
         
-        String selectQuery = "SELECT * FROM characters";
+        String selectQuery = "SELECT * FROM " + CHARACTER_TABLE;
  
         // 2. build query
         Cursor cursor = db.rawQuery(selectQuery, null);
@@ -130,7 +126,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		// 1. get reference to readable DB
         SQLiteDatabase db = this.getReadableDatabase();
         
-        String selectQuery = "SELECT MAX (confidence) FROM characters WHERE unicode_value = " + newUnicodeValue;
+        String selectQuery = 
+        		"SELECT MAX (" + CONFIDENCE + ") FROM " + CHARACTER_TABLE + 
+        		" WHERE " + UNICODE_VALUE + " = " + newUnicodeValue;
  
         // 2. build query
         Cursor cursor = db.rawQuery(selectQuery, null);
@@ -152,7 +150,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		// 1. Get reference to readable DB
         SQLiteDatabase db = this.getReadableDatabase();
         
-        String selectQuery = "SELECT id, unicode_value, MAX(confidence) FROM characters GROUP BY unicode_value";
+        String selectQuery = 
+        		"SELECT " + ID + ", " + UNICODE_VALUE + ", MAX(" + CONFIDENCE + ") " + 
+        		" FROM " + CHARACTER_TABLE + " GROUP BY " + UNICODE_VALUE;
  
         // 2. Build query
         Cursor cursor = db.rawQuery(selectQuery, null);
@@ -172,6 +172,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
  
         // 5. Return character
         return characterHash;
+	}
+	
+	public void clearData() {
+		SQLiteDatabase db = this.getWritableDatabase();
+		db.delete(CHARACTER_TABLE, null, null);
 	}
 
 }

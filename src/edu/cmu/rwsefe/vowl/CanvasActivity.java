@@ -30,6 +30,7 @@ public class CanvasActivity extends Activity {
 	private final String TAG = CanvasActivity.class.getName();
 	public final static String BUNDLE_LEVELS = "levels";
 	public final static String BUNDLE_LEVEL_INDEX = "levelIndex";
+	public final static int MAX_RATING = 5;
 
 	private CanvasView mCanvasView;
 	private RatingBar mRatingBar;
@@ -180,10 +181,9 @@ public class CanvasActivity extends Activity {
 	
 	public void processConfidence(String character, int confidence) {	
 		// TODO Change mapping?
-		int rating = confidence / 10;
+		int rating = Math.min(MAX_RATING, confidence / 10);
 		mRatingBar.setRating(rating);
 
-		
 		String feedback = "";
 		switch (rating) {
 			case 0:
@@ -197,7 +197,6 @@ public class CanvasActivity extends Activity {
 			case 4:
 				feedback = "great job"; break;
 			case 5:
-			default:
 				feedback = "amazing!"; break;
 		}
 
@@ -209,11 +208,11 @@ public class CanvasActivity extends Activity {
 		
 		// Get previous high score to determine if new record 
 		int previousHighScore = mScoreKeeper.getScoreRating(character);
-		if (confidence > previousHighScore) {
+		if (rating > previousHighScore) {
 			mNewRecordLabel.setVisibility(View.VISIBLE);
 			
-			// Save confidence score to database
-			mScoreKeeper.saveScore(character, confidence);
+			// Save rating to database
+			mScoreKeeper.saveScore(character, rating);
 		}
 	}
 	
