@@ -31,7 +31,7 @@
         <activity android:name=".UserSettingsActivity" >
         </activity>
         <activity
-            android:name=".mode.play.critter.CritterCounterActivity"
+            android:name="edu.cmu.rwsefe.vowl.mode.play.critter.CritterCounterActivity"
             android:label="@string/title_activity_critter_counter" >
         </activity>
     </application>
