@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
@@ -34,6 +35,7 @@ public class CanvasActivity extends Activity {
 	private RatingBar mRatingBar;
 	private TextView mNewRecordLabel;
 	private TextView mFeedbackLabel;
+	private ImageView mFeedbackRibbon;
 	private Button mPreviousButton;
 	private Button mRetryButton;
 	private Button mAudioButton;
@@ -53,6 +55,7 @@ public class CanvasActivity extends Activity {
 		setContentView(R.layout.canvas);
 
 		mFeedbackLabel = (TextView) findViewById(R.id.canvasFeedback);
+		mFeedbackRibbon = (ImageView) findViewById(R.id.canvasFeedbackRibbon);
 		mNewRecordLabel = (TextView) findViewById(R.id.canvasNewRecord);
 		mPreviousButton = (Button)findViewById(R.id.canvasLevelNavPrev);
 		mRetryButton = (Button)findViewById(R.id.canvasLevelRetry);
@@ -167,6 +170,7 @@ public class CanvasActivity extends Activity {
 		mPreviousButton.setVisibility(isFeedbackVisible ? View.GONE : View.VISIBLE);
 		mAudioButton.setVisibility(isFeedbackVisible ? View.GONE : View.VISIBLE);
 		mRetryButton.setVisibility(isFeedbackVisible ? View.VISIBLE : View.GONE);
+		mFeedbackRibbon.setVisibility(isFeedbackVisible ? View.VISIBLE : View.GONE);
 		if (!isFeedbackVisible) {
 			mNewRecordLabel.setVisibility(View.INVISIBLE);
 			mFeedbackLabel.setVisibility(View.INVISIBLE);
