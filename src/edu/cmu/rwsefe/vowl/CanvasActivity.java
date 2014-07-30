@@ -171,9 +171,10 @@ public class CanvasActivity extends Activity {
 		mAudioButton.setVisibility(isFeedbackVisible ? View.GONE : View.VISIBLE);
 		mRetryButton.setVisibility(isFeedbackVisible ? View.VISIBLE : View.GONE);
 		mFeedbackRibbon.setVisibility(isFeedbackVisible ? View.VISIBLE : View.GONE);
+		mFeedbackLabel.setVisibility(isFeedbackVisible ? View.VISIBLE : View.INVISIBLE);
+		
 		if (!isFeedbackVisible) {
 			mNewRecordLabel.setVisibility(View.INVISIBLE);
-			mFeedbackLabel.setVisibility(View.INVISIBLE);
 		}
 	}
 	
@@ -182,7 +183,6 @@ public class CanvasActivity extends Activity {
 		int rating = confidence / 10;
 		mRatingBar.setRating(rating);
 
-		setFeedbackState(true);
 		
 		String feedback = "";
 		switch (rating) {
@@ -202,8 +202,10 @@ public class CanvasActivity extends Activity {
 		}
 
 		mFeedbackLabel.setText(feedback);
-		//mFeedbackLabel.startAnimation(mFeedbackAnimation);
-		mFeedbackLabel.setVisibility(View.VISIBLE);
+		
+		mFeedbackLabel.startAnimation(mFeedbackAnimation);
+		mFeedbackRibbon.startAnimation(mFeedbackAnimation);
+		setFeedbackState(true);
 		
 		// Get previous high score to determine if new record 
 		int previousHighScore = mScoreKeeper.getScoreRating(character);

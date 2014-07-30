@@ -62,6 +62,7 @@
             android:layout_marginBottom="10dp"
             android:layout_weight="1"
             android:scaleType="centerCrop"
+            android:visibility="gone"
             android:src="@drawable/feedback_ribbon" />
 
         <edu.cmu.rwsefe.vowl.ui.FlatButton
