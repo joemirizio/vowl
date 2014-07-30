@@ -21,26 +21,30 @@ public class ScoreKeeper {
     	mCharacterScores = mDbHandler.getMaxScoreForAllCharacters();
 	}
 	
-	public void saveScore(String character, int confidence) {
-		CharacterResult newCharacter = new CharacterResult((int) character.charAt(0), confidence);
+	public void saveScore(String character, int rating) {
+		CharacterResult newCharacter = new CharacterResult(
+				stringCharacterToInt(character), rating);
 		mDbHandler.addCharacterResult(newCharacter);
-		Log.d(TAG, "ADDING " + newCharacter.getUnicodeValue() + " : " + newCharacter.getConfidence());
+		Log.d(TAG, "ADDING " + newCharacter.getUnicodeValue() + " : " + 
+				newCharacter.getConfidence());
 		
 		List<CharacterResult> results = mDbHandler.getAllCharacterResults();
-		
-		for(CharacterResult result: results) {
-			Log.d(TAG, result.getUnicodeValue() + " : " + result.getConfidence());
-		}
 	}
 	
-	// TODO Confidence to star algorithm not full determined
 	public int getScoreRating(String character) {
-    	int rating = 0;
-    	if (mCharacterScores != null) {
-	    	Integer maxScore = mCharacterScores.get((int)character.charAt(0));
-    		rating = (maxScore != null) ? maxScore / 10 : rating;
-    	}
+    	
+    	int chr = stringCharacterToInt(character);
+    	int rating = (mCharacterScores != null && mCharacterScores.containsKey(chr)) ?
+    			mCharacterScores.get(chr) : 0;
     	return rating;
+	}
+	
+	private int stringCharacterToInt(String character) {
+		return (int)character.charAt(0);
+	}
+	
+	public void clearScores() {
+		mDbHandler.clearData();
 	}
 	
 	public void close() {
