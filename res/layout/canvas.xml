@@ -3,35 +3,68 @@
     xmlns:vowl="http://schemas.android.com/apk/res/edu.cmu.rwsefe.vowl"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical"
-    android:padding="10dp">
-    
+    android:orientation="vertical" >
+
     <edu.cmu.rwsefe.vowl.ui.FlatRatingBar
         android:id="@+id/canvasRatingBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginBottom="5dp"
+        android:layout_marginBottom="-5dp"
         android:layout_marginTop="5dp"
         android:isIndicator="true"
         android:numStars="5"
         android:rating="0"
         android:stepSize="1.0" />
-    
+
+    <edu.cmu.rwsefe.vowl.ui.CustomTextView
+        android:id="@+id/canvasNewRecord"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="20dp"
+        android:text="@string/new_record"
+        android:textColor="@color/blueLight"
+        android:textSize="36sp"
+        android:visibility="invisible"
+        vowl:fontFamily="FredokaOne-Regular.ttf" />
+
     <edu.cmu.rwsefe.vowl.CanvasView
         android:id="@+id/canvas"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="12"
-        />
+        android:layout_weight="12" />
 
-
-    
+    <edu.cmu.rwsefe.vowl.ui.CustomTextView
+        android:id="@+id/canvasFeedback"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/greenLight"
+        android:textColor="@color/white"
+        android:gravity="center"
+        android:paddingBottom="20dp"
+        android:paddingTop="20dp"
+        android:textSize="36sp"
+        android:visibility="visible"
+        vowl:fontFamily="FredokaOne-Regular.ttf" />
+        
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal" >
         
+        <ImageView
+            android:id="@+id/canvasFeedbackRibbon"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_weight="1"
+            android:scaleType="centerCrop"
+            android:visibility="gone"
+            android:src="@drawable/feedback_ribbon" />
+
         <edu.cmu.rwsefe.vowl.ui.FlatButton
 	        android:id="@+id/canvasLevelRetry"
 	        android:layout_width="match_parent"
@@ -52,25 +85,25 @@
             android:layout_height="match_parent"
             android:layout_margin="20dp"
             android:layout_weight="1"
+            android:onClick="onClickLevelPrev"
             android:paddingTop="10dp"
             android:text="&lt;"
             android:textColor="@color/white"
             android:textSize="42sp"
-            android:onClick="onClickLevelPrev"
             vowl:baseColor="@color/purpleLight"
             vowl:shadowColor="@color/purpleDark" />
-        
+
         <edu.cmu.rwsefe.vowl.ui.FlatButton
             android:id="@+id/canvasLevelSpeak"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="20dp"
             android:layout_weight="1"
+            android:onClick="onClickLevelSpeak"
             android:paddingTop="10dp"
             android:text="(•)"
             android:textColor="@color/white"
             android:textSize="42sp"
-            android:onClick="onClickLevelSpeak"
             vowl:baseColor="@color/blueLight"
             vowl:shadowColor="@color/blueDark" />
 
@@ -78,16 +111,15 @@
             android:id="@+id/canvasLevelNavNext"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:paddingTop="10dp"
             android:layout_margin="20dp"
+            android:layout_weight="1"
+            android:onClick="onClickLevelNext"
+            android:paddingTop="10dp"
             android:text=">"
             android:textColor="@color/white"
-        	android:textSize="42sp"
-        	android:onClick="onClickLevelNext"
+            android:textSize="42sp"
             vowl:baseColor="@color/purpleLight"
-            vowl:shadowColor="@color/purpleDark"/>
-        
+            vowl:shadowColor="@color/purpleDark" />
     </LinearLayout>
-	
+
 </LinearLayout>

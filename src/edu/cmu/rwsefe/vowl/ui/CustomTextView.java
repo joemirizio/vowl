@@ -38,8 +38,10 @@ public class CustomTextView extends TextView {
     public void setCustomFont(Context context, AttributeSet attrs) {
     	TypedArray attributes = context.obtainStyledAttributes(attrs, R.styleable.CustomTextView);
         String fontFamily = attributes.getString(R.styleable.CustomTextView_fontFamily);
-
-        this.setTypeface(getCustomTypeface(context, fontFamily));
+        
+        if (!this.isInEditMode()) {
+        	this.setTypeface(getCustomTypeface(context, fontFamily));
+        }
         
         attributes.recycle();
     }
