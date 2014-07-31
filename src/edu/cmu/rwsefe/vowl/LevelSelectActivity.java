@@ -4,9 +4,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.LinearLayout;
@@ -14,7 +13,8 @@ import edu.cmu.rwsefe.vowl.model.UserSettings;
 import edu.cmu.rwsefe.vowl.ui.FlatButton;
 
 public class LevelSelectActivity extends Activity {
-
+	private final String TAG = LevelSelectActivity.class.getName();
+	
 	private LevelSelectFragment mlevelSelect;
 	private String[] mCharacterSets;
 	LinearLayout mCharacterSetsLayout;
@@ -24,42 +24,47 @@ public class LevelSelectActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_level_select);
 		
-		Resources resources = getResources();
 		mCharacterSetsLayout = (LinearLayout)findViewById(R.id.character_sets);
 		mCharacterSets = UserSettings.getInstance().getLanguage().getCharacterSets();
 		
-		for(int i = 0; i < mCharacterSets.length; i++) {
+		// Initialize character set buttons
+		for(int chrSetIndex = 0; chrSetIndex < mCharacterSets.length; chrSetIndex++) {
+			// Create button
+			final String characterSet = mCharacterSets[chrSetIndex];
+			FlatButton characterSetButton = createCharacterSetButton(characterSet);
+			characterSetButton.setId(chrSetIndex);
 			
-			final int index = i;
-			final FlatButton characterSetButton = new FlatButton(this, null);
-			characterSetButton.setPadding(0, 10, 0, 10);
-			characterSetButton.setText(mCharacterSets[i].substring(0, 1));
-			characterSetButton.setTextColor(resources.getColor(R.color.white));
-			characterSetButton.setTextSize(30);
-			characterSetButton.setBaseColor(resources.getColor(R.color.purpleDark));
-			characterSetButton.setShadowColor(resources.getColor(R.color.purpleLight));
+			// Set corners and initial state for first and last buttons
+			int cornerRadius = 50;
+			if (chrSetIndex == 0) {
+				characterSetButton.setSticky(true);
+				characterSetButton.setCornerRadius(cornerRadius, 0, 0, cornerRadius);
+			} else if (chrSetIndex == (mCharacterSets.length - 1)) {
+				characterSetButton.setCornerRadius(0, cornerRadius, cornerRadius, 0);
+			}
+
+			// Set click listener
 			characterSetButton.setOnClickListener(new View.OnClickListener() {
-				
 				@Override
 				public void onClick(View view) {
-
-					characterSetButton.setSticky(true);
-					ViewGroup characterSetsViewGroup = (ViewGroup) mCharacterSetsLayout;
-					for (int i = 0; i < characterSetsViewGroup.getChildCount(); i++) {
-						FlatButton localCharacterSet = (FlatButton) characterSetsViewGroup.getChildAt(i);
+					Log.d(TAG, "Clicked " + view.getId());
+					for (int i = 0; i < mCharacterSetsLayout.getChildCount(); i++) {
+						FlatButton localCharacterSet = (FlatButton) mCharacterSetsLayout.getChildAt(i);
 						// Make the active button sticky
 						localCharacterSet.setSticky(localCharacterSet.getId() == view.getId());
 						// Reset state of buttons
 						localCharacterSet.setPressed(false);
 					}
-					
-					mlevelSelect.setLevelCategory(mCharacterSets[index]);
+					mlevelSelect.setLevelCategory(characterSet);
 				}
 			});
+			
 			mCharacterSetsLayout.addView(characterSetButton);
 		}
-		
-		mlevelSelect = (LevelSelectFragment) this.getFragmentManager().findFragmentById(R.id.level_select_fragment);
+				
+		// Initialize level selection
+		mlevelSelect = (LevelSelectFragment) this.getFragmentManager().findFragmentById(
+				R.id.level_select_fragment);
 		mlevelSelect.setLevelClickListener(new OnItemClickListener() {
 	        public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
 	        	LevelSelector levelSelector = mlevelSelect.getLevelSelector();
@@ -74,34 +79,24 @@ public class LevelSelectActivity extends Activity {
 		});
 	}
 	
-	/*
-	public void onCharacterSetClicked(View view) {
+	public FlatButton createCharacterSetButton(String characterSet) {
+		FlatButton characterSetButton = new FlatButton(this, null);
 		
-		ViewGroup characterSets = (ViewGroup) findViewById(R.id.character_sets);
-		for (int i = 0; i < characterSets.getChildCount(); i++) {
-			FlatButton characterSet = (FlatButton) characterSets.getChildAt(i);
-			// Make the active button sticky
-			characterSet.setSticky(characterSet.getId() == view.getId());
-			// Reset state of buttons
-			characterSet.setPressed(false);
-		}
+		LinearLayout.LayoutParams buttonLayout = new LinearLayout.LayoutParams(
+				LinearLayout.LayoutParams.MATCH_PARENT, 
+				LinearLayout.LayoutParams.WRAP_CONTENT);
+		buttonLayout.weight = 1;
+		characterSetButton.setLayoutParams(buttonLayout);
+		characterSetButton.setCornerRadius(0);
+		characterSetButton.setPadding(0, 10, 0, 40);
+		characterSetButton.setText(characterSet.substring(0, 1));
+		characterSetButton.setTextColor(getResources().getColor(R.color.white));
+		characterSetButton.setTextSize(30);
+		characterSetButton.setBaseColor(getResources().getColor(R.color.purpleLight));
+		characterSetButton.setShadowColor(getResources().getColor(R.color.purpleDark));
 		
-		//mlevelSelect.setLevelCategory(mCharacterSets[view.getId()]);
-		
-	    // Check which radio button was clicked
-	    switch(view.getId()) {
-	        case R.id.level_alphabet_lower:
-	        	mlevelSelect.setLevelCategory("abcdefghijklmnopqrstuvwxyz");
-	            break;
-	        case R.id.level_alphabet_upper:
-	        	mlevelSelect.setLevelCategory("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
-	            break;
-	        case R.id.level_numerals:
-	        	mlevelSelect.setLevelCategory("0123456789");
-	            break;
-	    }
+		return characterSetButton;
 	}
-	*/
 	
 	@Override
 	public void onResume() {
