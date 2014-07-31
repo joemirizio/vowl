@@ -20,7 +20,7 @@ import edu.cmu.rwsefe.vowl.R;
 
 public class UserSettings {
 	
-	private static final String DEFAULT_SCRIPT = "english";
+	public static final String DEFAULT_LANGUAGE = "english";
 	
 	// Singleton Object
 	private static UserSettings mInstance;
@@ -40,7 +40,7 @@ public class UserSettings {
 		mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
 		mProjectPath = mContext.getExternalFilesDir(null).getPath() + "/" + "projects";
 		mJSON = getJSONString();
-		String languageValue = mSharedPreferences.getString("script", DEFAULT_SCRIPT);
+		String languageValue = mSharedPreferences.getString("script", DEFAULT_LANGUAGE);
 		mLanguage = new Language(languageValue);
 	}
 	

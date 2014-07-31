@@ -122,7 +122,7 @@ public class Script {
 				unicodeCharType = Character.getType(unicodeChar);
 			}
 			else {
-				unicodeCharType = Character.UNASSIGNED;
+				continue;
 			}
 			
 			// Get character type
@@ -191,6 +191,7 @@ public class Script {
 					
 					if(scriptValue.equals(matcher.group(2))) {
 						shapeRecString = matcher.group(1);
+						break;
 					}
 				}
 			}
