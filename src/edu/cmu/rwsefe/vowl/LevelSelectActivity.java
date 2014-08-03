@@ -36,12 +36,17 @@ public class LevelSelectActivity extends Activity {
 			
 			// Set corners and initial state for first and last buttons
 			int cornerRadius = 50;
+			float topLeft = 0, topRight = 0, bottomRight = 0, bottomLeft = 0;
 			if (chrSetIndex == 0) {
 				characterSetButton.setSticky(true);
-				characterSetButton.setCornerRadius(cornerRadius, 0, 0, cornerRadius);
-			} else if (chrSetIndex == (mCharacterSets.length - 1)) {
-				characterSetButton.setCornerRadius(0, cornerRadius, cornerRadius, 0);
+				topLeft = cornerRadius;
+				bottomLeft = cornerRadius;
 			}
+			if (chrSetIndex == (mCharacterSets.length - 1)) {
+				topRight = cornerRadius;
+				bottomRight = cornerRadius;
+			}
+			characterSetButton.setCornerRadius(topLeft, topRight, bottomRight, bottomLeft);
 
 			// Set click listener
 			characterSetButton.setOnClickListener(new View.OnClickListener() {
