@@ -3,14 +3,15 @@ package com.canvas;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-import android.graphics.PointF;
 import android.util.Log;
 
 public class LipiTKJNIInterface {
 	private String _lipiDirectory;
 	private String _project;
-	
+		
 	static
 	{
 		try {
@@ -62,7 +63,7 @@ public class LipiTKJNIInterface {
 		}
 		return "0";
 	}
-	
+		
 	public void initialize() {
 		initializeNative(_lipiDirectory, _project);
 	}

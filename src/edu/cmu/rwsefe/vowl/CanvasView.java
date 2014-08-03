@@ -15,6 +15,7 @@ import android.graphics.Paint.Align;
 import android.graphics.Path;
 import android.graphics.Point;
 import android.graphics.PointF;
+import android.graphics.Typeface;
 import android.os.CountDownTimer;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -26,6 +27,7 @@ import com.canvas.LipiTKJNIInterface;
 import com.canvas.LipitkResult;
 import com.canvas.Stroke;
 
+import edu.cmu.rwsefe.vowl.model.UserSettings;
 import edu.cmu.rwsefe.vowl.ui.CustomTextView;
 
 public class CanvasView extends View implements OnTouchListener {
@@ -37,7 +39,6 @@ public class CanvasView extends View implements OnTouchListener {
 	private LipiTKJNIInterface lipitkInterface;
 	private LipiTKJNIInterface recognizer;
 	private Stroke currentStroke;
-	//private CanvasActivity canvasActivity;
 	private HashMap<String, Integer> characters;
 	private ArrayList<Point> vals = new ArrayList<Point>();
 	private int minY = 480;
@@ -88,7 +89,7 @@ public class CanvasView extends View implements OnTouchListener {
 			Context contextlipi = getContext();
 			File externalFileDir = contextlipi.getExternalFilesDir(null);
 			String path = externalFileDir.getPath();
-			lipitkInterface = new LipiTKJNIInterface(path, "SHAPEREC_ALPHANUM");
+			lipitkInterface = new LipiTKJNIInterface(path, UserSettings.getInstance().getLanguage().getShapeRecognizer());
 			lipitkInterface.initialize();
 			recognizer = lipitkInterface;
 		}
@@ -177,8 +178,8 @@ public class CanvasView extends View implements OnTouchListener {
 					", Confidence = " + result.Confidence);
 		}
 
-		String configFileDirectory = recognizer.getLipiDirectory()
-				+ "/projects/alphanumeric/config/";
+		String configFileDirectory = recognizer.getLipiDirectory() + 
+				"/projects/" + UserSettings.getInstance().getLanguage().getScriptValue() + "/config/";
 		characters.clear();
 		for (LipitkResult result : results) {
 			String key = recognizer.getSymbolName(result.Id,
@@ -222,7 +223,9 @@ public class CanvasView extends View implements OnTouchListener {
 		mOutlinePaint.setTextSize(getHeight() / 2);
 		mOutlinePaint.setColor(mDottedPaint.getColor());
 		if (!isInEditMode()) {
-			mOutlinePaint.setTypeface(CustomTextView.getCustomTypeface(getContext(), "FredokaOne-Regular.ttf"));
+			Typeface typeface = CustomTextView.getCustomTypeface(
+					getContext(), UserSettings.getInstance().getLanguage().getFont());
+			mOutlinePaint.setTypeface(typeface);
 		}
 	}
 	
