@@ -92,6 +92,7 @@ public class LevelSelectActivity extends Activity {
 		characterSetButton.setText(characterSet.substring(0, 1));
 		characterSetButton.setTextColor(getResources().getColor(R.color.white));
 		characterSetButton.setTextSize(30);
+		characterSetButton.setCustomFont(UserSettings.getInstance().getLanguage().getFont());
 		characterSetButton.setBaseColor(getResources().getColor(R.color.purpleLight));
 		characterSetButton.setShadowColor(getResources().getColor(R.color.purpleDark));
 		
