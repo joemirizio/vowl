@@ -56,7 +56,7 @@ public class FlatButton extends Button {
 	
 		// Set custom font if not displaying in editor
 	    if (!this.isInEditMode()) {
-	    	mTextStyle = new CustomTextView.TypefaceSpan(context, UserSettings.getInstance().getLanguage().getFont());
+	    	mTextStyle = new CustomTextView.TypefaceSpan(context, "FredokaOne-Regular.ttf");
 	    } else {
 	    	mTextStyle = new StyleSpan(Typeface.NORMAL);
 	    }

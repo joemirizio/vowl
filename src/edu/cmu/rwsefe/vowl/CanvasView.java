@@ -223,7 +223,7 @@ public class CanvasView extends View implements OnTouchListener {
 		mOutlinePaint.setTextSize(getHeight() / 2);
 		mOutlinePaint.setColor(mDottedPaint.getColor());
 		if (!isInEditMode()) {
-			mOutlinePaint.setTypeface(CustomTextView.getCustomTypeface(getContext(), "FredokaOne-Regular.ttf"));
+			mOutlinePaint.setTypeface(CustomTextView.getCustomTypeface(getContext(), UserSettings.getInstance().getLanguage().getFont()));
 		}
 	}
 	
