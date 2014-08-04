@@ -55,7 +55,7 @@
         
         <ImageView
             android:id="@+id/canvasFeedbackRibbon"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
@@ -67,7 +67,7 @@
 
         <edu.cmu.rwsefe.vowl.ui.FlatButton
 	        android:id="@+id/canvasLevelRetry"
-	        android:layout_width="match_parent"
+	        android:layout_width="wrap_content"
 	        android:layout_height="match_parent"
 	        android:layout_margin="20dp"
 	        android:onClick="onClickRetry"
@@ -85,7 +85,7 @@
         
         <edu.cmu.rwsefe.vowl.ui.FlatButton
             android:id="@+id/canvasLevelNavPrev"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_margin="20dp"
             android:layout_weight="1"
@@ -102,23 +102,24 @@
 
         <edu.cmu.rwsefe.vowl.ui.FlatButton
             android:id="@+id/canvasLevelSpeak"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_gravity="center"
             android:layout_margin="20dp"
             android:layout_weight="1"
-            android:drawableLeft="@drawable/speech"
+            android:drawablePadding="-64dp"
+            android:drawableTop="@drawable/speech"
             android:onClick="onClickLevelSpeak"
-            android:paddingBottom="10dp"
-            android:paddingLeft="21dp"
-            android:paddingTop="10dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:paddingTop="21dp"
             android:textColor="@color/white"
-            android:textSize="42sp"
             vowl:baseColor="@color/blueLight"
             vowl:shadowColor="@color/blueDark" />
 
         <edu.cmu.rwsefe.vowl.ui.FlatButton
             android:id="@+id/canvasLevelNavNext"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_margin="20dp"
             android:layout_weight="1"
