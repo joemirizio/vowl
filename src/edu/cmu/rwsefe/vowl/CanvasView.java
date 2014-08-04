@@ -16,6 +16,7 @@ import android.graphics.Paint.FontMetrics;
 import android.graphics.Path;
 import android.graphics.Point;
 import android.graphics.PointF;
+import android.graphics.Typeface;
 import android.os.CountDownTimer;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -27,6 +28,7 @@ import com.canvas.LipiTKJNIInterface;
 import com.canvas.LipitkResult;
 import com.canvas.Stroke;
 
+import edu.cmu.rwsefe.vowl.model.UserSettings;
 import edu.cmu.rwsefe.vowl.ui.CustomTextView;
 
 public class CanvasView extends View implements OnTouchListener {
@@ -88,7 +90,7 @@ public class CanvasView extends View implements OnTouchListener {
 			Context contextlipi = getContext();
 			File externalFileDir = contextlipi.getExternalFilesDir(null);
 			String path = externalFileDir.getPath();
-			lipitkInterface = new LipiTKJNIInterface(path, "SHAPEREC_ALPHANUM");
+			lipitkInterface = new LipiTKJNIInterface(path, UserSettings.getInstance().getLanguage().getShapeRecognizer());
 			lipitkInterface.initialize();
 			recognizer = lipitkInterface;
 		} else {
@@ -180,8 +182,8 @@ public class CanvasView extends View implements OnTouchListener {
 					", Confidence = " + result.Confidence);
 		}
 
-		String configFileDirectory = recognizer.getLipiDirectory()
-				+ "/projects/alphanumeric/config/";
+		String configFileDirectory = recognizer.getLipiDirectory() + 
+				"/projects/" + UserSettings.getInstance().getLanguage().getScriptValue() + "/config/";
 		characters.clear();
 		for (LipitkResult result : results) {
 			String key = recognizer.getSymbolName(result.Id,
@@ -227,11 +229,22 @@ public class CanvasView extends View implements OnTouchListener {
 		mDottedPaint.setColor(mOutlinePaint.getColor());
 		mDottedPaint.setPathEffect(new DashPathEffect(new float[] {10,20}, 0));
 		mDottedGuides = new Path();
+
 		mDottedGuides.moveTo(0, xHeight / 2);
 		mDottedGuides.lineTo(getWidth(), xHeight / 2);
 		mDottedGuides.moveTo(0, xHeight + fontMetrics.bottom);
 		mDottedGuides.lineTo(getWidth(), xHeight + fontMetrics.bottom);
 		
+		// Character outline
+		mOutlinePaint = new Paint();
+		mOutlinePaint.setTextAlign(Align.CENTER);
+		mOutlinePaint.setTextSize(getHeight() / 2);
+		mOutlinePaint.setColor(mDottedPaint.getColor());
+		if (!isInEditMode()) {
+			Typeface typeface = CustomTextView.getCustomTypeface(
+					getContext(), UserSettings.getInstance().getLanguage().getFont());
+			mOutlinePaint.setTypeface(typeface);
+		}
 	}
 	
 	public void setOutlineCharacter(String outlineCharacter) {

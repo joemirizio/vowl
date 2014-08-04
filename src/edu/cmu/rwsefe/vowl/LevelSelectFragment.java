@@ -33,7 +33,9 @@ public class LevelSelectFragment extends Fragment {
 	    // Inflate the layout for this fragment
 	    View view = inflater.inflate(R.layout.fragment_level_select, container, false);
 
-	    String initialLevel = UserSettings.getInstance().getLetters();
+	    String[] characterSets = UserSettings.getInstance().getLanguage().getCharacterSets();
+	    
+	    String initialLevel = characterSets[0];
 	    mLevelSelector = new LevelSelector(initialLevel);
 	    
 	    mScoreKeeper = new ScoreKeeper(getActivity());

@@ -1,5 +1,6 @@
 package edu.cmu.rwsefe.vowl;
 
+import java.io.IOException;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Intent;
@@ -9,6 +10,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 import edu.cmu.rwsefe.vowl.mode.play.critter.CritterCounterActivity;
+import edu.cmu.rwsefe.vowl.model.UserSettings;
+
+import com.canvas.AssetInstaller;
+
 import edu.cmu.rwsefe.vowl.model.UserSettings;
 
 public class MainActivity extends FragmentActivity {
@@ -22,7 +27,16 @@ public class MainActivity extends FragmentActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		// Install LipiTK components
+		AssetInstaller assetInstaller = new AssetInstaller(getApplicationContext(), "projects");
+		try {
+			assetInstaller.execute();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
 		UserSettings.getInstance().Initialize(getApplicationContext());
+
 
 		setContentView(R.layout.activity_main);
 

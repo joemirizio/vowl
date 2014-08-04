@@ -46,39 +46,39 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	
 	public void addCharacterResult(CharacterResult newCharacter) {
 		
-		// 1. get reference to writable DB
+		// get reference to writable DB
 		SQLiteDatabase db = this.getWritableDatabase();
 		
-		// 2. create ContentValues to add key "column"/value
+		// create ContentValues to add key "column"/value
 		ContentValues values = new ContentValues();
-		values.put(UNICODE_VALUE, newCharacter.getUnicodeValue()); // get title 
-		values.put(CONFIDENCE, newCharacter.getConfidence()); // get author
+		values.put(UNICODE_VALUE, newCharacter.getUnicodeValue());
+		values.put(CONFIDENCE, newCharacter.getConfidence());
 		
-		// 3. insert
-		db.insert(CHARACTER_TABLE, // table
-		        null, //nullColumnHack
-		        values); // key/value -> keys = column names/ values = column values
+		// insert
+		db.insert(CHARACTER_TABLE,
+		        null,
+		        values); 
 	}
 	
 	public List<CharacterResult> getCharacterResults(int newUnicodeValue) {
 		
 		
-		// 1. get reference to readable DB
+		// get reference to readable DB
         SQLiteDatabase db = this.getReadableDatabase();
         
         String selectQuery = 
         		"SELECT * FROM " + CHARACTER_TABLE + 
         		" WHERE " + UNICODE_VALUE + " = " + newUnicodeValue;
  
-        // 2. build query
+        // build query
         Cursor cursor = db.rawQuery(selectQuery, null);
-        // 3. if we got results get the first one
+        // if we got results get the first one
         if (cursor != null)
             cursor.moveToFirst();
 
         List<CharacterResult> characters = new ArrayList<CharacterResult>();
         
-        // 4. build character object
+        // build character object
         do {
             CharacterResult newCharacter = new CharacterResult(
             		cursor.getColumnIndex(ID),
@@ -87,27 +87,30 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             
             characters.add(newCharacter);
         } while(cursor.moveToNext());
+        
+        // Close cursor
+        cursor.close();
  
-        // 5. return character
+        // return characters
         return characters;
 	}
 	
 	public List<CharacterResult> getAllCharacterResults()
 	{
-		// 1. get reference to readable DB
+		// get reference to readable DB
         SQLiteDatabase db = this.getReadableDatabase();
         
         String selectQuery = "SELECT * FROM " + CHARACTER_TABLE;
  
-        // 2. build query
+        // build query
         Cursor cursor = db.rawQuery(selectQuery, null);
-        // 3. if we got results get the first one
+        // if we got results get the first one
         if (cursor != null)
             cursor.moveToFirst();
 
         List<CharacterResult> characters = new ArrayList<CharacterResult>();
         
-        // 4. build character object
+        // build character object
         do {
             CharacterResult newCharacter = new CharacterResult(
             		cursor.getInt(cursor.getColumnIndex(ID)),
@@ -116,61 +119,70 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             
             characters.add(newCharacter);
         } while(cursor.moveToNext());
+        
+        // Close cursor
+        cursor.close();
  
-        // 5. return character
+        // return characters
         return characters;
 	}
 	
 	public int getMaxConfidence(int newUnicodeValue) {
 		
-		// 1. get reference to readable DB
+		// get reference to readable DB
         SQLiteDatabase db = this.getReadableDatabase();
         
         String selectQuery = 
         		"SELECT MAX (" + CONFIDENCE + ") FROM " + CHARACTER_TABLE + 
         		" WHERE " + UNICODE_VALUE + " = " + newUnicodeValue;
  
-        // 2. build query
+        // build query
         Cursor cursor = db.rawQuery(selectQuery, null);
-        // 3. if we got results get the first one
+        // if we got results get the first one
         if (cursor != null)
             cursor.moveToFirst();
         else
         	return 0;
         
-        // 4. Get Confidence
+        // Get Confidence
         int maxConfidence = cursor.getInt(0);
+        
+        // Close cursor
+        cursor.close();
          
-        // 5. return confidence
+        // return confidence
         return maxConfidence;
 	}
 	
 	public HashMap<Integer, Integer> getMaxScoreForAllCharacters()
 	{
-		// 1. Get reference to readable DB
+		// Get reference to readable DB
         SQLiteDatabase db = this.getReadableDatabase();
         
         String selectQuery = 
         		"SELECT " + ID + ", " + UNICODE_VALUE + ", MAX(" + CONFIDENCE + ") " + 
         		" FROM " + CHARACTER_TABLE + " GROUP BY " + UNICODE_VALUE;
  
-        // 2. Build query
+        // Build query
         Cursor cursor = db.rawQuery(selectQuery, null);
         
-        // 3. Exit if no results were found
+        // Exit if no results were found
         if (cursor == null || cursor.getCount() == 0) {
         	return null;
         }
         
         cursor.moveToFirst();
         
-        // 4. Build character object
+        // Build character object
         HashMap<Integer, Integer>  characterHash = new HashMap<Integer, Integer>();
         do {
             characterHash.put(cursor.getInt(1), cursor.getInt(2));
         } while(cursor.moveToNext());
  
-        // 5. Return character
+        // Close cursor
+        cursor.close();
+        
+        // Return character hash
         return characterHash;
 	}
 	
