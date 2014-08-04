@@ -11,7 +11,5 @@
 	
 	<Preference
 	    android:key="clear_data"
-	    android:title="Clear Data" >
-	</Preference>
-
+	    android:title="Clear Data" />
 </PreferenceScreen>
