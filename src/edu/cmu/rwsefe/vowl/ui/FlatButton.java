@@ -21,6 +21,8 @@ import edu.cmu.rwsefe.vowl.model.UserSettings;
 public class FlatButton extends Button {
 	public static final String TAG = FlatButton.class.getName();
 	
+	private static final String DEFAULT_FONT = "FredokaOne-Regular.ttf";
+	
 	protected ShapeDrawable mBase;
 	protected ShapeDrawable mShadow;
 	
@@ -56,7 +58,7 @@ public class FlatButton extends Button {
 	
 		// Set custom font if not displaying in editor
 	    if (!this.isInEditMode()) {
-	    	mTextStyle = new CustomTextView.TypefaceSpan(context, UserSettings.getInstance().getLanguage().getFont());
+	    	setCustomFont(DEFAULT_FONT);
 	    } else {
 	    	mTextStyle = new StyleSpan(Typeface.NORMAL);
 	    }
@@ -66,6 +68,10 @@ public class FlatButton extends Button {
 	    
 		// Recycle TypedArray
 		attrs.recycle();
+	}
+	
+	public void setCustomFont(String fontFamily) {
+		mTextStyle = new CustomTextView.TypefaceSpan(getContext(), fontFamily);
 	}
 	
 	protected void applyCustomFont() {

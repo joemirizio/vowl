@@ -15,6 +15,7 @@ import android.graphics.Paint.Align;
 import android.graphics.Path;
 import android.graphics.Point;
 import android.graphics.PointF;
+import android.graphics.Typeface;
 import android.os.CountDownTimer;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -38,7 +39,6 @@ public class CanvasView extends View implements OnTouchListener {
 	private LipiTKJNIInterface lipitkInterface;
 	private LipiTKJNIInterface recognizer;
 	private Stroke currentStroke;
-	//private CanvasActivity canvasActivity;
 	private HashMap<String, Integer> characters;
 	private ArrayList<Point> vals = new ArrayList<Point>();
 	private int minY = 480;
@@ -223,7 +223,9 @@ public class CanvasView extends View implements OnTouchListener {
 		mOutlinePaint.setTextSize(getHeight() / 2);
 		mOutlinePaint.setColor(mDottedPaint.getColor());
 		if (!isInEditMode()) {
-			mOutlinePaint.setTypeface(CustomTextView.getCustomTypeface(getContext(), "FredokaOne-Regular.ttf"));
+			Typeface typeface = CustomTextView.getCustomTypeface(
+					getContext(), UserSettings.getInstance().getLanguage().getFont());
+			mOutlinePaint.setTypeface(typeface);
 		}
 	}
 	
