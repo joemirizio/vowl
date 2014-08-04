@@ -164,7 +164,8 @@ public class CanvasActivity extends Activity {
 		// Set rating from database
 		mScoreKeeper.updateScores();
 		String character = mLevelSelector.getLevel();
-		mRatingBar.setRating(mScoreKeeper.getScoreRating(character));
+		mRatingBar.setRating(0);
+		mRatingBar.setSecondaryProgress(mScoreKeeper.getScoreRating(character));
 	}
 	
 	public void setFeedbackState(boolean isFeedbackVisible) {
@@ -182,7 +183,9 @@ public class CanvasActivity extends Activity {
 	public void processConfidence(String character, int confidence) {	
 		// TODO Change mapping?
 		int rating = Math.min(MAX_RATING, confidence / 10);
+		int previousRating = mRatingBar.getSecondaryProgress();
 		mRatingBar.setRating(rating);
+		mRatingBar.setSecondaryProgress(previousRating);
 
 		String feedback = "";
 		switch (rating) {
