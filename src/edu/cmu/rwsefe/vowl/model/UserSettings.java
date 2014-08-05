@@ -38,7 +38,7 @@ public class UserSettings {
 	public void Initialize(Context context) {
 		mContext = context;
 		mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
-		mProjectPath = mContext.getExternalFilesDir(null).getPath() + "/" + "projects";
+		mProjectPath = mContext.getFilesDir().getPath() + "/" + "projects";
 		mJSON = getJSONString();
 		String languageValue = mSharedPreferences.getString("script", DEFAULT_LANGUAGE);
 		mLanguage = new Language(languageValue);

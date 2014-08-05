@@ -35,7 +35,7 @@ public class AssetInstaller {
 			OutputStream out = null;
 			try {
 				in = assetManager.open(filename);
-				out = new FileOutputStream(context.getExternalFilesDir(null)
+				out = new FileOutputStream(context.getFilesDir()
 						.getPath() + "/" + filename);
 				copyFile(in, out);
 				in.close();
@@ -58,9 +58,9 @@ public class AssetInstaller {
 	}
 
 	private void explodeAsset() throws IOException {
-		String zipPath = context.getExternalFilesDir(null).getPath() + "/"
+		String zipPath = context.getFilesDir().getPath() + "/"
 				+ zipName + ".zip";
-		String extractPath = context.getExternalFilesDir(null).getPath() + "/";
+		String extractPath = context.getFilesDir().getPath() + "/";
 		File file = new File(zipPath);
 		ZipFile zipFile = new ZipFile(file);
 		try {
@@ -76,7 +76,10 @@ public class AssetInstaller {
 	
 
 	private boolean dirCheck() {
-		File dir = new File(context.getExternalFilesDir(null).getPath() + "/"
+		Log.d(TAG, "Context: " + context);
+		Log.d(TAG, "Context Dir: " + context.getFilesDir());
+		Log.d(TAG, "Context Path: " + context.getFilesDir().getPath());
+		File dir = new File(context.getFilesDir().getPath() + "/"
 				+ zipName);
 		return dir.exists();
 	}

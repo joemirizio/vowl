@@ -88,7 +88,7 @@ public class CanvasView extends View implements OnTouchListener {
 		
 		if (!isInEditMode()) {
 			Context contextlipi = getContext();
-			File externalFileDir = contextlipi.getExternalFilesDir(null);
+			File externalFileDir = contextlipi.getFilesDir();
 			String path = externalFileDir.getPath();
 			lipitkInterface = new LipiTKJNIInterface(path, UserSettings.getInstance().getLanguage().getShapeRecognizer());
 			lipitkInterface.initialize();
