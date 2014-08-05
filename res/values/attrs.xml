@@ -15,5 +15,9 @@
         <attr name="shadowColor" format="color" />
         <attr name="isPressed" format="boolean" />
     </declare-styleable>
+    
+    <declare-styleable name="FlatRatingBar">
+        <attr name="isProgressStyle" format="boolean" />
+    </declare-styleable>
 
 </resources>

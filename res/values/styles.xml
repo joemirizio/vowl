@@ -27,5 +27,11 @@
     <style name="CustomActionBar.TitleTextStyle" parent="@android:style/TextAppearance.Holo.Widget.ActionBar.Title.Inverse">
         <item name="android:textSize">26sp</item>
 	</style>
+	
+    <style name="FlatRatingBarProgress" parent="@android:style/Widget.RatingBar">
+        <item name="android:progressDrawable">@drawable/ratingbar_progress</item>
+        <item name="android:minHeight">22dip</item>
+        <item name="android:maxHeight">22dip</item>
+    </style>
 
 </resources>

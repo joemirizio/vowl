@@ -15,31 +15,31 @@
     <string name="level_numerals_label">1</string>
     <string name="new_record">new record!</string>
     <string name="settings_label">Settings</string>
-    
+
     <!-- Level Categories -->
-    
+
+
     <!-- Latin Characters -->
     <string name="latin_alphabet_upper">ABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
     <string name="latin_alphabet_lower">abcdefghijklmnopqrstuvwxyz</string>
     <string name="latin_numerals">0123456789</string>
-    
+
     <!-- Devnagari Characters -->
     <string name="devnagari_letters">\u0901\u0902\u0903\u0905\u0906\u0907\u0908\u0909\u090A\u090B\u090F\u0910\u0913\u0914\u0915\u0916\u0917\u0918\u0919\u091A\u091B\u091C\u091D\u091E\u091F\u0920\u0921\u0922\u0923\u0924\u0925\u0926\u0927\u0928\u092A\u092B\u092C\u092D\u092E\u092F\u0930\u0932\u0935\u0936\u0937\u0938\u0939\u093C\u093E\u093F\u0940\u0941\u0942\u0943\u0945\u0947\u0948\u094B\u094C\u094D</string>
     <string name="devnagari_uppercase_letters"></string>
     <string name="devnagari_numerals"></string>
-    
-    <string-array
-        name="latin">
+
+    <string-array name="latin">
         <item>@string/latin_alphabet_lower</item>
         <item>@string/latin_alphabet_upper</item>
         <item>@string/latin_numerals</item>
     </string-array>
-    
-    <string-array 
-        name="devnagari">
+    <string-array name="devnagari">
         <item>@string/devnagari_letters</item>
         <item>@string/devnagari_uppercase_letters</item>
         <item>@string/devnagari_numerals</item>
     </string-array>
-    
+
+    <string name="title_activity_critter_counter">CritterCounterActivity</string>
+	<string name="critter_instructions">count the critters</string>
 </resources>

@@ -14,7 +14,8 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="edu.cmu.rwsefe.vowl.MainActivity"
+            android:name=".MainActivity"
+            android:label="@string/app_name" >
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,13 +23,16 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="edu.cmu.rwsefe.vowl.LevelSelectActivity" >
+            android:name=".LevelSelectActivity"
+            android:label="@string/title_activity_level_select" >
+        </activity>
+        <activity android:name=".CanvasActivity" >
+        </activity>
+        <activity android:name=".UserSettingsActivity" >
         </activity>
         <activity
-            android:name="edu.cmu.rwsefe.vowl.CanvasActivity" >
-        </activity>
-        <activity
-            android:name="edu.cmu.rwsefe.vowl.UserSettingsActivity" >
+            android:name="edu.cmu.rwsefe.vowl.mode.play.critter.CritterCounterActivity"
+            android:label="@string/title_activity_critter_counter" >
         </activity>
     </application>
 

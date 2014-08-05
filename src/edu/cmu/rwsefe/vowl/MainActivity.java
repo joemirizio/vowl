@@ -1,7 +1,6 @@
 package edu.cmu.rwsefe.vowl;
 
 import java.io.IOException;
-
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Intent;
@@ -10,6 +9,8 @@ import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
+import edu.cmu.rwsefe.vowl.mode.play.critter.CritterCounterActivity;
+import edu.cmu.rwsefe.vowl.model.UserSettings;
 
 import com.canvas.AssetInstaller;
 
@@ -33,9 +34,9 @@ public class MainActivity extends FragmentActivity {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		UserSettings.getInstance().Initialize(getApplicationContext());
-		
+
 
 		setContentView(R.layout.activity_main);
 
@@ -60,8 +61,8 @@ public class MainActivity extends FragmentActivity {
 	}
 
 	public void menuPlayOnClick(View v) {
-		// TODO Implement play mode
-		Toast.makeText(this, "Play mode not implemented", Toast.LENGTH_SHORT).show();
+		Intent intent = new Intent(v.getContext(), CritterCounterActivity.class);
+		startActivity(intent);
 	}
 
 	public void settingsOnClick(View v) {
