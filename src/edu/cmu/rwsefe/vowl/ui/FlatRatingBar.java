@@ -32,11 +32,15 @@ public class FlatRatingBar extends RatingBar {
 	
 	protected void init(Context context, AttributeSet attributes, int defStyle) {
 		LayerDrawable ratingBarStyle;
-		if (defStyle == android.R.attr.ratingBarStyle) {
-			ratingBarStyle = (LayerDrawable) getResources().getDrawable(R.drawable.ratingbar_large);
+		int drawable = 0;
+		if (attributes != null && attributes.getAttributeBooleanValue("http://schemas.android.com/apk/res/edu.cmu.rwsefe.vowl", "isProgressStyle", false)) { 
+			drawable = R.drawable.ratingbar_progress;
+		} else if (defStyle == android.R.attr.ratingBarStyle) {
+			drawable = R.drawable.ratingbar_large;
 		} else {
-			ratingBarStyle = (LayerDrawable) getResources().getDrawable(R.drawable.ratingbar);
+			drawable = R.drawable.ratingbar;
 		}
+		ratingBarStyle = (LayerDrawable) getResources().getDrawable(drawable);
 		Drawable tiled = tileify(ratingBarStyle, true);
 		this.setProgressDrawable(tiled);
 	}
