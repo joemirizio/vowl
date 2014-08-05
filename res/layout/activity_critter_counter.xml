@@ -19,6 +19,17 @@
         android:stepSize="1.0"
         vowl:isProgressStyle="true" />
     
+    <edu.cmu.rwsefe.vowl.ui.CustomTextView
+        android:id="@+id/critterInstructions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="20dp"
+        android:text="@string/critter_instructions"
+        android:textColor="@color/blueLight"
+        android:textSize="36sp"
+        vowl:fontFamily="FredokaOne-Regular.ttf" />
+    
     <edu.cmu.rwsefe.vowl.mode.play.critter.CritterCanvas
         android:id="@+id/playCritterCanvas"
         android:layout_width="match_parent"
