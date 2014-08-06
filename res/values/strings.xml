@@ -41,5 +41,5 @@
     </string-array>
 
     <string name="title_activity_critter_counter">CritterCounterActivity</string>
-
+	<string name="critter_instructions">count the critters</string>
 </resources>
