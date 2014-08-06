@@ -120,6 +120,7 @@ public class LevelSelectFragment extends Fragment {
 	    	FlatButtonRating button = new FlatButtonRating(mContext, null);
 			button.setText("" + character);
 			button.setTextSize(30);
+			button.setCustomFont(UserSettings.getInstance().getLanguage().getFont());
 			button.setTextColor(colorWhite);
 			button.setBaseColor(colorBlueLight);
 			button.setShadowColor(colorBlueDark);

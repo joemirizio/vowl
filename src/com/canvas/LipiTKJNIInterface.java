@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import edu.cmu.rwsefe.vowl.model.UserSettings;
 import android.util.Log;
 
 public class LipiTKJNIInterface {
@@ -36,7 +37,7 @@ public class LipiTKJNIInterface {
 		String [] splited_line= null;
 		try
 		{
-			File map_file = new File(project_config_dir+"unicodeMapfile_alphanumeric.ini");
+			File map_file = new File(project_config_dir+"unicodeMapfile_" + UserSettings.getInstance().getLanguage().getScriptValue() + ".ini");
 			BufferedReader readIni = new BufferedReader(new FileReader(map_file));
 			readIni.readLine();
 			readIni.readLine();
